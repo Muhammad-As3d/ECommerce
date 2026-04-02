@@ -1,7 +1,12 @@
 ﻿global using ECommerce.Application.Interfaces;
 global using ECommerce.Application.Interfaces.Repositories;
 global using ECommerce.Domain.Entities;
+global using ECommerce.Domain.Entities.Identity;
+global using ECommerce.Infrastructure.Implementations;
 global using ECommerce.Infrastructure.Implementations.Repositories;
 global using ECommerce.Infrastructure.Persistence;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;

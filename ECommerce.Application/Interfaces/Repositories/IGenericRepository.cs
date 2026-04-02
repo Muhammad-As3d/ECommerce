@@ -4,10 +4,10 @@ namespace ECommerce.Application.Interfaces.Repositories;
 
 public interface IGenericRepository<T> where T : class
 {
-    Task<IEnumerable<T>> GetAllAsync();
-    Task<T?> GetByIdAsync(int id);
-    Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate);
-    Task AddAsync(T entity);
+    Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+    Task AddAsync(T entity, CancellationToken cancellationToken = default);
     void Update(T entity);
-    void Delete(T entity);
+    void ToggleStatusAsync(T entity);
 }

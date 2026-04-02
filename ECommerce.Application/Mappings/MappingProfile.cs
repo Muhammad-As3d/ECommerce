@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Contracts.Products;
 using ECommerce.Domain.Entities;
 
@@ -8,6 +9,11 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        //Product Mappings
         CreateMap<ProductResponse, Product>();
+
+
+        //Category Mappings
+        CreateMap<Category, CategoryResponse>();
     }
 }

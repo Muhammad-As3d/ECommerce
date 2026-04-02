@@ -1,10 +1,4 @@
-﻿using ECommerce.Application.Interfaces;
-using ECommerce.Domain.Entities.Identity;
-using ECommerce.Infrastructure.Implementations;
-using ECommerce.Infrastructure.Persistence;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
+﻿
 namespace ECommerce.Infrastructure.DependencyInjection;
 
 public static class DependencyInjection

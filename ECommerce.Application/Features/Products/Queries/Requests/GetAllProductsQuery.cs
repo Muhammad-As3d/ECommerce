@@ -19,6 +19,4 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) 
 
         return _mapper.Map<IEnumerable<ProductResponse>>(products);
     }
-
-
 }
