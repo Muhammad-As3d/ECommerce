@@ -3,6 +3,7 @@ using ECommerce.Domain.Common;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Errors;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
@@ -12,10 +13,12 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHan
 
     public async Task<Result<int>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var categoryExists = await _unitOfWork.Repository<Category>()
-           .GetByIdAsync(request.CategoryId, cancellationToken);
+        var categoryIsExists = await _unitOfWork
+            .Repository<Category>()
+            .GetQueryable()
+            .AnyAsync(c => c.Id == request.CategoryId, cancellationToken);
 
-        if (categoryExists is null)
+        if (!categoryIsExists)
             return Result.Failure<int>(CategoryError.NotFound(request.CategoryId));
 
         var product = Product.Create(
