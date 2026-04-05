@@ -2,7 +2,7 @@
 using ECommerce.Infrastructure.DependencyInjection;
 using FluentValidation;
 
-namespace ECommerce.Api.DependencyInjection;
+namespace ECommerce.Api;
 
 public static class DependencyInjection
 {

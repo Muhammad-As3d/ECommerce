@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ECommerce.Application.Common.Behaviors;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace ECommerce.Application;
@@ -9,9 +12,15 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
-        //services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
-        services.AddMediatR(op => op.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        });
+
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         return services;
     }

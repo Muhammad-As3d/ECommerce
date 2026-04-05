@@ -6,8 +6,10 @@ public class Product : AuditableEntity
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public int ModelYear { get; set; }
-    public double ListPrice { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public int Stock { get; set; }
+    public int? ModelYear { get; set; }
+    public double Price { get; set; }
     public bool IsActive { get; set; } = true;
     public int CategoryId { get; set; }
 
@@ -15,24 +17,28 @@ public class Product : AuditableEntity
     public ICollection<OrderItem> OrderItems { get; set; } = [];
 
     private Product() { }
-    public static Product Create(string name, int modelYear, double listPrice, int categoryId, string createdById)
+    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId, string createdById)
     {
         return new Product()
         {
             Name = name,
+            Description = description,
+            Stock = stock,
             ModelYear = modelYear,
-            ListPrice = listPrice,
+            Price = price,
             CategoryId = categoryId,
             CreatedById = createdById,
             CreatedOn = DateTime.UtcNow,
         };
     }
 
-    public void Update(string name, int modelYear, double listPrice, int categoryId, string updatedById)
+    public void Update(string name, string description, int stock, int modelYear, double price, int categoryId, string updatedById)
     {
         Name = name;
+        Description = description;
+        Stock = stock;
         ModelYear = modelYear;
-        ListPrice = listPrice;
+        Price = price;
         CategoryId = categoryId;
         UpdatedById = updatedById;
         UpdatedOn = DateTime.UtcNow;

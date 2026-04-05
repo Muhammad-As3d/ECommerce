@@ -1,6 +1,6 @@
 ﻿using ECommerce.Domain.Common;
 
-namespace ECommerce.Application.Abstractions.Errors;
+namespace ECommerce.Domain.Errors;
 
 public static class CategoryError
 {

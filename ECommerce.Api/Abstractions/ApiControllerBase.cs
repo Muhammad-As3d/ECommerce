@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECommerce.Api.Abstractions.Extensions;
+using ECommerce.Api.Extensions;
 using ECommerce.Application.Abstractions.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

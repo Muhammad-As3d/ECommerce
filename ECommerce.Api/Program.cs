@@ -1,4 +1,4 @@
-using ECommerce.Api.DependencyInjection;
+using ECommerce.Api;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
