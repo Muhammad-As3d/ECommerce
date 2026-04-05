@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.DependencyInjection;
+﻿using ECommerce.Application;
 using ECommerce.Infrastructure.DependencyInjection;
 using FluentValidation;
 

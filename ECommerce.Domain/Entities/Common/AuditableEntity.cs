@@ -5,7 +5,7 @@ namespace ECommerce.Domain.Entities.Common;
 public class AuditableEntity
 {
     public string CreatedById { get; set; } = string.Empty;
-    public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedOn { get; set; }
     public string? UpdatedById { get; set; } = string.Empty;
     public DateTime? UpdatedOn { get; set; }
 
