@@ -1,71 +1,73 @@
 # ECommerce
 
-ECommerce.Domain/
-├── Entities/
+ECommerce.Domain
+├── Entities
 │   ├── Product.cs
 │   ├── Category.cs
 │   ├── Order.cs
 │   ├── OrderItem.cs
 │   └── ApplicationUser.cs
-├── Errors/
-│   └── ProductErrors.cs
-│   └── CategoryErrors.cs
+│
+├── Errors
+│   ├── ProductErrors.cs
+│   ├── CategoryErrors.cs
 │   └── OrderErrors.cs
-└── Common/
-    └── Error.cs
+│
+└── Common
+    ├── Error.cs
     └── Result.cs
 
-ECommerce.Application/
-├── Common/
-│   ├── Behaviors/
-│   │   └── ValidationBehavior.cs      ← MediatR pipeline
-│   ├── Interfaces/
+ECommerce.Application
+├── Common
+│   ├── Behaviors
+│   │   └── ValidationBehavior.cs       ← MediatR pipeline behavior
+│   ├── Interfaces
 │   │   ├── IApplicationDbContext.cs
 │   │   └── ICurrentUserService.cs
-│   └── Errors/
+│   └── Errors
 │       └── ValidationErrors.cs
-├── Features/
-│   ├── Products/
-│   │   ├── Commands/
-│   │   │   ├── CreateProduct/
+├── Features
+│   ├── Products
+│   │   ├── Commands
+│   │   │   ├── CreateProduct
 │   │   │   │   ├── CreateProductCommand.cs
 │   │   │   │   ├── CreateProductCommandHandler.cs
-│   │   │   │   └── CreateProductCommandValidator.cs  ← HERE
-│   │   │   └── UpdateProduct/
+│   │   │   │   └── CreateProductCommandValidator.cs
+│   │   │   └── UpdateProduct
 │   │   │       ├── UpdateProductCommand.cs
 │   │   │       ├── UpdateProductCommandHandler.cs
 │   │   │       └── UpdateProductCommandValidator.cs
-│   │   └── Queries/
-│   │       └── GetAllProducts/
+│   │   └── Queries
+│   │       └── GetAllProducts
 │   │           ├── GetAllProductsQuery.cs
 │   │           └── GetAllProductsQueryHandler.cs
-│   ├── Categories/
+│   ├── Categories
 │   │   └── Commands/ ...
-│   ├── Orders/
+│   ├── Orders
 │   │   └── Commands/ ...
-│   └── Auth/
+│   └── Auth
 │       └── Commands/ ...
 └── DependencyInjection.cs
 
-ECommerce.Infrastructure/
-├── Persistence/
+ECommerce.Infrastructure
+├── Persistence
 │   ├── ApplicationDbContext.cs
-│   └── Configurations/
+│   └── Configurations
 │       ├── ProductConfiguration.cs
 │       └── OrderConfiguration.cs
-├── Repositories/ (if using explicit repos)
-├── Services/
+├── Repositories/   ← Optional (explicit repositories)
+├── Services
 │   └── CurrentUserService.cs
 └── DependencyInjection.cs
 
-ECommerce.Api/
-├── Controllers/
+ECommerce.Api
+├── Controllers
 │   ├── ProductsController.cs
 │   ├── CategoriesController.cs
 │   ├── OrdersController.cs
 │   └── AuthController.cs
-├── Middleware/
+├── Middleware
 │   └── GlobalExceptionHandler.cs
-├── Extensions/
+├── Extensions
 │   └── ResultExtensions.cs
 └── DependencyInjection.cs
