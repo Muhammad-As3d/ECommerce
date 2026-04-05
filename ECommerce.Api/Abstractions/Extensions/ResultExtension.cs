@@ -1,7 +1,7 @@
 ﻿using ECommerce.Application.Abstractions.Results;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Api.Extensions;
+namespace ECommerce.Api.Abstractions.Extensions;
 
 public static class ResultExtension
 {

@@ -9,6 +9,8 @@ public static class DependencyInjection
     {
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
+        //services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
         services.AddMediatR(op => op.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
         return services;

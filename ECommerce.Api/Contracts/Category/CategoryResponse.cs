@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Contracts.Category;
+﻿namespace ECommerce.Api.Contracts.Category;
 
 public record CategoryResponse(
     int Id,

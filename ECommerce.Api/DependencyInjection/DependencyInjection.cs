@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.DependencyInjection;
 using ECommerce.Infrastructure.DependencyInjection;
+using FluentValidation;
 
 namespace ECommerce.Api.DependencyInjection;
 
@@ -15,6 +16,10 @@ public static class DependencyInjection
             .AddApplicationServices()
             .AddInfrastructureServices(configuration);
 
+
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+        services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
 
         return services;
     }

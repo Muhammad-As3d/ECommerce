@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.Contracts.Products;
+﻿using ECommerce.Api.Contracts.Products;
 using ECommerce.Application.Features.Products.Queries.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
