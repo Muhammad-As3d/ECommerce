@@ -12,7 +12,6 @@ public class MappingProfile : Profile
         //Product Mappings
         CreateMap<GetProductDto, Product>();
 
-
         //Category Mappings
         CreateMap<Category, GetCategoryDto>();
     }

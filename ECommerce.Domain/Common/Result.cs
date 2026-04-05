@@ -1,6 +1,4 @@
-﻿using ECommerce.Domain.Common;
-
-namespace ECommerce.Application.Abstractions.Results;
+﻿namespace ECommerce.Domain.Common;
 
 public class Result
 {

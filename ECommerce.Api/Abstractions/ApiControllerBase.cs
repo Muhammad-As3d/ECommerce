@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ECommerce.Api.Extensions;
-using ECommerce.Application.Abstractions.Results;
+using ECommerce.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

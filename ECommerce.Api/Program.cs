@@ -15,6 +15,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseExceptionHandler();
+
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();

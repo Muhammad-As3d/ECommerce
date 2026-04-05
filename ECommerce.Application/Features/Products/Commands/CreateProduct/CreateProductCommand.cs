@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.Abstractions.Results;
+﻿using ECommerce.Domain.Common;
 using MediatR;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;

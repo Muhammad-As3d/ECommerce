@@ -1,4 +1,5 @@
-﻿using ECommerce.Application;
+﻿using ECommerce.Api.Middleware;
+using ECommerce.Application;
 using ECommerce.Infrastructure.DependencyInjection;
 using FluentValidation;
 
@@ -16,6 +17,9 @@ public static class DependencyInjection
             .AddApplicationServices()
             .AddInfrastructureServices(configuration);
 
+
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 

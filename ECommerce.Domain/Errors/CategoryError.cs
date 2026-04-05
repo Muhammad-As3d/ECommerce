@@ -6,6 +6,6 @@ public static class CategoryError
 {
     public static Error NotFound(int id) =>
         Error.NotFound("Category.NotFound", $"Category with ID '{id}' was not found.");
-    public static Error DuplicatedName() =>
-        Error.NotFound("Category.DuplicatedName", $"A category with this name already exists.");
+    public static Error DuplicatedName =>
+        Error.Conflict("Category.DuplicatedName", "A category with this name already exists.");
 }

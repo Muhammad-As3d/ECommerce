@@ -23,7 +23,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .GreaterThanOrEqualTo(0);
 
         RuleFor(c => c.CategoryId)
-            .LessThanOrEqualTo(0)
+            .GreaterThanOrEqualTo(0)
             .WithMessage("A valid category must be selected.");
     }
 }
