@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECommerce.Application.DTOs.Products;
+using ECommerce.Application.Contracts.Products;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain.Entities;
 using MediatR;

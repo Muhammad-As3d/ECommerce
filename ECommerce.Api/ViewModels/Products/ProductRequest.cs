@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Api.Contracts.Products;
+﻿namespace ECommerce.Api.ViewModels.Products;
 
 public record ProductRequest(string Name,
     string Description,

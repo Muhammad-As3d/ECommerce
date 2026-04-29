@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace ECommerce.Application.Common.Behaviors;
+namespace ECommerce.Application.Abstractions.Behaviors;
 
 internal class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
@@ -11,7 +11,7 @@ internal class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TR
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (!_validators.Any())
-            return await next();
+            return await next(cancellationToken);
 
         var context = new ValidationContext<TRequest>(request);
 
@@ -26,6 +26,6 @@ internal class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TR
         if (failures.Count != 0)
             throw new ValidationException(failures);
 
-        return await next();
+        return await next(cancellationToken);
     }
 }

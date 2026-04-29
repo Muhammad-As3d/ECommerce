@@ -1,4 +1,4 @@
-﻿using ECommerce.Domain.Common;
+﻿using ECommerce.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Extensions;

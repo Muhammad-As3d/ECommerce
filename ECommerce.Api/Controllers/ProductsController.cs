@@ -1,7 +1,9 @@
-﻿using ECommerce.Api.Abstractions;
-using ECommerce.Api.Contracts.Products;
+﻿using AutoMapper;
+using ECommerce.Api.Abstractions;
+using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.Application.Features.Products.Queries.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
@@ -10,22 +12,22 @@ namespace ECommerce.Api.Controllers;
 [ApiController]
 public class ProductsController : ApiControllerBase
 {
+    public ProductsController(IMediator mediator, IMapper mapper)
+    : base(mediator, mapper) { }
 
     [HttpGet("")]
     public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAll()
     {
-        var result = await Mediator.Send(new GetAllProductsQuery());
+        var result = await _mediator.Send(new GetAllProductsQuery());
 
         return Ok(result);
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Create(ProductRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create(CreateProductCommand command, CancellationToken cancellationToken)
     {
-        var command = Mapper.Map<CreateProductCommand>(request);
+        var result = await _mediator.Send(command, cancellationToken);
 
-        var result = await Mediator.Send(command, cancellationToken);
-
-        return HandleCreateResult(result);
+        return HandleCreateResult(result, "", new { });
     }
 }

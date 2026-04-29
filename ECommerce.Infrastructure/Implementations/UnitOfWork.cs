@@ -5,7 +5,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
 {
     private readonly ApplicationDbContext _context = context;
     private readonly Dictionary<Type, object> _repositories = [];
-    public IGenericRepository<T> Repository<T>() where T : class
+    public IGenericRepository<T> Repository<T>() where T : BaseEntity
     {
         var type = typeof(T);
 

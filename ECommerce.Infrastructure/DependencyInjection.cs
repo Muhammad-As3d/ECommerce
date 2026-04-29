@@ -1,4 +1,6 @@
 ﻿
+using ECommerce.Infrastructure.Identity.Entities;
+
 namespace ECommerce.Infrastructure.DependencyInjection;
 
 public static class DependencyInjection

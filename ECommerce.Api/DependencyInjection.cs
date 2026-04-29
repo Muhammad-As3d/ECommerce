@@ -1,7 +1,6 @@
 ﻿using ECommerce.Api.Middleware;
 using ECommerce.Application;
 using ECommerce.Infrastructure.DependencyInjection;
-using FluentValidation;
 
 namespace ECommerce.Api;
 
@@ -21,7 +20,7 @@ public static class DependencyInjection
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
-        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        //services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
         services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ECommerce.Api.Contracts.Category;
+namespace ECommerce.Api.ViewModels.Category;
 
 public record CreateCategoryRequest(string Name);
 
