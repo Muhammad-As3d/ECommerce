@@ -1,4 +1,4 @@
-﻿using ECommerce.Domain.Common;
+﻿using ECommerce.Domain.Abstractions;
 
 namespace ECommerce.Domain.Errors;
 

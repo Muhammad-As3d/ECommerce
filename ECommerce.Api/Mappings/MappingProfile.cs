@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using ECommerce.Api.Contracts.Category;
-using ECommerce.Api.Contracts.Products;
-using ECommerce.Application.DTOs.Category;
-using ECommerce.Application.DTOs.Products;
-using ECommerce.Application.Features.Categories.Commands.Requests;
+using ECommerce.Api.ViewModels.Products;
+using ECommerce.Application.Contracts.Products;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
 
 namespace ECommerce.Api.Mappings;
@@ -17,9 +14,6 @@ public class MappingProfile : Profile
         CreateMap<GetProductDto, ProductResponse>().ReverseMap();
 
         // Category Mapping
-        CreateMap<GetCategoryDto, CategoryResponse>().ReverseMap();
-        CreateMap<CreateCategoryRequest, CreateCategoryCommand>();
-        CreateMap<GetCategoryDto, CategoryResponse>().ReverseMap();
 
     }
 }

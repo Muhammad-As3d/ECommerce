@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ECommerce.Api.Extensions;
-using ECommerce.Domain.Common;
+using ECommerce.Domain.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,19 +8,23 @@ namespace ECommerce.Api.Abstractions;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ApiControllerBase : ControllerBase
+public abstract class ApiControllerBase(IMediator mediator, IMapper mapper) : ControllerBase
 {
-    private IMediator? _mediatorInstance;
-    private IMapper? _mapperInstance;
-
-    protected IMediator Mediator => _mediatorInstance ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
-    protected IMapper Mapper => _mapperInstance ??= HttpContext.RequestServices.GetRequiredService<IMapper>();
-
-    protected IActionResult HandleResult(Result result) => result.IsSuccess ? NoContent() : result.ToProblem();
+    protected IMediator _mediator { get; } = mediator;
+    protected IMapper _mapper { get; } = mapper;
+    protected IActionResult HandleResult(Result result) =>
+        result.IsSuccess ? NoContent() : result.ToProblem();
 
     protected IActionResult HandleResult<TValue, TViewModel>(Result<TValue> result) =>
-        result.IsSuccess ? Ok(Mapper.Map<TViewModel>(result.Value)) : result.ToProblem();
+        result.IsSuccess ? Ok(_mapper.Map<TViewModel>(result.Value))
+        : result.ToProblem();
 
-    protected IActionResult HandleCreateResult(Result result) =>
-        result.IsSuccess ? Created() : result.ToProblem();
+    protected IActionResult HandleResult<TValue, TViewModel>(Result<IEnumerable<TValue>> result) =>
+    result.IsSuccess
+        ? Ok(_mapper.Map<IEnumerable<TViewModel>>(result.Value))
+        : result.ToProblem();
+
+    protected IActionResult HandleCreateResult<TValue>(Result<TValue> result, string routeName, object routeValue) =>
+        result.IsSuccess ? CreatedAtAction(routeName, routeValue, result.Value)
+        : result.ToProblem();
 }

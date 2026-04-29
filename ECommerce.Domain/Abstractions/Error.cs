@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Domain.Common;
+﻿namespace ECommerce.Domain.Abstractions;
 
 public record Error(string Code, string Description, ErrorType ErrorType)
 {
@@ -6,13 +6,10 @@ public record Error(string Code, string Description, ErrorType ErrorType)
 
     public static Error Failure(string Code, string Description) =>
         new(Code, Description, ErrorType.Failure);
-
     public static Error NotFound(string Code, string Description) =>
         new(Code, Description, ErrorType.NotFound);
-
     public static Error Conflict(string Code, string Description) =>
         new(Code, Description, ErrorType.Conflict);
-
     public static Error Validation(string Code, string Description) =>
         new(Code, Description, ErrorType.Validation);
 }

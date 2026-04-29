@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Domain.Common;
+﻿namespace ECommerce.Domain.Abstractions;
 
 public class Result
 {

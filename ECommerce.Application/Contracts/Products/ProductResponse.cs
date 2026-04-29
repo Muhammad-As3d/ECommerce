@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.DTOs.Products;
+﻿namespace ECommerce.Application.Contracts.Products;
 
 public record GetProductDto(
     int Id,

@@ -1,5 +1,5 @@
 ﻿using ECommerce.Application.Interfaces;
-using ECommerce.Domain.Common;
+using ECommerce.Domain.Abstractions;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Errors;
 using MediatR;
