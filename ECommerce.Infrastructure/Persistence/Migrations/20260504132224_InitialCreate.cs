@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateDb : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,6 +16,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -29,9 +32,9 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -50,27 +53,6 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Street = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    State = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    ZipCode = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -185,8 +167,9 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -205,44 +188,6 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         name: "FK_Categories_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderStatus = table.Column<byte>(type: "tinyint", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RequiredDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ShippingDate = table.Column<DateOnly>(type: "date", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
-                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UpdatedById",
-                        column: x => x.UpdatedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Orders_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -253,11 +198,13 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ModelYear = table.Column<int>(type: "int", nullable: false),
-                    ListPrice = table.Column<double>(type: "float(10)", precision: 10, scale: 2, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    ModelYear = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<double>(type: "float(10)", precision: 10, scale: 2, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -276,41 +223,12 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         name: "FK_Products_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ListPrice = table.Column<double>(type: "float(10)", precision: 10, scale: 2, nullable: false),
-                    Discount = table.Column<double>(type: "float(4)", precision: 4, scale: 2, nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_OrderItems_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -365,31 +283,6 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 column: "UpdatedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId",
-                table: "OrderItems",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_ProductId",
-                table: "OrderItems",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_CreatedById",
-                table: "Orders",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_CustomerId",
-                table: "Orders",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_UpdatedById",
-                table: "Orders",
-                column: "UpdatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -424,19 +317,10 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Categories");

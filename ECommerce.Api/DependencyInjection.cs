@@ -13,8 +13,8 @@ public static class DependencyInjection
         services.AddOpenApi();
 
         services
-            .AddApplicationServices()
-            .AddInfrastructureServices(configuration);
+            .AddApplicationDependencies()
+            .AddInfrastructureDependencies(configuration);
 
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
