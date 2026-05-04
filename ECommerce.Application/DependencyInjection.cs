@@ -9,7 +9,7 @@ namespace ECommerce.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
     {
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
