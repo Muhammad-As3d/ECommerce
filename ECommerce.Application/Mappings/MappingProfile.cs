@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECommerce.Application.Contracts.Authentication;
 using ECommerce.Application.Contracts.Products;
 using ECommerce.Domain.Entities;
 
@@ -8,6 +9,10 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        //Authentication
+        //CreateMap<RegisterRequest, ApplicationUser>
+
+
         //Product Mappings
         CreateMap<GetProductDto, Product>();
 
