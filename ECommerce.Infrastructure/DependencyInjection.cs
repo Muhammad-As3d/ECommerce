@@ -1,5 +1,7 @@
-﻿
-using ECommerce.Infrastructure.Identity.Entities;
+﻿using ECommerce.Infrastructure.Identity.Settings;
+using ECommerce.Infrastructure.Implementations.Authentication;
+using ECommerce.Infrastructure.Implementations.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ECommerce.Infrastructure.DependencyInjection;
 
@@ -15,9 +17,19 @@ public static class DependencyInjection
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
         );
 
+        services.AddOptions<MailSetting>()
+            .BindConfiguration(nameof(MailSetting))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddHttpContextAccessor();  
+
         services.AddAuthenticationConfig(configuration);
 
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IEmailSender, EmailService>();
 
         return services;
     }
@@ -25,7 +37,15 @@ public static class DependencyInjection
     private static IServiceCollection AddAuthenticationConfig(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<ApplicationUser, ApplicationRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequiredLength = 8;
+            options.SignIn.RequireConfirmedEmail = true;
+            options.User.RequireUniqueEmail = true;
+        });
 
         return services;
     }
