@@ -5,7 +5,6 @@ namespace ECommerce.Application.Interfaces.Repositories;
 
 public interface IGenericRepository<T> where T : BaseEntity
 {
-    IQueryable<T> GetQueryable();
     Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);

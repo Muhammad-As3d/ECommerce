@@ -33,7 +33,7 @@ public static class ResultExtension
         ErrorType.Forbidden => StatusCodes.Status403Forbidden,
         ErrorType.InvalidCredentials => StatusCodes.Status401Unauthorized,
         ErrorType.Conflict => StatusCodes.Status409Conflict,
-        ErrorType.Validation => StatusCodes.Status400BadRequest,
+        ErrorType.BadRequest => StatusCodes.Status400BadRequest,
         _ => StatusCodes.Status500InternalServerError
     };
 }
