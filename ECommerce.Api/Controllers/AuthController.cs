@@ -33,4 +33,12 @@ public class AuthController(IAuthService authService) : ApiBaseController
 
         return HandleResult(result);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        var result = await _authService.LoginAsync(request);
+
+        return HandleResult(result);
+    }
 }

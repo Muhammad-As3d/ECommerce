@@ -1,9 +1,10 @@
-﻿using ECommerce.Infrastructure.Identity.Settings;
+﻿using ECommerce.Application.Interfaces.Services;
 using ECommerce.Infrastructure.Implementations.Authentication;
 using ECommerce.Infrastructure.Implementations.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace ECommerce.Infrastructure.DependencyInjection;
+namespace ECommerce.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -22,7 +23,7 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddHttpContextAccessor();  
+        services.AddHttpContextAccessor();
 
         services.AddAuthenticationConfig(configuration);
 
@@ -30,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailSender, EmailService>();
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         return services;
     }
@@ -39,6 +41,34 @@ public static class DependencyInjection
         services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddOptions<JwtOptions>()
+        .BindConfiguration(JwtOptions.SectionName)
+        .ValidateDataAnnotations()
+        .ValidateOnStart();
+
+        var jwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(o =>
+        {
+            o.SaveToken = true;
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings!.Key)),
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+            };
+        });
+
 
         services.Configure<IdentityOptions>(options =>
         {
