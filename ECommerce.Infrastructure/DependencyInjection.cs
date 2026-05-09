@@ -1,8 +1,6 @@
-﻿using ECommerce.Application.Interfaces.Services;
-using ECommerce.Infrastructure.Implementations.Authentication;
+﻿using ECommerce.Infrastructure.Implementations.Authentication;
 using ECommerce.Infrastructure.Implementations.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace ECommerce.Infrastructure;
 
@@ -43,9 +41,9 @@ public static class DependencyInjection
             .AddDefaultTokenProviders();
 
         services.AddOptions<JwtOptions>()
-        .BindConfiguration(JwtOptions.SectionName)
-        .ValidateDataAnnotations()
-        .ValidateOnStart();
+            .BindConfiguration(JwtOptions.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         var jwtSettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
 
@@ -66,9 +64,12 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings!.Key)),
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
+                RoleClaimType = ClaimTypes.Role,
+                NameClaimType = ClaimTypes.NameIdentifier
             };
         });
 
+        services.AddAuthorization();
 
         services.Configure<IdentityOptions>(options =>
         {

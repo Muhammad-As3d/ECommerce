@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Category\" />
-    <Folder Include="Features\Categories\Commands\Validators\" />
-    <Folder Include="Features\Categories\Queries\Requests\" />
-    <Folder Include="Features\Products\Queries\Handlers\" />
     <Folder Include="Interfaces\Services\" />
   </ItemGroup>
 
