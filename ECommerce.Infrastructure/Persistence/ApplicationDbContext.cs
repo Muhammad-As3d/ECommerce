@@ -1,10 +1,10 @@
-﻿using ECommerce.Infrastructure.Identity.Entities;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ECommerce.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
 {
+    //public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
     public DbSet<Product> Products { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
 

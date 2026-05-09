@@ -4,7 +4,6 @@ public class GenericRepository<T>(ApplicationDbContext context) : IGenericReposi
 {
     private readonly ApplicationDbContext _context = context;
 
-    public IQueryable<T> GetQueryable() => _context.Set<T>();
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _context.Set<T>().ToListAsync(cancellationToken);
     public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>

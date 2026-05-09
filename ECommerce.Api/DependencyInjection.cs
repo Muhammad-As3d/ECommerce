@@ -1,6 +1,6 @@
 ﻿using ECommerce.Api.Middleware;
 using ECommerce.Application;
-using ECommerce.Infrastructure.DependencyInjection;
+using ECommerce.Infrastructure;
 
 namespace ECommerce.Api;
 

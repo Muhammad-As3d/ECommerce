@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260508224227_AddDataSeeding")]
+    partial class AddDataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,7 +172,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         {
                             Id = "23c617eb-34dd-41ca-b15a-b5630999daaa",
                             ConcurrencyStamp = "ffc2d9b2-b2f9-4bcc-af93-eec61e521c87",
-                            IsDefault = true,
+                            IsDefault = false,
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
