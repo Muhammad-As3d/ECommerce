@@ -4,7 +4,7 @@ using ECommerce.Application.Interfaces;
 using ECommerce.Domain.Entities;
 using MediatR;
 
-namespace ECommerce.Application.Features.Products.Queries.Requests;
+namespace ECommerce.Application.Features.Products.GetAll;
 
 public record GetAllProductsQuery() : IRequest<IEnumerable<GetProductDto>>;
 
@@ -15,7 +15,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) 
 
     public async Task<IEnumerable<GetProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _unitOfWork.Repository<Product>().GetAllAsync();
+        var products = await _unitOfWork.Repository<Product>().GetAllAsync(cancellationToken);
 
         return _mapper.Map<IEnumerable<GetProductDto>>(products);
     }

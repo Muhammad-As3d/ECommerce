@@ -3,7 +3,7 @@ using ECommerce.Domain.Abstractions;
 using ECommerce.Domain.Entities;
 using MediatR;
 
-namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
+namespace ECommerce.Application.Features.Products.Create;
 
 internal class CreateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateProductCommand, Result<int>>
 {
