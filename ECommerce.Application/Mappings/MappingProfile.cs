@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using ECommerce.Application.Contracts.Authentication;
+using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Contracts.Products;
 using ECommerce.Domain.Entities;
 
@@ -9,6 +9,11 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        #region Category
+        CreateMap<Category, CategoryResponse>();
+
+        #endregion
+
         //Authentication
         //CreateMap<RegisterRequest, ApplicationUser>
 
@@ -16,6 +21,5 @@ public class MappingProfile : Profile
         //Product Mappings
         CreateMap<GetProductDto, Product>();
 
-        //Category Mappings
     }
 }

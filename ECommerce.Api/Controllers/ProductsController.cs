@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using ECommerce.Api.ViewModels.Products;
-using ECommerce.Application.Features.Products.Commands.CreateProduct;
-using ECommerce.Application.Features.Products.Queries.Requests;
+﻿using ECommerce.Application.Features.Products.Create;
+using ECommerce.Application.Features.Products.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,15 +7,14 @@ namespace ECommerce.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductsController(ISender sender, IMapper mapper) : ApiBaseController
+public class ProductsController(ISender sender) : ApiBaseController
 {
     private readonly ISender _sender = sender;
-    private readonly IMapper _mapper = mapper;
 
     [HttpGet("")]
-    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetAllProductsQuery());
+        var result = await _sender.Send(new GetAllProductsQuery(), cancellationToken);
 
         return Ok(result);
     }

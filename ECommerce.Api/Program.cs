@@ -11,18 +11,19 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
 
-app.UseExceptionHandler();
-
 app.UseSerilogRequestLogging();
-
 app.UseHttpsRedirection();
+app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

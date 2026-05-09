@@ -1,6 +1,4 @@
-﻿using ECommerce.Application.Interfaces.Services;
-
-namespace ECommerce.Infrastructure.Implementations.Authentication;
+﻿namespace ECommerce.Infrastructure.Implementations.Authentication;
 
 public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
@@ -8,16 +6,19 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 
     public async Task<(string token, int ExpiresIn)> GenerateTokenAsync(ApplicationUser user, IEnumerable<string> roles)
     {
-        Claim[] claims =
+        List<Claim> claims =
         [
             new(JwtRegisteredClaimNames.Sub,user.Id),
             new(JwtRegisteredClaimNames.Email,user.Email!),
             new(JwtRegisteredClaimNames.GivenName,user.FirstName),
             new(JwtRegisteredClaimNames.FamilyName,user.LastName),
             new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Sub,user.Id),
             new(nameof(roles),JsonSerializer.Serialize(roles),JsonClaimValueTypes.JsonArray)
         ];
+
+        foreach (var role in roles)
+            claims.Add(new Claim(ClaimTypes.Role, role));
+
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
 
