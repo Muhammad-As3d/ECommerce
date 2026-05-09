@@ -1,10 +1,10 @@
-﻿
-namespace ECommerce.Infrastructure.Implementations;
+﻿namespace ECommerce.Infrastructure.Implementations;
 
 public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
 {
-    private readonly ApplicationDbContext _context = context;
     private readonly Dictionary<Type, object> _repositories = [];
+    private readonly ApplicationDbContext _context = context;
+
     public IGenericRepository<T> Repository<T>() where T : BaseEntity
     {
         var type = typeof(T);

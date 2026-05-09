@@ -1,6 +1,4 @@
-﻿using ECommerce.Infrastructure.Identity.Entities;
-
-namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
+﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
 public abstract class AuditableEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : AuditableEntity
 {
@@ -15,8 +13,5 @@ public abstract class AuditableEntityConfiguration<TEntity> : IEntityTypeConfigu
             .WithMany()
             .HasForeignKey(x => x.UpdatedById)
             .OnDelete(DeleteBehavior.Restrict);
-
-        //builder.Property(x => x.CreatedById).HasMaxLength(150);
-        //builder.Property(x => x.UpdatedById).HasMaxLength(150);
     }
 }
