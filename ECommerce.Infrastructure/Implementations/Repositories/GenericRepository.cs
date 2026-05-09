@@ -1,23 +1,38 @@
-﻿namespace ECommerce.Infrastructure.Implementations.Repositories;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
-public class GenericRepository<T>(ApplicationDbContext context) : IGenericRepository<T> where T : BaseEntity
+namespace ECommerce.Infrastructure.Implementations.Repositories;
+
+public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper) : IGenericRepository<T> where T : BaseEntity
 {
     private readonly ApplicationDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
+    private readonly DbSet<T> _dbSet = context.Set<T>();
 
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
-        await _context.Set<T>().ToListAsync(cancellationToken);
+        await _dbSet.ToListAsync(cancellationToken);
+    public async Task<IEnumerable<T>> GetAllAsync(string[] includes = null!, CancellationToken cancellationToken = default) =>
+        await _dbSet.ApplyIncludes(includes).ToListAsync(cancellationToken);
     public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
-        await _context.Set<T>().FindAsync(id, cancellationToken);
+        await _dbSet.FindAsync(id, cancellationToken);
 
     public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
-        await _context.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
+        await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
-        await _context.Set<T>().AddAsync(entity, cancellationToken);
+        await _dbSet.AddAsync(entity, cancellationToken);
 
-    public void Update(T entity) => _context.Set<T>().Update(entity);
+    public void Update(T entity) => _dbSet.Update(entity);
 
     public async Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default) =>
-        await _context.Set<T>().Where(c => c.Id == id).ExecuteUpdateAsync(s => s
+        await _dbSet.Where(c => c.Id == id).ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => !x.IsDeleted), cancellationToken);
+
+    #region Projection
+    public async Task<IEnumerable<TProjection>> GetAllProjectionAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class
+        => await _dbSet.AsNoTracking()
+        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ToListAsync(cancellationToken);
+
+    #endregion
 }

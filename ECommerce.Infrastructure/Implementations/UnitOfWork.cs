@@ -1,9 +1,12 @@
-﻿namespace ECommerce.Infrastructure.Implementations;
+﻿using AutoMapper;
 
-public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
+namespace ECommerce.Infrastructure.Implementations;
+
+public class UnitOfWork(ApplicationDbContext context, IMapper mapper) : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = [];
     private readonly ApplicationDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public IGenericRepository<T> Repository<T>() where T : BaseEntity
     {
@@ -12,7 +15,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
         if (_repositories.TryGetValue(type, out var repository))
             return (IGenericRepository<T>)repository;
 
-        var newRepository = new GenericRepository<T>(_context);
+        var newRepository = new GenericRepository<T>(_context, _mapper);
 
         _repositories[type] = newRepository;
 

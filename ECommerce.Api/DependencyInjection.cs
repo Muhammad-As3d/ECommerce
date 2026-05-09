@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.Middleware;
 using ECommerce.Application;
 using ECommerce.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api;
 
@@ -12,9 +13,20 @@ public static class DependencyInjection
         services.AddControllers();
         services.AddOpenApi();
 
-        services
-            .AddApplicationDependencies()
-            .AddInfrastructureDependencies(configuration);
+        var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+        services.AddCors(options =>
+            options.AddDefaultPolicy(builder =>
+                builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins(allowedOrigins!)
+            )
+        );
+
+
+        services.AddApplicationDependencies();
+        services.AddInfrastructureDependencies(configuration);
 
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -22,7 +34,9 @@ public static class DependencyInjection
 
         //services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
-        services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
+        //services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
+
+
 
         return services;
     }
