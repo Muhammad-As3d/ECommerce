@@ -17,7 +17,8 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHan
         //    .AnyAsync(c => c.Id == request.CategoryId, cancellationToken);
 
         //if (!categoryIsExists)
-        //    return Result.Failure<int>(CategoryError.NotFound(request.CategoryId));
+        //    return Result.Failure<int>(CategoryErrors
+        //.NotFound(request.CategoryId));
 
         var product = Product.Create(
              request.Name,

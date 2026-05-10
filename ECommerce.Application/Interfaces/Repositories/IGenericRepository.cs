@@ -15,5 +15,6 @@ public interface IGenericRepository<T> where T : BaseEntity
 
     #region Projection
     Task<IEnumerable<TProjection>> GetAllProjectionAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
+    Task<TProjection?> GetByIdProjectionAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class;
     #endregion
 }
