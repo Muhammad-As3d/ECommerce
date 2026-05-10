@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 A **scalable E-Commerce RESTful API** built with **ASP.NET Core (.NET 10)** following **Clean Architecture** principles.
-Implements **CQRS**, **MediatR**, **Result Pattern**, **Repository Pattern**, **JWT Authentication**, and **FluentValidation**.
+Implements **CQRS**, **MediatR**, **Result Pattern**, **Repository Pattern**, **AutoMapper**, **JWT Authentication**, and **FluentValidation**.
 
 ---
 
