@@ -34,5 +34,8 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper) 
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
         .ToListAsync(cancellationToken);
 
+    public async Task<TProjection?> GetByIdProjectionAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class =>
+        await _dbSet.Where(x => x.Id == id).ProjectTo<TProjection>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+
     #endregion
 }
