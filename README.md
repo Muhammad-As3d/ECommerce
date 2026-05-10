@@ -1,7 +1,7 @@
 # 🛒 ECommerce API
 
 [![.NET](https://img.shields.io/badge/.NET-10-blue?logo=dotnet)](https://dotnet.microsoft.com/)
-[![C#](https://img.shields.io/badge/C%23-9.0-blue?logo=c-sharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![C#](https://img.shields.io/badge/C%23-14-blue?logo=c-sharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 A **scalable E-Commerce RESTful API** built with **ASP.NET Core (.NET 10)** following **Clean Architecture** principles.
