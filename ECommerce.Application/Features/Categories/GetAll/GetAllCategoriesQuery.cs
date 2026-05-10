@@ -11,7 +11,8 @@ public class GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<IEnumerable<CategoryResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken) =>
-        await _unitOfWork.Repository<Category>()
+        await _unitOfWork
+        .Repository<Category>()
         .GetAllProjectionAsync<CategoryResponse>(cancellationToken);
 
 }
