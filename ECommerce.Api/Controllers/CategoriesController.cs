@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.Features.Categories.Create;
 using ECommerce.Application.Features.Categories.Get;
 using ECommerce.Application.Features.Categories.GetAll;
+using ECommerce.Application.Features.Categories.ToggleStatus;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,15 @@ public class CategoriesController(ISender sender) : ApiBaseController
     public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPut("{id}/toggle-status")]
+    public async Task<IActionResult> ToggleStatus([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new ToggleStatusCategoryCommand(id), cancellationToken);
 
         return HandleResult(result);
     }

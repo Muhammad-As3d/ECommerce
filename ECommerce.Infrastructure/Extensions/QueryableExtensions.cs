@@ -2,11 +2,10 @@
 
 public static class QueryableExtensions
 {
-    public static IQueryable<T> ApplyIncludes<T>(this IQueryable<T> query, string[] includes) where T : class
+    public static IQueryable<T> ApplyIncludes<T>(this IQueryable<T> query, Func<IQueryable<T>, IQueryable<T>> include) where T : class
     {
-        if (includes != null)
-            foreach (var include in includes)
-                query = query.Include(include);
+        if (include is not null)
+            query = include(query);
 
         return query;
     }

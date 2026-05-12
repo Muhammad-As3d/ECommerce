@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Categories\Checks\" />
+    <Folder Include="Features\Products\Checks\" />
     <Folder Include="Interfaces\Services\" />
   </ItemGroup>
 
