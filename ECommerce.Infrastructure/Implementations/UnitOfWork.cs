@@ -2,7 +2,8 @@
 
 namespace ECommerce.Infrastructure.Implementations;
 
-public class UnitOfWork(ApplicationDbContext context, IMapper mapper) : IUnitOfWork
+public class UnitOfWork(ApplicationDbContext context, IMapper mapper)
+    : IUnitOfWork
 {
     private readonly Dictionary<Type, object> _repositories = [];
     private readonly ApplicationDbContext _context = context;
