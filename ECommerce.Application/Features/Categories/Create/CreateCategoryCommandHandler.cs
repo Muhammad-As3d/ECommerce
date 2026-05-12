@@ -1,9 +1,4 @@
-﻿using ECommerce.Application.Interfaces;
-using ECommerce.Domain.Abstractions;
-using ECommerce.Domain.Entities;
-using MediatR;
-
-namespace ECommerce.Application.Features.Categories.Create;
+﻿namespace ECommerce.Application.Features.Categories.Create;
 
 public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, Result>
 {
@@ -11,12 +6,16 @@ public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
     public async Task<Result> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
+        var repo = _unitOfWork.Repository<Category>();
+
+        var isNameExists = await repo.AnyAsync(x => x.Name == request.Name, cancellationToken);
+
+        if (isNameExists)
+            return Result.Failure(CategoryErrors.DuplicatedName);
 
         var category = Category.Create(request.Name, request.Description);
 
-        await _unitOfWork
-            .Repository<Category>()
-            .AddAsync(category, cancellationToken);
+        await repo.AddAsync(category, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
