@@ -26,8 +26,7 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork) : IRequestHan
              request.Stock,
              request.ModelYear,
              request.Price,
-             request.CategoryId,
-             "88F56E41-4D68-4C35-914A-EBBA66691D5F"
+             request.CategoryId
              );
 
         await _unitOfWork.Repository<Product>().AddAsync(product, cancellationToken);

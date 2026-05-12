@@ -13,22 +13,18 @@ public class Product : AuditableEntity
 
     public Category Category { get; set; } = default!;
     private Product() { }
-    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId, string createdById)
-    {
-        return new Product()
-        {
-            Name = name,
-            Description = description,
-            Stock = stock,
-            ModelYear = modelYear,
-            Price = price,
-            CategoryId = categoryId,
-            CreatedById = createdById,
-            CreatedOn = DateTime.UtcNow,
-        };
-    }
+    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId) =>
+         new()
+         {
+             Name = name,
+             Description = description,
+             Stock = stock,
+             ModelYear = modelYear,
+             Price = price,
+             CategoryId = categoryId
+         };
 
-    public void Update(string name, string description, int stock, int modelYear, double price, int categoryId, string updatedById)
+    public void Update(string name, string description, int stock, int modelYear, double price, int categoryId)
     {
         Name = name;
         Description = description;
@@ -36,8 +32,6 @@ public class Product : AuditableEntity
         ModelYear = modelYear;
         Price = price;
         CategoryId = categoryId;
-        UpdatedById = updatedById;
-        UpdatedOn = DateTime.UtcNow;
     }
 }
 
