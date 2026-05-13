@@ -1,9 +1,4 @@
 ﻿using ECommerce.Application.Contracts.Category;
-using ECommerce.Application.Interfaces;
-using ECommerce.Domain.Abstractions;
-using ECommerce.Domain.Entities;
-using ECommerce.Domain.Errors;
-using MediatR;
 
 namespace ECommerce.Application.Features.Categories.Get;
 
@@ -17,7 +12,7 @@ public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandl
     {
         var category = await _unitOfWork
             .Repository<Category>()
-            .GetByIdProjectionAsync<CategoryResponse>(request.Id, cancellationToken);
+            .GetByIdProjectAsync<CategoryResponse>(request.Id, cancellationToken);
 
         if (category is null)
             return Result.Failure<CategoryResponse>(CategoryErrors.NotFound(request.Id));
