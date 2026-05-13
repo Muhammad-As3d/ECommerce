@@ -1,7 +1,9 @@
-﻿using ECommerce.Application.Features.Categories.Create;
+﻿using ECommerce.Api.ViewModels;
+using ECommerce.Application.Features.Categories.Create;
 using ECommerce.Application.Features.Categories.Get;
 using ECommerce.Application.Features.Categories.GetAll;
 using ECommerce.Application.Features.Categories.ToggleStatus;
+using ECommerce.Application.Features.Categories.Update;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -34,8 +36,21 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("")]
-    public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
+        var command = new CreateCategoryCommand(request.Name, request.Description);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateCategoryCommand(id, request.Name, request.Description);
+
         var result = await _sender.Send(command, cancellationToken);
 
         return HandleResult(result);

@@ -16,4 +16,10 @@ public class Category : AuditableEntity
              Description = description
          };
 
+    public void Update(string name, string description)
+    {
+        Name = name;
+        Description = description;
+    }
+
 }
