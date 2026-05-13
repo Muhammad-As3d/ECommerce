@@ -11,7 +11,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> includes = null!, CancellationToken cancellationToken = default);
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
-    void Update(T entity);
+    void PartialUpdateAsync(T entity, params Expression<Func<T, object>>[] properties);
     Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default);
 
     #region Checks
@@ -20,7 +20,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     #endregion
 
     #region Projection
-    Task<IEnumerable<TProjection>> GetAllProjectionAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
-    Task<TProjection?> GetByIdProjectionAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class;
+    Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
+    Task<TProjection?> GetByIdProjectAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class;
     #endregion
 }
