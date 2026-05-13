@@ -1,6 +1,4 @@
-﻿using ECommerce.Domain.Abstractions;
-using FluentValidation;
-using MediatR;
+﻿using FluentValidation;
 
 namespace ECommerce.Application.Features.Categories.Create;
 

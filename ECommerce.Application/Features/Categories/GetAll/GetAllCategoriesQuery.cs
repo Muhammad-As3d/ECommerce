@@ -1,7 +1,4 @@
 ﻿using ECommerce.Application.Contracts.Category;
-using ECommerce.Application.Interfaces;
-using ECommerce.Domain.Entities;
-using MediatR;
 
 namespace ECommerce.Application.Features.Categories.GetAll;
 
@@ -13,6 +10,6 @@ public class GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
     public async Task<IEnumerable<CategoryResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken) =>
         await _unitOfWork
         .Repository<Category>()
-        .GetAllProjectionAsync<CategoryResponse>(cancellationToken);
+        .GetAllProjectAsync<CategoryResponse>(cancellationToken);
 
 }
