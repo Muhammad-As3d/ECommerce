@@ -1,9 +1,11 @@
 ﻿namespace ECommerce.Application.Contracts.Products;
 
-public record GetProductDto(
+public record ProductResponse(
     int Id,
     string Name,
-    int ModelYear,
-    double ListPrice,
+    string Description,
+    int Stock,
+    int? ModelYear,
+    double Price,
     int CategoryId
 );

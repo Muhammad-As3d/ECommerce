@@ -6,17 +6,17 @@ using MediatR;
 
 namespace ECommerce.Application.Features.Products.GetAll;
 
-public record GetAllProductsQuery() : IRequest<IEnumerable<GetProductDto>>;
+public record GetAllProductsQuery() : IRequest<IEnumerable<ProductResponse>>;
 
-public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetAllProductsQuery, IEnumerable<GetProductDto>>
+public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<IEnumerable<GetProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ProductResponse>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         var products = await _unitOfWork.Repository<Product>().GetAllAsync(cancellationToken);
 
-        return _mapper.Map<IEnumerable<GetProductDto>>(products);
+        return _mapper.Map<IEnumerable<ProductResponse>>(products);
     }
 }

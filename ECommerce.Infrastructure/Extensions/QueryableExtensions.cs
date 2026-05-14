@@ -1,12 +1,19 @@
-﻿namespace ECommerce.Infrastructure.Extensions;
+﻿using ECommerce.Application.Abstractions.Pagination;
+
+namespace ECommerce.Infrastructure.Extensions;
 
 public static class QueryableExtensions
 {
-    public static IQueryable<T> ApplyIncludes<T>(this IQueryable<T> query, Func<IQueryable<T>, IQueryable<T>> include) where T : class
+    public static async Task<PaginatedList<T>> ToPaginatedListAsync<T>(this IQueryable<T> source,
+        int pageNumber, int pageSize, CancellationToken cancellationToken = default) where T : class
     {
-        if (include is not null)
-            query = include(query);
+        var totalCount = await source.CountAsync(cancellationToken);
 
-        return query;
+        var items = await source
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PaginatedList<T>(items, pageNumber, totalCount, pageSize);
     }
 }
