@@ -1,7 +1,9 @@
 ﻿using ECommerce.Api.ViewModels;
+using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Categories.Create;
 using ECommerce.Application.Features.Categories.Get;
 using ECommerce.Application.Features.Categories.GetAll;
+using ECommerce.Application.Features.Categories.GetCategoryProducts;
 using ECommerce.Application.Features.Categories.ToggleStatus;
 using ECommerce.Application.Features.Categories.Update;
 using ECommerce.Infrastructure.Identity.Seeding;
@@ -19,9 +21,9 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpGet("")]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PageFilters request, CancellationToken cancellationToken)
     {
-        var response = await _sender.Send(new GetAllCategoriesQuery(), cancellationToken);
+        var response = await _sender.Send(new GetAllCategoriesQuery(request), cancellationToken);
 
         return Ok(response);
     }
@@ -30,6 +32,14 @@ public class CategoriesController(ISender sender) : ApiBaseController
     public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryByIdQuery(id), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [HttpGet("{id}/products")]
+    public async Task<IActionResult> GetCategoryProducts([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new GetCategoryProductsQuery(id), cancellationToken);
 
         return HandleResult(result);
     }

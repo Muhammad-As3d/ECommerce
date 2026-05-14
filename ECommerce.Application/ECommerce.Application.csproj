@@ -14,13 +14,10 @@
     <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
     <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Categories\Checks\" />
     <Folder Include="Features\Products\Checks\" />
     <Folder Include="Interfaces\Services\" />
   </ItemGroup>
