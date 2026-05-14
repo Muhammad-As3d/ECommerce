@@ -1,6 +1,4 @@
-﻿using ECommerce.Application.Behaviors;
-using FluentValidation;
-using MediatR;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
@@ -11,18 +9,20 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
     {
+
+        var assembly = typeof(DependencyInjection).Assembly;
+
+        services.AddMediatR(configuration =>
+            configuration.RegisterServicesFromAssembly(assembly));
+
+        services.AddValidatorsFromAssembly(assembly);
+
+        //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>)); 
+
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
-
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
-
-            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-        });
-
         services.AddFluentValidationAutoValidation()
-            .AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+            .AddValidatorsFromAssembly(assembly);
 
         return services;
     }

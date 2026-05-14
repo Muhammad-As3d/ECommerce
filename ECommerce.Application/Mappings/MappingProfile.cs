@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Contracts.Products;
-using ECommerce.Domain.Entities;
 
 namespace ECommerce.Application.Mappings;
 
@@ -12,6 +11,9 @@ public class MappingProfile : Profile
         #region Category
         CreateMap<Category, CategoryResponse>();
 
+        CreateMap<Category, CategoryProductsResponse>()
+            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+
         #endregion
 
         //Authentication
@@ -19,7 +21,7 @@ public class MappingProfile : Profile
 
 
         //Product Mappings
-        CreateMap<GetProductDto, Product>();
+        CreateMap<Product, ProductResponse>();
 
     }
 }

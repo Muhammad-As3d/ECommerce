@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using ECommerce.Application.Abstractions.Pagination;
+using ECommerce.Domain.Specifications;
+using ECommerce.Infrastructure.Specifications;
 
 namespace ECommerce.Infrastructure.Implementations.Repositories;
 
@@ -13,21 +16,19 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IQueryable<T>> includes = null!, CancellationToken cancellationToken = default) =>
-        await _dbSet
-        .ApplyIncludes(includes)
+    public async Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec,
+        CancellationToken cancellationToken = default) =>
+        await SpecificationEvaluator
+        .GetQuery(_dbSet, spec)
         .ToListAsync(cancellationToken);
 
-    public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default) =>
-        await _dbSet.FindAsync(id, cancellationToken);
-
     public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
-        await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
+        await _dbSet.Where(predicate)
+        .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IQueryable<T>> includes = null!, CancellationToken cancellationToken = default) =>
-        await _dbSet
-        .Where(predicate)
-        .ApplyIncludes(includes)
+    public async Task<T?> GetBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default) =>
+        await SpecificationEvaluator
+        .GetQuery(_dbSet, spec)
         .FirstOrDefaultAsync(cancellationToken);
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
@@ -50,19 +51,6 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => !x.IsDeleted), cancellationToken);
 
-
-
-    //public void PartialUpdateAsync(T entity, params string[] propertiesNames)
-    //{
-    //    var entry = _context.Entry(entity);
-
-    //    if (entry.State == EntityState.Detached)
-    //        entry = _dbSet.Attach(entity);
-
-    //    foreach (var prop in propertiesNames)
-    //        entry.Property(prop).IsModified = true;
-    //}
-
     #region Checks
 
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
@@ -71,14 +59,36 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     #endregion
 
 
-    #region Projection
+    #region Projection & Pagination & Specification 
     public async Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class
         => await _dbSet
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
         .ToListAsync(cancellationToken);
 
+    public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(int pageNumber, int pageSize,
+        CancellationToken cancellationToken = default) where TProjection : class =>
+         await _dbSet
+            .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+            .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
+
+    public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,
+         int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class =>
+        await SpecificationEvaluator
+            .GetQuery(_dbSet, spec)
+            .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+            .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
+
     public async Task<TProjection?> GetByIdProjectAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class =>
-        await _dbSet.Where(x => x.Id == id).ProjectTo<TProjection>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(cancellationToken);
+        await _dbSet
+        .Where(x => x.Id == id)
+        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<TProjection?> GetBySpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
+        await SpecificationEvaluator
+        .GetQuery(_dbSet, spec)
+        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .FirstOrDefaultAsync(cancellationToken);
 
     #endregion
 }
