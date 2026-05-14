@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.Contracts.Authentication;
 using ECommerce.Application.Interfaces.Authentication;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
