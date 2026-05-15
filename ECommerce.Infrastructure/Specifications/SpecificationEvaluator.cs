@@ -1,5 +1,4 @@
 ﻿using ECommerce.Domain.Specifications;
-using System.Linq.Dynamic.Core;
 namespace ECommerce.Infrastructure.Specifications;
 
 public static class SpecificationEvaluator

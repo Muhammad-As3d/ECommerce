@@ -1,20 +1,22 @@
 ﻿using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Contracts.Category;
-using ECommerce.Application.Features.Categories.Specifications;
+using ECommerce.Application.Specifications.CategorySpecifications;
 
 namespace ECommerce.Application.Features.Categories.GetAll;
 
-public record GetAllCategoriesQuery(PageFilters Page) : IRequest<PaginatedList<CategoryResponse>>;
+public record GetAllCategoriesQuery(SpecFilters Spec)
+    : IRequest<PaginatedList<CategoryResponse>>;
 
 public class GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllCategoriesQuery, PaginatedList<CategoryResponse>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<PaginatedList<CategoryResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
-        var spec = new CategorySpecification(request.Page.SearchValue, null, request.Page.IsDescending);
+        var spec = new CategorySpecification(request.Spec);
 
         return await _unitOfWork
         .Repository<Category>()
-        .GetAllPaginatedProjectAsync<CategoryResponse>(spec, request.Page.PageNumber, request.Page.PageSize, cancellationToken);
+        .GetAllPaginatedProjectAsync<CategoryResponse>(spec, request.Spec.PageNumber, request.Spec.PageSize,
+        cancellationToken);
     }
 }
