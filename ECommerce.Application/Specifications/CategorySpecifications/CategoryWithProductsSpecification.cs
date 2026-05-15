@@ -1,12 +1,12 @@
 ﻿using ECommerce.Domain.Specifications;
 
-namespace ECommerce.Application.Features.Categories.Specifications;
+namespace ECommerce.Application.Specifications.CategorySpecifications;
 
 public class CategoryWithProductsSpecification : Specification<Category>
 {
     public CategoryWithProductsSpecification(int id)
     {
         Predicate = x => x.Id == id;
-        //AddInclude(q => q.Products);
+        AddInclude(q => q.Products);
     }
 }

@@ -1,16 +1,17 @@
 ﻿namespace ECommerce.Application.Abstractions.Pagination;
 
-public sealed class PageFilters
+public sealed class SpecFilters
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
     public string? SearchValue { get; init; }
-    public bool IsDescending { get; init; }
+    public string? SortColumn { get; init; }
+    public bool IsDescending { get; init; } = false;
 }
 
 #region Validation 
 
-public class PagingRequestValidator : AbstractValidator<PageFilters>
+public class PagingRequestValidator : AbstractValidator<SpecFilters>
 {
     public PagingRequestValidator()
     {

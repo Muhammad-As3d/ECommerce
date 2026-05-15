@@ -22,10 +22,6 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .GetQuery(_dbSet, spec)
         .ToListAsync(cancellationToken);
 
-    public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
-        await _dbSet.Where(predicate)
-        .FirstOrDefaultAsync(cancellationToken);
-
     public async Task<T?> GetBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default) =>
         await SpecificationEvaluator
         .GetQuery(_dbSet, spec)
@@ -34,7 +30,7 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
         await _dbSet.AddAsync(entity, cancellationToken);
 
-    public void PartialUpdateAsync(T entity, params Expression<Func<T, object>>[] properties)
+    public void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties)
     {
         var entry = _context.Entry(entity);
 

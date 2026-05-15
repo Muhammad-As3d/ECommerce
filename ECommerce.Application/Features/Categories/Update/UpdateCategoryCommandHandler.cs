@@ -17,7 +17,7 @@ public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
         category.Update(request.Name, request.Description);
 
-        repo.PartialUpdateAsync(category, x => x.Name, x => x.Description);
+        repo.PartialUpdate(category, x => x.Name, x => x.Description);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

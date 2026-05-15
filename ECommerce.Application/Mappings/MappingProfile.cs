@@ -22,6 +22,7 @@ public class MappingProfile : Profile
 
         //Product Mappings
         CreateMap<Product, ProductResponse>();
+        //CreateMap<Product, ProductResponse>().ReverseMap();
 
     }
 }

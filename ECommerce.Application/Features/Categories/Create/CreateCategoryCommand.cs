@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace ECommerce.Application.Features.Categories.Create;
+﻿namespace ECommerce.Application.Features.Categories.Create;
 
 public record CreateCategoryCommand(
     string Name,

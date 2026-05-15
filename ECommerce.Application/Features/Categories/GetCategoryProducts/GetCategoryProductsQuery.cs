@@ -1,5 +1,5 @@
 ﻿using ECommerce.Application.Contracts.Category;
-using ECommerce.Application.Features.Categories.Specifications;
+using ECommerce.Application.Specifications.CategorySpecifications;
 
 namespace ECommerce.Application.Features.Categories.GetCategoryProducts;
 

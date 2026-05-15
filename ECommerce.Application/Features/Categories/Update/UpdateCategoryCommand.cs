@@ -1,12 +1,10 @@
-﻿using FluentValidation;
-
-namespace ECommerce.Application.Features.Categories.Update;
+﻿namespace ECommerce.Application.Features.Categories.Update;
 
 public record UpdateCategoryCommand(
     int Id,
     string Name,
     string Description
-) 
+)
     : IRequest<Result>;
 
 

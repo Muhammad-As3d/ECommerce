@@ -6,6 +6,5 @@ public record ProductResponse(
     string Description,
     int Stock,
     int? ModelYear,
-    double Price,
-    int CategoryId
+    double Price
 );
