@@ -1,7 +1,7 @@
 ﻿using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Specifications.CategorySpecifications;
 
-namespace ECommerce.Application.Features.Categories.GetCategoryProducts;
+namespace ECommerce.Application.Features.Categories.Queries.GetCategoryProducts;
 
 public record GetCategoryProductsQuery(int Id) : IRequest<Result<CategoryProductsResponse>>;
 

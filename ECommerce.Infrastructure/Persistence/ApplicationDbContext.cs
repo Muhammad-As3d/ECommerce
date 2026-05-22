@@ -10,6 +10,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     //public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
     public DbSet<Product> Products { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
+    public DbSet<ProductImage> ProductImages { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

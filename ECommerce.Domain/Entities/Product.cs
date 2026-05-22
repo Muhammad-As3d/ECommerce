@@ -11,8 +11,11 @@ public class Product : AuditableEntity
     public double Price { get; set; }
     public int CategoryId { get; set; }
 
+    public ICollection<ProductImage> ProductImages { get; set; } = [];
     public Category Category { get; set; } = default!;
+
     private Product() { }
+
     public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId) =>
          new()
          {
@@ -32,6 +35,12 @@ public class Product : AuditableEntity
         ModelYear = modelYear;
         Price = price;
         CategoryId = categoryId;
+    }
+
+    public void AddImages(IEnumerable<ProductImage> images)
+    {
+        foreach (ProductImage image in images)
+            ProductImages.Add(image);
     }
 }
 
