@@ -2,7 +2,7 @@
 using ECommerce.Application.Contracts.Products;
 using ECommerce.Application.Specifications.ProductSpecifications;
 
-namespace ECommerce.Application.Features.Products.GetAll;
+namespace ECommerce.Application.Features.Products.Queries.GetAll;
 
 public record GetAllProductsQuery(int CategoryId, SpecFilters Spec) : IRequest<Result<PaginatedList<ProductResponse>>>;
 

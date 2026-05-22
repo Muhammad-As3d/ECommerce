@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Features.Categories.Update;
+﻿namespace ECommerce.Application.Features.Categories.Commands.Update;
 
 public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateCategoryCommand, Result>
 {

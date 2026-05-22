@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Features.Categories.ToggleStatus;
+﻿namespace ECommerce.Application.Features.Categories.Commands.ToggleStatus;
 
 public class ToggleStatusCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<ToggleStatusCategoryCommand, Result>
 {

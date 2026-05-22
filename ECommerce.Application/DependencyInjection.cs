@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using ECommerce.Application.Behaviors;
+using ECommerce.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
@@ -17,12 +19,16 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(assembly);
 
-        //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>)); 
+        //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
         services.AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(assembly);
+
+        //services.AddScoped<IWebHostEnvironment>();
+
+        services.AddScoped<IFileService, FileService>();
 
         return services;
     }

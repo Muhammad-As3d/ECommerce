@@ -1,11 +1,11 @@
 ﻿using ECommerce.Api.ViewModels;
 using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Application.Features.Categories.Create;
-using ECommerce.Application.Features.Categories.Get;
-using ECommerce.Application.Features.Categories.GetAll;
-using ECommerce.Application.Features.Categories.GetCategoryProducts;
-using ECommerce.Application.Features.Categories.ToggleStatus;
-using ECommerce.Application.Features.Categories.Update;
+using ECommerce.Application.Features.Categories.Commands.Create;
+using ECommerce.Application.Features.Categories.Commands.ToggleStatus;
+using ECommerce.Application.Features.Categories.Commands.Update;
+using ECommerce.Application.Features.Categories.Queries.Get;
+using ECommerce.Application.Features.Categories.Queries.GetAll;
+using ECommerce.Application.Features.Categories.Queries.GetCategoryProducts;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,7 +52,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return HandleResult(result);
+        return HandleCreatedResult(result, nameof(Get), new { id = result.Value });
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]

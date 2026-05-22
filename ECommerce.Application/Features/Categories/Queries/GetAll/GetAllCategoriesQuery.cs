@@ -2,7 +2,7 @@
 using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Specifications.CategorySpecifications;
 
-namespace ECommerce.Application.Features.Categories.GetAll;
+namespace ECommerce.Application.Features.Categories.Queries.GetAll;
 
 public record GetAllCategoriesQuery(SpecFilters Spec)
     : IRequest<PaginatedList<CategoryResponse>>;

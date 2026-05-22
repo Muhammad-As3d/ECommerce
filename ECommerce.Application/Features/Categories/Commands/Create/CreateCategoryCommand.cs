@@ -1,9 +1,9 @@
-﻿namespace ECommerce.Application.Features.Categories.Create;
+﻿namespace ECommerce.Application.Features.Categories.Commands.Create;
 
 public record CreateCategoryCommand(
     string Name,
     string Description
-) : IRequest<Result>;
+) : IRequest<Result<int>>;
 
 
 # region Validation 

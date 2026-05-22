@@ -1,6 +1,6 @@
 ﻿using ECommerce.Application.Contracts.Category;
 
-namespace ECommerce.Application.Features.Categories.Get;
+namespace ECommerce.Application.Features.Categories.Queries.Get;
 
 public record GetCategoryByIdQuery(int Id) : IRequest<Result<CategoryResponse>>;
 
