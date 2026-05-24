@@ -1,5 +1,5 @@
-﻿using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Application.Contracts.Products;
+﻿using ECommerce.Api.ViewModels.Products;
+using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.Create;
 using ECommerce.Application.Features.Products.Queries.GetAll;
 using ECommerce.Infrastructure.Identity.Seeding;

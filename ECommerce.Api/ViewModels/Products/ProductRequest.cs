@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace ECommerce.Application.Contracts.Products;
+﻿namespace ECommerce.Api.ViewModels.Products;
 
 public record ProductRequest(
     string Name,
@@ -10,3 +8,4 @@ public record ProductRequest(
     double Price,
     List<IFormFile> Images
 );
+

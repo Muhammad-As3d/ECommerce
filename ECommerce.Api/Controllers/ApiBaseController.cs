@@ -16,6 +16,6 @@ public abstract class ApiBaseController : ControllerBase
         : result.ToProblem();
 
     protected IActionResult HandleCreatedResult<TValue>(Result<TValue> result, string routeName, object routeValue) =>
-        result.IsSuccess ? CreatedAtAction(routeName, routeValue, null)
+        result.IsSuccess ? CreatedAtAction(routeName, routeValue, result.Value)
         : result.ToProblem();
 }

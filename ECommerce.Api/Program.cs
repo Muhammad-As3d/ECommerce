@@ -1,5 +1,7 @@
 using ECommerce.Api;
+using FluentValidation;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +12,17 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging(options =>
+{
+    options.GetLevel = (httpContext, elapsed, ex) => ex is ValidationException
+        ? LogEventLevel.Verbose
+        : httpContext.Response.StatusCode >= 500
+            ? LogEventLevel.Error
+            : LogEventLevel.Information;
+});
+
 app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
 {
@@ -18,7 +30,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));
 }
 
-app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseCors();
 
