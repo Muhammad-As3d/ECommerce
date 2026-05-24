@@ -13,20 +13,18 @@ public static class DependencyInjection
 
         var assembly = typeof(DependencyInjection).Assembly;
 
-        services.AddMediatR(configuration =>
-            configuration.RegisterServicesFromAssembly(assembly)
-            .AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>)));
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(assembly);
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+        });
 
         services.AddValidatorsFromAssembly(assembly);
-
-        //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 
         services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
 
         services.AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(assembly);
-
-        //services.AddScoped<IWebHostEnvironment>();
 
         services.AddScoped<IFileService, FileService>();
 

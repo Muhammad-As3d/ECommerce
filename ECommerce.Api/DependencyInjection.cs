@@ -1,7 +1,8 @@
-﻿using ECommerce.Api.Middleware;
+﻿using ECommerce.Api.Exceptions;
 using ECommerce.Application;
 using ECommerce.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
+using System.Diagnostics;
 
 namespace ECommerce.Api;
 
@@ -24,19 +25,25 @@ public static class DependencyInjection
             )
         );
 
-
         services.AddApplicationDependencies();
         services.AddInfrastructureDependencies(configuration);
 
-
+        services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
-        services.AddProblemDetails();
 
-        //services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddProblemDetails(options =>
+        {
+            options.CustomizeProblemDetails = context =>
+            {
+                context.ProblemDetails.Instance =
+                    $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
 
-        //services.AddAutoMapper(cfg => { }, typeof(DependencyInjection).Assembly);
+                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
 
-
+                Activity? activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+                context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+            };
+        });
 
         return services;
     }
