@@ -5,7 +5,7 @@ namespace ECommerce.Application.Specifications.CategorySpecifications;
 
 public class CategorySpecification : Specification<Category>
 {
-    public CategorySpecification(SpecFilters spec)
+    public CategorySpecification(SpecificationRequest spec)
     {
         Predicate = x =>
         (string.IsNullOrEmpty(spec.SearchValue) || x.Name.Contains(spec.SearchValue.ToLower()));

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
-namespace ECommerce.Application.Interfaces.Services;
+namespace ECommerce.Application.Services;
 
 public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 {
