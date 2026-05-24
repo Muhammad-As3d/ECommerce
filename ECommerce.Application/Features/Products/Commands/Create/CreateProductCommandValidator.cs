@@ -1,11 +1,16 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
+using ECommerce.Application.Features.Products.Common;
 
 namespace ECommerce.Application.Features.Products.Commands.Create;
 
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
-    public CreateProductCommandValidator()
+    private readonly IUnitOfWork _unitOfWork;
+
+    public CreateProductCommandValidator(IUnitOfWork unitOfWork)
     {
+        _unitOfWork = unitOfWork;
+
         RuleFor(c => c.Name)
             .NotEmpty()
             .Length(3, 255)
@@ -21,6 +26,9 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
         RuleFor(c => c.Stock)
             .GreaterThan(0);
+
+        RuleFor(c => c.categoryId)
+            .SetValidator(new CategoryIdValidator(_unitOfWork));
 
         RuleFor(c => c.Images)
             .Must((request, images) =>

@@ -4,7 +4,7 @@ using ECommerce.Application.Specifications.ProductSpecifications;
 
 namespace ECommerce.Application.Features.Products.Queries.GetAll;
 
-public record GetAllProductsQuery(int CategoryId, SpecFilters Spec) : IRequest<Result<PaginatedList<ProductResponse>>>;
+public record GetAllProductsQuery(int CategoryId, SpecificationRequest Spec) : IRequest<Result<PaginatedList<ProductResponse>>>;
 
 public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsQuery, Result<PaginatedList<ProductResponse>>>
 {
@@ -12,9 +12,9 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
 
     public async Task<Result<PaginatedList<ProductResponse>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var repo = _unitOfWork.Repository<Category>();
-
-        var isCategoryExists = await repo.AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        var isCategoryExists = await _unitOfWork
+            .Repository<Category>()
+            .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!isCategoryExists)
             return Result.Failure<PaginatedList<ProductResponse>>(CategoryErrors.NotFound(request.CategoryId));

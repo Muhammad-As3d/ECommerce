@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.Interfaces.Services;
+﻿using ECommerce.Application.Services;
 
 namespace ECommerce.Application.Features.Products.Commands.Create;
 
@@ -15,7 +15,7 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService 
              request.Stock,
              request.ModelYear,
              request.Price,
-             request.CategoryId
+             request.categoryId
              );
 
         List<ProductImage> uploadedImages = [];

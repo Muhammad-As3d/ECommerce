@@ -1,4 +1,4 @@
-﻿using ECommerce.Api.ViewModels;
+﻿using ECommerce.Api.ViewModels.Categories;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Categories.Commands.Create;
 using ECommerce.Application.Features.Categories.Commands.ToggleStatus;
@@ -21,7 +21,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromQuery] SpecFilters request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] SpecificationRequest request, CancellationToken cancellationToken)
     {
         var response = await _sender.Send(new GetAllCategoriesQuery(request), cancellationToken);
 

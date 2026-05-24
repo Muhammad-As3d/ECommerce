@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace ECommerce.Api.ViewModels;
+namespace ECommerce.Api.ViewModels.Categories;
 
 public record CategoryRequest(string Name, string Description);
 

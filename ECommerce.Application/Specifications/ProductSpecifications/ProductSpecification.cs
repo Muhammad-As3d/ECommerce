@@ -4,7 +4,7 @@ namespace ECommerce.Application.Specifications.ProductSpecifications;
 
 public class ProductSpecification : Specification<Product>
 {
-    public ProductSpecification(int? id, SpecFilters? spec)
+    public ProductSpecification(int? id, SpecificationRequest? spec)
     {
         Predicate = x =>
         (x.Id == id || !id.HasValue) &&

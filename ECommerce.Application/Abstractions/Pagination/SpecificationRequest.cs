@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Application.Abstractions.Pagination;
 
-public sealed class SpecFilters
+public sealed class SpecificationRequest
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -11,9 +11,9 @@ public sealed class SpecFilters
 
 #region Validation 
 
-public class PagingRequestValidator : AbstractValidator<SpecFilters>
+public class SpecificationRequestValidator : AbstractValidator<SpecificationRequest>
 {
-    public PagingRequestValidator()
+    public SpecificationRequestValidator()
     {
         RuleFor(x => x.PageSize).LessThanOrEqualTo(100);
         RuleFor(x => x.PageNumber).NotEqual(0);
