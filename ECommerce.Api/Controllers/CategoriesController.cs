@@ -1,10 +1,10 @@
 ﻿using ECommerce.Api.ViewModels.Categories;
 using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Application.Features.Categories.Commands.Create;
+using ECommerce.Application.Features.Categories.Commands.CreateCategory;
 using ECommerce.Application.Features.Categories.Commands.ToggleStatus;
-using ECommerce.Application.Features.Categories.Commands.Update;
-using ECommerce.Application.Features.Categories.Queries.Get;
-using ECommerce.Application.Features.Categories.Queries.GetAll;
+using ECommerce.Application.Features.Categories.Commands.UpdateCategory;
+using ECommerce.Application.Features.Categories.Queries.GetAllCategories;
+using ECommerce.Application.Features.Categories.Queries.GetCategory;
 using ECommerce.Application.Features.Categories.Queries.GetCategoryProducts;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;

@@ -1,10 +1,12 @@
 ﻿namespace ECommerce.Application.Contracts.Products;
 
-public record ProductResponse(
-    int Id,
-    string Name,
-    string Description,
-    int Stock,
-    int? ModelYear,
-    double Price
-);
+public record ProductResponse
+{
+    public int Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
+    public int Stock { get; init; }
+    public int? ModelYear { get; init; }
+    public double Price { get; init; }
+    public List<string> ImageURLs { get; init; } = [];
+}

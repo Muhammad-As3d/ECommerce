@@ -1,7 +1,7 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
-using ECommerce.Application.Features.Products.Common;
+using ECommerce.Application.Contracts.Common;
 
-namespace ECommerce.Application.Features.Products.Commands.Create;
+namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
@@ -15,7 +15,6 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .NotEmpty()
             .Length(3, 255)
             .WithMessage("Product name must be at least 3 characters.");
-
 
         RuleFor(c => c.Description)
             .NotEmpty()
