@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Features.Categories.Commands.Create;
+﻿namespace ECommerce.Application.Features.Categories.Commands.CreateCategory;
 
 public record CreateCategoryCommand(
     string Name,

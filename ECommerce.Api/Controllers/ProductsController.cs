@@ -1,7 +1,7 @@
 ﻿using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Application.Features.Products.Commands.Create;
-using ECommerce.Application.Features.Products.Queries.GetAll;
+using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +16,11 @@ public class ProductsController(ISender sender) : ApiBaseController
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromRoute] int categoryId, [FromRoute] SpecificationRequest spec, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromRoute] int categoryId, [FromQuery] SpecificationRequest spec, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
 
-        return HandleResult(result);
+        return Ok(result);
     }
 
     //[HttpGet("{id}")]

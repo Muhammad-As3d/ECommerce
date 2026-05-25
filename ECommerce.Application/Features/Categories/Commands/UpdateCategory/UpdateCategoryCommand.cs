@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Features.Categories.Commands.Update;
+﻿namespace ECommerce.Application.Features.Categories.Commands.UpdateCategory;
 
 public record UpdateCategoryCommand(
     int Id,

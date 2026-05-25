@@ -8,5 +8,5 @@ public sealed class ProductImage : AuditableEntity
     public string ImageUrl { get; set; } = string.Empty;
     public Product Product { get; set; } = default!;
 
-    public ProductImage() { }
+    //public ProductImage() { }
 }

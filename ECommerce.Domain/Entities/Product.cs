@@ -42,5 +42,10 @@ public class Product : AuditableEntity
         foreach (ProductImage image in images)
             ProductImages.Add(image);
     }
+
+    //public List<string> GetAllImagesUrls()
+    //{
+    //    return Pr
+    //}
 }
 

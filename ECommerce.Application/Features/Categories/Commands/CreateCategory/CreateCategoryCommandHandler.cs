@@ -1,4 +1,6 @@
-﻿namespace ECommerce.Application.Features.Categories.Commands.Create;
+﻿using ECommerce.Application.Features.Categories.Commands.CreateCategory;
+
+namespace ECommerce.Application.Features.Categories.Commands.CreateCategory;
 
 public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, Result<int>>
 {

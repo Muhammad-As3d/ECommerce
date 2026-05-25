@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Application.Features.Products.Commands.Create;
+namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
 public record CreateProductCommand(
     [property: FromRoute] int categoryId,
