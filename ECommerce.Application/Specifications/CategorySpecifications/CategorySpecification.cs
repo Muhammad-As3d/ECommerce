@@ -1,38 +1,34 @@
 ﻿using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Domain.Specifications;
+using System.Linq.Expressions;
 
 namespace ECommerce.Application.Specifications.CategorySpecifications;
 
 public class CategorySpecification : Specification<Category>
 {
-    public CategorySpecification(SpecFilters spec)
+    public CategorySpecification(SpecificationRequest spec)
     {
         Predicate = x =>
         (string.IsNullOrEmpty(spec.SearchValue) || x.Name.Contains(spec.SearchValue.ToLower()));
 
-        var columnName = spec.SortColumn?.ToLower();
+        ApplySorting(spec);
+    }
 
-        switch (columnName)
+    private void ApplySorting(SpecificationRequest spec)
+    {
+        Action<Expression<Func<Category, object>>> sort = spec.IsDescending ? SortingByDescending : SortingBy;
+
+        switch (spec.SortColumn?.ToLower())
         {
             case "name":
-                if (spec.IsDescending)
-                    SortingByDescending(x => x.Name);
-                else
-                    SortingBy(x => x.Name);
+                sort(x => x.Name);
                 break;
 
             case "description":
-                if (spec.IsDescending)
-                    SortingByDescending(x => x.Description);
-                else
-                    SortingBy(x => x.Description);
+                sort(x => x.Description);
                 break;
 
             default:
-                if (spec.IsDescending)
-                    SortingByDescending(x => x.Id);
-                else
-                    SortingBy(x => x.Id);
+                sort(x => x.Id);
                 break;
         }
     }

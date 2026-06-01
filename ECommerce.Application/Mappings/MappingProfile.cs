@@ -16,13 +16,10 @@ public class MappingProfile : Profile
 
         #endregion
 
-        //Authentication
-        //CreateMap<RegisterRequest, ApplicationUser>
-
-
         //Product Mappings
-        CreateMap<Product, ProductResponse>();
-        //CreateMap<Product, ProductResponse>().ReverseMap();
+        CreateMap<Product, ProductResponse>()
+            .ForMember(dest => dest.ImageURLs,
+            opt => opt.MapFrom(src => src.ProductImages.Select(x => x.ImageUrl).ToList()));
 
     }
 }

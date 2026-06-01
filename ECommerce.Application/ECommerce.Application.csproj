@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Products\Checks\" />
-    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Contracts\Common\" />
   </ItemGroup>
 
 </Project>
