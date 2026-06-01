@@ -1,4 +1,4 @@
-﻿namespace ECommerce.Application.Contracts.Common;
+﻿namespace ECommerce.Application.Shared;
 
 public class CategoryIdValidator : AbstractValidator<int>
 {
@@ -17,7 +17,7 @@ public class CategoryIdValidator : AbstractValidator<int>
     private async Task<bool> CategoryExistsAsync(int categoryId, CancellationToken cancellationToken)
     {
         return await _unitOfWork
-            .Repository<Domain.Entities.Category>()
+            .Repository<Category>()
             .AnyAsync(c => c.Id == categoryId, cancellationToken);
     }
 }
