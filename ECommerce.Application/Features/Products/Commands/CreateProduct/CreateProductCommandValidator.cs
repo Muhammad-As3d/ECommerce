@@ -1,5 +1,5 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
-using ECommerce.Application.Contracts.Common;
+using ECommerce.Application.Shard;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
