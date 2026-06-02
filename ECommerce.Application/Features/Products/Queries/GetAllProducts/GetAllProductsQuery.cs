@@ -1,6 +1,6 @@
 ﻿using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Contracts.Products;
-using ECommerce.Application.Shard;
+using ECommerce.Application.Shared;
 
 namespace ECommerce.Application.Features.Products.Queries.GetAllProducts;
 
