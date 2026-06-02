@@ -2,6 +2,7 @@
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
+using ECommerce.Application.Features.Products.Queries.GetProduct;
 using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -23,13 +24,14 @@ public class ProductsController(ISender sender) : ApiBaseController
         return Ok(result);
     }
 
-    //[HttpGet("{id}")]
-    //public async Task<IActionResult> Get([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
-    //{
-    //    //var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Get([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(new GetProductByIdQuery(categoryId, id), cancellationToken);
 
-    //    return Ok();
-    //}
+        return HandleResult(result);
+    }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("")]
