@@ -15,7 +15,7 @@ public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
         if (!exists)
             return Result.Failure(CategoryErrors.NotFound(request.Id));
 
-        var category = new Category { Id = request.Id };
+        var category = Category.CreateStub(request.Id);
 
         category.Update(request.Name, request.Description);
 

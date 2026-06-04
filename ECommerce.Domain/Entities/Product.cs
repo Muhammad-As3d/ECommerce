@@ -16,6 +16,8 @@ public class Product : AuditableEntity
 
     private Product() { }
 
+    public static Product CreateStub(int id) => new() { Id = id };
+
     public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId) =>
          new()
          {
@@ -27,25 +29,35 @@ public class Product : AuditableEntity
              CategoryId = categoryId
          };
 
-    public void Update(string name, string description, int stock, int modelYear, double price, int categoryId)
+    public void Update(string name, string description, int stock, int modelYear, double price)
     {
         Name = name;
         Description = description;
         Stock = stock;
         ModelYear = modelYear;
         Price = price;
-        CategoryId = categoryId;
     }
 
-    public void AddImages(IEnumerable<ProductImage> images)
+    public void AddImages(List<string> imageUrls)
     {
-        foreach (ProductImage image in images)
+
+        List<ProductImage> uploadedImages = [];
+
+        foreach (var image in imageUrls)
+        {
+            uploadedImages.Add(new ProductImage { ImageUrl = image });
+        }
+
+        foreach (ProductImage image in uploadedImages)
             ProductImages.Add(image);
     }
 
-    //public List<string> GetAllImagesUrls()
-    //{
-    //    return Pr
-    //}
+    public IReadOnlyList<string> GetAllImageUrls()
+    {
+        return ProductImages
+            .Select(img => img.ImageUrl)
+            .ToList()
+            .AsReadOnly();
+    }
 }
 

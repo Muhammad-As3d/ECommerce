@@ -1,6 +1,8 @@
 ﻿using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Commands.ToggleStatus;
+using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using ECommerce.Application.Features.Products.Queries.GetProduct;
 using ECommerce.Infrastructure.Identity.Seeding;
@@ -24,8 +26,8 @@ public class ProductsController(ISender sender) : ApiBaseController
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
     [Authorize]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetProductByIdQuery(categoryId, id), cancellationToken);
@@ -41,8 +43,28 @@ public class ProductsController(ISender sender) : ApiBaseController
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return HandleResult(result);
+        return HandleCreatedResult(result, nameof(Get), new { categoryId, id = result.Value });
+    }
 
-        //return HandleCreatedResult(result, nameof(Get), new { id = result.Value });
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int categoryId, [FromRoute] int id, [FromBody] ProductUpdateRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateProductCommand(categoryId, id, request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPut("{id}/toggle-status")]
+    public async Task<IActionResult> ToggleStatus([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new ToggleStatusProductCommand(categoryId, id);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Domain.Entities.Common;
-using ECommerce.Domain.Specifications;
 using System.Linq.Expressions;
 
 namespace ECommerce.Application.Interfaces.Repositories;

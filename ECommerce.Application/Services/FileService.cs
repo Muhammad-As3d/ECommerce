@@ -15,4 +15,23 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
         return path;
     }
+
+    public async Task<List<string>> UploadManyImageAsync(List<IFormFile> images, CancellationToken cancellationToken = default)
+    {
+        List<string> paths = [];
+
+        foreach (var image in images)
+        {
+            var path = Path.Combine(_imagePath, image.FileName);
+
+            using var stream = File.Create(path);
+            await image.CopyToAsync(stream, cancellationToken);
+
+            paths.Add(path);
+        }
+
+        return paths;
+    }
+
+
 }
