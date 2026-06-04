@@ -45,19 +45,19 @@ public class Product : AuditableEntity
 
         foreach (var image in imageUrls)
         {
-            uploadedImages.Add(new ProductImage
-            {
-                ImageUrl = image
-            });
+            uploadedImages.Add(new ProductImage { ImageUrl = image });
         }
 
         foreach (ProductImage image in uploadedImages)
             ProductImages.Add(image);
     }
 
-    //public List<string> GetAllImagesUrls()
-    //{
-    //    return Pr
-    //}
+    public IReadOnlyList<string> GetAllImageUrls()
+    {
+        return ProductImages
+            .Select(img => img.ImageUrl)
+            .ToList()
+            .AsReadOnly();
+    }
 }
 
