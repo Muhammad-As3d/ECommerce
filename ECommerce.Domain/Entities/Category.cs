@@ -8,7 +8,9 @@ public class Category : AuditableEntity
     public string Description { get; set; } = string.Empty;
     public ICollection<Product> Products { get; set; } = [];
 
-    public Category() { }
+    private Category() { }
+    public static Category CreateStub(int id) => new() { Id = id };
+
     public static Category Create(string name, string description) =>
          new()
          {
@@ -19,7 +21,7 @@ public class Category : AuditableEntity
     public void Update(string name, string description)
     {
         Name = name;
-        Description = description;
+        Description = description ?? string.Empty;
     }
 
 }

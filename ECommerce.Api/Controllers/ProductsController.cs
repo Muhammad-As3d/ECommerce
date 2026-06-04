@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 using ECommerce.Application.Features.Products.Queries.GetProduct;
 using ECommerce.Infrastructure.Identity.Seeding;
@@ -41,8 +42,17 @@ public class ProductsController(ISender sender) : ApiBaseController
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return HandleResult(result);
+        return HandleCreatedResult(result, nameof(Get), new { categoryId, id = result.Value });
+    }
 
-        //return HandleCreatedResult(result, nameof(Get), new { id = result.Value });
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int categoryId, [FromRoute] int id, [FromBody] ProductUpdateRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateProductCommand(categoryId, id, request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
     }
 }

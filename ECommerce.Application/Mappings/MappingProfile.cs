@@ -21,5 +21,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ImageURLs,
             opt => opt.MapFrom(src => src.ProductImages.Select(x => x.ImageUrl).ToList()));
 
+        CreateMap<Product, ProductImagesResponse>()
+            .ForMember(dest => dest.ImagesUrls,
+            opt => opt.MapFrom(src => src.ProductImages.Select(x => x.ImageUrl).ToList()));
+
     }
 }

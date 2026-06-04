@@ -9,3 +9,12 @@ public record ProductRequest(
     List<IFormFile> Images
 );
 
+public record ProductUpdateRequest(
+    string Name,
+    string Description,
+    int Stock,
+    int ModelYear,
+    double Price
+);
+
+
