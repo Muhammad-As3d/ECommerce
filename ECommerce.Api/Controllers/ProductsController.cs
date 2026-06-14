@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Commands.DeleteProductImages;
 using ECommerce.Application.Features.Products.Commands.ToggleStatus;
 using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 using ECommerce.Application.Features.Products.Queries.GetAllProducts;
@@ -62,6 +63,17 @@ public class ProductsController(ISender sender) : ApiBaseController
     public async Task<IActionResult> ToggleStatus([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
     {
         var command = new ToggleStatusProductCommand(categoryId, id);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpDelete("{id}/images")]
+    public async Task<IActionResult> DeleteImages([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProductImagesCommand(categoryId, id);
 
         var result = await _sender.Send(command, cancellationToken);
 

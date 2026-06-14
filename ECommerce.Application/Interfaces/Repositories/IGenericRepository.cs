@@ -12,6 +12,8 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
     void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties);
     Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default);
+    Task<int> SoftDeleteAsync(int id, CancellationToken cancellationToken = default);
+    Task<int> DeleteAsync(int id, CancellationToken cancellationToken = default);
 
     #region Checks
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -27,6 +29,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,
         int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class;
     Task<TProjection?> GetBySpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
+    Task<List<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
 
     #endregion
 }

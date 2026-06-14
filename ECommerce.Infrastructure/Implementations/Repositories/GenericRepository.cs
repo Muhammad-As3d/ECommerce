@@ -47,6 +47,17 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => !x.IsDeleted), cancellationToken);
 
+    public async Task<int> SoftDeleteAsync(int id, CancellationToken cancellationToken = default) =>
+        await _dbSet
+        .Where(c => c.Id == id)
+        .ExecuteUpdateAsync(s => s
+        .SetProperty(c => c.IsDeleted, x => true), cancellationToken);
+
+    public async Task<int> DeleteAsync(int id, CancellationToken cancellationToken = default) =>
+        await _dbSet
+        .Where(c => c.Id == id)
+        .ExecuteDeleteAsync(cancellationToken);
+
     #region Checks
 
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
@@ -85,6 +96,12 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .GetQuery(_dbSet, spec)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
         .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<List<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
+        await SpecificationEvaluator
+        .GetQuery(_dbSet, spec)
+        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ToListAsync(cancellationToken);
 
     #endregion
 }
