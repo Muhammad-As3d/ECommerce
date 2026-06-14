@@ -9,7 +9,7 @@ public class ProductSpecification : Specification<Product>
     {
         Predicate = x =>
         x.Category.Id == categoryId &&
-        (x.Id == id || !id.HasValue) &&
+        (x.Id == id || !id.HasValue) && !x.IsDeleted &&
         (string.IsNullOrEmpty(spec!.SearchValue) || x.Name.ToLower().Contains(spec.SearchValue.ToLower()));
 
         ApplySorting(spec);
@@ -27,6 +27,10 @@ public class ProductSpecification : Specification<Product>
 
             case "description":
                 sort(x => x.Description);
+                break;
+
+            case "price":
+                sort(x => x.Price);
                 break;
 
             default:
