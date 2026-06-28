@@ -23,7 +23,10 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
         foreach (var image in images)
         {
-            var path = Path.Combine(_imagePath, image.FileName);
+            var extension = Path.GetExtension(image.FileName);
+            var fileName = Path.GetFileName(image.FileName + Guid.NewGuid().ToString() + extension);
+
+            var path = Path.Combine(_imagePath, fileName);
 
             using var stream = File.Create(path);
             await image.CopyToAsync(stream, cancellationToken);
@@ -33,7 +36,6 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
         return paths;
     }
-
 
     public Task DeleteImages(List<string> imagePaths)
     {
