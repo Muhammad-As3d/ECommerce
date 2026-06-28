@@ -18,7 +18,8 @@ public class Product : AuditableEntity
 
     public static Product CreateStub(int id) => new() { Id = id };
 
-    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId) =>
+    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId)
+        =>
          new()
          {
              Name = name,

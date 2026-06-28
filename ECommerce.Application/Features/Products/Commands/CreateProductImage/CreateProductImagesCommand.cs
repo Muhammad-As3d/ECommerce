@@ -1,27 +1,21 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
 using ECommerce.Application.Shared;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
+namespace ECommerce.Application.Features.Products.Commands.CreateProductImage;
 
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+public record CreateProductImagesCommand(
+    [FromRoute] int categoryId,
+    int ProductId,
+    List<IFormFile> Images
+) : IRequest<Result>;
+
+#region Validation
+public class CreateProductImagesCommandValidator : AbstractValidator<CreateProductImagesCommand>
 {
-    public CreateProductCommandValidator(IUnitOfWork unitOfWork)
+    public CreateProductImagesCommandValidator(IUnitOfWork unitOfWork)
     {
-        RuleFor(c => c.Name)
-            .NotEmpty()
-            .Length(3, 255)
-            .WithMessage("Product name must be at least 3 characters.");
-
-        RuleFor(c => c.Description)
-            .NotEmpty()
-            .MaximumLength(300);
-
-        RuleFor(c => c.Price)
-            .GreaterThan(0);
-
-        RuleFor(c => c.Stock)
-            .GreaterThan(0);
-
         RuleFor(c => c.categoryId)
             .SetValidator(new CategoryIdValidator(unitOfWork));
 
@@ -39,3 +33,4 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .When(x => x.Images is not null);
     }
 }
+#endregion

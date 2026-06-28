@@ -30,6 +30,9 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
         await _dbSet.AddAsync(entity, cancellationToken);
 
+    public async Task AddRangeAsync(List<T> entity, CancellationToken cancellationToken = default) =>
+        await _dbSet.AddRangeAsync(entity, cancellationToken);
+
     public void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties)
     {
         var entry = _context.Entry(entity);

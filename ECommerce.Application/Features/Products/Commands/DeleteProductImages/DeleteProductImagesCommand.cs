@@ -8,7 +8,7 @@ public record DeleteProductImagesCommand(
     int ProductId
 ) : IRequest<Result>;
 
-
+#region Validation
 public class DeleteProductImagesCommandValidator : AbstractValidator<DeleteProductImagesCommand>
 {
     public DeleteProductImagesCommandValidator(IUnitOfWork unitOfWork)
@@ -17,3 +17,4 @@ public class DeleteProductImagesCommandValidator : AbstractValidator<DeleteProdu
             .SetValidator(new CategoryIdValidator(unitOfWork));
     }
 }
+#endregion

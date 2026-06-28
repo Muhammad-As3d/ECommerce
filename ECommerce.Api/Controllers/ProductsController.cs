@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
+using ECommerce.Application.Features.Products.Commands.CreateProductImage;
 using ECommerce.Application.Features.Products.Commands.DeleteProductImages;
 using ECommerce.Application.Features.Products.Commands.ToggleStatus;
 using ECommerce.Application.Features.Products.Commands.UpdateProduct;
@@ -45,6 +46,17 @@ public class ProductsController(ISender sender) : ApiBaseController
         var result = await _sender.Send(command, cancellationToken);
 
         return HandleCreatedResult(result, nameof(Get), new { categoryId, id = result.Value });
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPost("{productId:int}/images")]
+    public async Task<IActionResult> CreateImages([FromRoute] int categoryId, [FromRoute] int productId, [FromForm] ProductImagesRequest request, CancellationToken cancellationToken)
+    {
+        var command = new CreateProductImagesCommand(categoryId, productId, request.Images);
+
+        var result = await _sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]

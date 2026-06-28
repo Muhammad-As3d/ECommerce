@@ -10,6 +10,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default);
     Task<T?> GetBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default);
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
+    Task AddRangeAsync(List<T> entity, CancellationToken cancellationToken = default);
     void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties);
     Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default);
     Task<int> SoftDeleteAsync(int id, CancellationToken cancellationToken = default);
