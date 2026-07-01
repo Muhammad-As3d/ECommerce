@@ -16,6 +16,9 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.ToListAsync(cancellationToken);
 
+    public async Task<IEnumerable<T>> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate).ToListAsync(cancellationToken);
+
     public async Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec,
         CancellationToken cancellationToken = default) =>
         await SpecificationEvaluator
@@ -30,8 +33,8 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default) =>
         await _dbSet.AddAsync(entity, cancellationToken);
 
-    public async Task AddRangeAsync(List<T> entity, CancellationToken cancellationToken = default) =>
-        await _dbSet.AddRangeAsync(entity, cancellationToken);
+    public async Task AddRangeAsync(List<T> entities, CancellationToken cancellationToken = default) =>
+        await _dbSet.AddRangeAsync(entities, cancellationToken);
 
     public void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties)
     {
@@ -60,6 +63,8 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         await _dbSet
         .Where(c => c.Id == id)
         .ExecuteDeleteAsync(cancellationToken);
+    public void DeleteRangeAsync(List<T> entities, CancellationToken cancellationToken = default) =>
+         _dbSet.RemoveRange(entities);
 
     #region Checks
 

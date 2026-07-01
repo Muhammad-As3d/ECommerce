@@ -1,12 +1,10 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
-using ECommerce.Application.Shared;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProductImage;
 
 public record CreateProductImagesCommand(
-    [FromRoute] int categoryId,
+    int CategoryId,
     int ProductId,
     List<IFormFile> Images
 ) : IRequest<Result>;
@@ -14,10 +12,8 @@ public record CreateProductImagesCommand(
 #region Validation
 public class CreateProductImagesCommandValidator : AbstractValidator<CreateProductImagesCommand>
 {
-    public CreateProductImagesCommandValidator(IUnitOfWork unitOfWork)
+    public CreateProductImagesCommandValidator()
     {
-        RuleFor(c => c.categoryId)
-            .SetValidator(new CategoryIdValidator(unitOfWork));
 
         RuleFor(c => c.Images)
             .Must((request, images) =>

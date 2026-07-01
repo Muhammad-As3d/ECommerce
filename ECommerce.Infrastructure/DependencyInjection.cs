@@ -21,15 +21,21 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        //caching
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");      
+        });
+
         services.AddHttpContextAccessor();
-
         services.AddAuthenticationConfig(configuration);
-
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailSender, EmailService>();
         services.AddSingleton<IJwtProvider, JwtProvider>();
+        services.AddScoped<IFileService, FileService>();
+        services.AddScoped<ICacheService, CacheService>();
 
         return services;
     }

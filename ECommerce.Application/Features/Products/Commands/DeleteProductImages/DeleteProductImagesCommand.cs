@@ -1,20 +1,6 @@
-﻿using ECommerce.Application.Shared;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ECommerce.Application.Features.Products.Commands.DeleteProductImages;
+﻿namespace ECommerce.Application.Features.Products.Commands.DeleteProductImages;
 
 public record DeleteProductImagesCommand(
-    [FromRoute] int categoryId,
+    int CategoryId,
     int ProductId
 ) : IRequest<Result>;
-
-#region Validation
-public class DeleteProductImagesCommandValidator : AbstractValidator<DeleteProductImagesCommand>
-{
-    public DeleteProductImagesCommandValidator(IUnitOfWork unitOfWork)
-    {
-        RuleFor(c => c.categoryId)
-            .SetValidator(new CategoryIdValidator(unitOfWork));
-    }
-}
-#endregion

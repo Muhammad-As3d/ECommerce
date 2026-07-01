@@ -10,7 +10,7 @@ public class ProductSpecification : Specification<Product>
         Predicate = x =>
         x.Category.Id == categoryId &&
         (x.Id == id || !id.HasValue) && !x.IsDeleted &&
-        (string.IsNullOrEmpty(spec!.SearchValue) || x.Name.ToLower().Contains(spec.SearchValue.ToLower()));
+        (string.IsNullOrEmpty(spec.SearchValue) || x.Name.ToLower().Contains(spec.SearchValue.ToLower()));
 
         ApplySorting(spec);
     }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
-namespace ECommerce.Application.Services;
+namespace ECommerce.Infrastructure.Implementations.Services;
 
 public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 {
@@ -9,7 +8,10 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
     public async Task<string> UploadImageAsync(IFormFile image, CancellationToken cancellationToken = default)
     {
-        var path = Path.Combine(_imagePath, image.FileName);
+        var extension = Path.GetExtension(image.FileName);
+        var fileName = Path.GetFileName(image.FileName + Guid.NewGuid().ToString() + extension);
+
+        var path = Path.Combine(_imagePath, fileName);
 
         using var stream = File.Create(path);
         await image.CopyToAsync(stream, cancellationToken);
@@ -23,8 +25,7 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
         foreach (var image in images)
         {
-            var extension = Path.GetExtension(image.FileName);
-            var fileName = Path.GetFileName(image.FileName + Guid.NewGuid().ToString() + extension);
+            var fileName = Path.GetRandomFileName();
 
             var path = Path.Combine(_imagePath, fileName);
 
