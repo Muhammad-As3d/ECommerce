@@ -1,12 +1,27 @@
-﻿using ECommerce.Application.Services;
+﻿using ECommerce.Application.Contracts.Products;
+using ECommerce.Application.Interfaces.Services;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProductImage;
 
-internal class CreateProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileService fileService)
+internal class CreateProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileService fileService, IDistributedCache distributedCache)
     : IRequestHandler<CreateProductImagesCommand, Result>
 {
+    private const string CacheKeyPrefix = "product";
+
     public async Task<Result> Handle(CreateProductImagesCommand request, CancellationToken cancellationToken)
     {
+        var cacheKey = $"{CacheKeyPrefix}:{request.CategoryId}:{request.ProductId}";
+
+        await distributedCache.RemoveAsync(cacheKey, cancellationToken);
+
+        var categoryIsExists = await unitOfWork
+            .Repository<Category>()
+            .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+
+        if (!categoryIsExists)
+            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
+
         var repo = unitOfWork.Repository<Product>();
 
         var isExists = await repo.AnyAsync(x => x.Id == request.ProductId, cancellationToken);

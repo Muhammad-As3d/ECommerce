@@ -1,10 +1,8 @@
-﻿using ECommerce.Application.Shared;
-
-namespace ECommerce.Application.Features.Products.Commands.UpdateProduct;
+﻿namespace ECommerce.Application.Features.Products.Commands.UpdateProduct;
 
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public UpdateProductCommandValidator(IUnitOfWork unitOfWork)
+    public UpdateProductCommandValidator()
     {
         RuleFor(c => c.Name)
            .NotEmpty()
@@ -20,9 +18,6 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
         RuleFor(c => c.Stock)
             .GreaterThan(0);
-
-        RuleFor(c => c.categoryId)
-            .SetValidator(new CategoryIdValidator(unitOfWork));
     }
 }
 

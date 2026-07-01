@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.Services;
+﻿using ECommerce.Application.Interfaces.Services;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 

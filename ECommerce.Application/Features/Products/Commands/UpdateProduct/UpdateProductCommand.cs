@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace ECommerce.Application.Features.Products.Commands.UpdateProduct;
+﻿namespace ECommerce.Application.Features.Products.Commands.UpdateProduct;
 
 public record UpdateProductCommand(
-    [property: FromRoute] int categoryId,
+    int CategoryId,
     int Id,
     string Name,
     string Description,

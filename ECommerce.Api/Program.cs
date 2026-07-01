@@ -1,5 +1,6 @@
 using ECommerce.Api;
 using FluentValidation;
+using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Events;
 
@@ -27,7 +28,7 @@ app.UseStatusCodePages();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();

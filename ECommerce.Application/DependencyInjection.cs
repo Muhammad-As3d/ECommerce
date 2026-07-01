@@ -1,5 +1,4 @@
 ﻿using ECommerce.Application.Behaviors;
-using ECommerce.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
@@ -10,7 +9,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
     {
-
         var assembly = typeof(DependencyInjection).Assembly;
 
         services.AddMediatR(cfg =>
@@ -25,8 +23,6 @@ public static class DependencyInjection
 
         services.AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(assembly);
-
-        services.AddScoped<IFileService, FileService>();
 
         return services;
     }

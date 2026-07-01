@@ -25,7 +25,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
 
-        return Ok(result);
+        return HandleResult(result);
     }
 
     [Authorize]
