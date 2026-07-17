@@ -5,9 +5,7 @@ namespace ECommerce.Infrastructure.Persistence;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
     : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-
-    //public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
     public DbSet<Product> Products { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
     public DbSet<ProductImage> ProductImages { get; set; } = default!;
@@ -28,7 +26,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var currentUserId = _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var currentUserId = httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var entries = ChangeTracker.Entries<AuditableEntity>();
 

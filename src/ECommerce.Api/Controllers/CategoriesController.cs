@@ -28,7 +28,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryByIdQuery(id), cancellationToken);
@@ -36,7 +36,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [HttpGet("{id}/products")]
+    [HttpGet("{id:int}/products")]
     public async Task<IActionResult> GetCategoryProducts([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryProductsQuery(id), cancellationToken);
@@ -52,11 +52,11 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return HandleCreatedResult(result, nameof(Get), new { id = result.Value });
+        return HandleCreatedResult(result, nameof(Get), value => new { id = result.Value });
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateCategoryCommand(id, request.Name, request.Description);
@@ -67,7 +67,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id}/toggle-status")]
+    [HttpPut("{id:int}/toggle-status")]
     public async Task<IActionResult> ToggleStatus([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new ToggleStatusCategoryCommand(id), cancellationToken);

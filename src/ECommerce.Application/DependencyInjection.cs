@@ -1,9 +1,4 @@
-﻿using ECommerce.Application.Behaviors;
-using Microsoft.Extensions.DependencyInjection;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using System.Reflection;
-
-namespace ECommerce.Application;
+﻿namespace ECommerce.Application;
 
 public static class DependencyInjection
 {
@@ -17,9 +12,9 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
         });
 
-        services.AddValidatorsFromAssembly(assembly);
+        services.AddAutoMapper(cfg => { }, assembly);
 
-        services.AddAutoMapper(cfg => { }, Assembly.GetExecutingAssembly());
+        services.AddValidatorsFromAssembly(assembly);
 
         services.AddFluentValidationAutoValidation()
             .AddValidatorsFromAssembly(assembly);

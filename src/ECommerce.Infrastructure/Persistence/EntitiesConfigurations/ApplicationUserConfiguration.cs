@@ -1,6 +1,4 @@
-﻿using ECommerce.Infrastructure.Identity.Seeding;
-
-namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
+﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
 public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
@@ -25,11 +23,5 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         };
 
         builder.HasData(adminUser);
-
-        //builder
-        //   .OwnsMany(x => x.RefreshTokens)
-        //   .ToTable("RefreshTokens")
-        //   .WithOwner()
-        //   .HasForeignKey("UserId");
     }
 }

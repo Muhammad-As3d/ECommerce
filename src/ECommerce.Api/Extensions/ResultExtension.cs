@@ -12,7 +12,6 @@ public static class ResultExtension
 
         var statusCode = GetStatusCode(result.Error.ErrorType);
 
-
         var problem = Results.Problem(statusCode: statusCode);
 
         var problemDetails = problem.GetType().GetProperty(nameof(ProblemDetails))!.GetValue(problem) as ProblemDetails;
@@ -26,7 +25,6 @@ public static class ResultExtension
         };
 
         return new ObjectResult(problemDetails);
-
     }
 
     private static int GetStatusCode(ErrorType errorType) => errorType switch

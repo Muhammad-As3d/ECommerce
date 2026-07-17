@@ -7,6 +7,11 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService 
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<Result<int>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
+        var categoryIsExist = await _unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.categoryId, cancellationToken);
+
+        if (!categoryIsExist)
+            return Result.Failure<int>(CategoryErrors.NotFound(request.categoryId));
+
         var product = Product.Create(
              request.Name,
              request.Description,

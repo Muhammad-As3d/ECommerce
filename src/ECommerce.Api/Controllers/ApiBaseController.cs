@@ -12,10 +12,12 @@ public abstract class ApiBaseController : ControllerBase
         result.IsSuccess ? NoContent() : result.ToProblem();
 
     protected IActionResult HandleResult<TValue>(Result<TValue> result) =>
-        result.IsSuccess ? Ok(result.Value)
+        result.IsSuccess
+        ? Ok(result.Value)
         : result.ToProblem();
 
-    protected IActionResult HandleCreatedResult<TValue>(Result<TValue> result, string routeName, object routeValue) =>
-        result.IsSuccess ? CreatedAtAction(routeName, routeValue, null)
-        : result.ToProblem();
+    protected IActionResult HandleCreatedResult<TValue>(Result<TValue> result, string routeName, Func<TValue, object> routeValues) =>
+        result.IsSuccess
+            ? CreatedAtAction(routeName, routeValues(result.Value), null)
+            : result.ToProblem();
 }

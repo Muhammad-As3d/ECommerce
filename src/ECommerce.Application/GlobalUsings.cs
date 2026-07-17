@@ -1,7 +1,11 @@
-﻿global using ECommerce.Application.Interfaces;
+﻿global using ECommerce.Application.Behaviors;
+global using ECommerce.Application.Interfaces;
 global using ECommerce.Domain.Abstractions;
 global using ECommerce.Domain.Entities;
 global using ECommerce.Domain.Errors;
 global using ECommerce.Domain.Specifications;
 global using FluentValidation;
 global using MediatR;
+global using Microsoft.Extensions.DependencyInjection;
+global using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+global using System.Reflection;

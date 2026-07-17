@@ -19,7 +19,11 @@ public static class UserErrors
     public static Error LockedUser =>
         Error.Unauthorized("User.LockedUser", "Please try again after 5 minutes");
     public static Error InvalidCode =>
-        Error.Conflict("User.InvalidCode", "You entered Invalid Code");
-    public static readonly Error IsDisabled =
+        Error.Unauthorized("User.InvalidCode", "You entered Invalid Code");
+    public static Error InvalidToken =>
+        Error.Unauthorized("User.InvalidToken", "You entered Invalid token");
+    public static Error InvalidRefreshToken =>
+        Error.Unauthorized("User.InvalidRefreshToken", "You entered Invalid Refresh token");
+    public static Error IsDisabled =>
     Error.InvalidCredentials("User.IsDisabled", "Disabled User, Please contact your administrator");
 }

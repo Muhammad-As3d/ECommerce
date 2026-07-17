@@ -41,4 +41,19 @@ public class AuthController(IAuthService authService) : ApiBaseController
 
         return HandleResult(result);
     }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshAsync([FromBody] RefreshTokenRequest request)
+    {
+        var result = await _authService.GetRefreshTokenAsync(request.Token, request.RefreshToken);
+
+        return HandleResult(result);
+    }
+    [HttpPost("revoke-refresh")]
+    public async Task<IActionResult> RevokeRefreshAsync([FromBody] RefreshTokenRequest request)
+    {
+        var result = await _authService.RevokeRefreshTokenAsync(request.Token, request.RefreshToken);
+
+        return HandleResult(result);
+    }
 }

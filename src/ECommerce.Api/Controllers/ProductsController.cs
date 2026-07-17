@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
-[Route("api/{categoryId}/[controller]")]
+[Route("api/{categoryId:int}/[controller]")]
 [ApiController]
 public class ProductsController(ISender sender) : ApiBaseController
 {
@@ -45,7 +45,7 @@ public class ProductsController(ISender sender) : ApiBaseController
 
         var result = await _sender.Send(command, cancellationToken);
 
-        return HandleCreatedResult(result, nameof(Get), new { categoryId, id = result.Value });
+        return HandleCreatedResult(result, nameof(Get), value => new { categoryId, id = result.Value });
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
@@ -60,7 +60,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int categoryId, [FromRoute] int id, [FromBody] ProductUpdateRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateProductCommand(categoryId, id, request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
@@ -71,7 +71,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id}/toggle-status")]
+    [HttpPut("{id:int}/toggle-status")]
     public async Task<IActionResult> ToggleStatus([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
     {
         var command = new ToggleStatusProductCommand(categoryId, id);
@@ -82,7 +82,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpDelete("{id}/images")]
+    [HttpDelete("{id:int}/images")]
     public async Task<IActionResult> DeleteImages([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
     {
         var command = new DeleteProductImagesCommand(categoryId, id);
