@@ -3,7 +3,7 @@ using ECommerce.Application.Specifications.CategorySpecifications;
 
 namespace ECommerce.Application.Features.Categories.Queries.GetCategoryProducts;
 
-public record GetCategoryProductsQuery(int Id) : IRequest<Result<CategoryProductsResponse>>;
+public record GetCategoryProductsQuery(Guid Id) : IRequest<Result<CategoryProductsResponse>>;
 
 public class GetCategoryProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetCategoryProductsQuery, Result<CategoryProductsResponse>>
 {

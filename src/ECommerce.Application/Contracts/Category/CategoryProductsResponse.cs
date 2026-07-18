@@ -3,7 +3,7 @@
 namespace ECommerce.Application.Contracts.Category;
 
 public record CategoryProductsResponse(
-    int Id,
+    Guid Id,
     string Name,
     string Description,
     IEnumerable<ProductResponse> Products

@@ -13,9 +13,9 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
     Task AddRangeAsync(List<T> entities, CancellationToken cancellationToken = default);
     void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties);
-    Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default);
-    Task<int> SoftDeleteAsync(int id, CancellationToken cancellationToken = default);
-    Task<int> DeleteAsync(int id, CancellationToken cancellationToken = default);
+    Task<int> ToggleStatusAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<int> SoftDeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     void DeleteRangeAsync(List<T> entities, CancellationToken cancellationToken = default);
 
     #region Checks
@@ -26,7 +26,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     #region Projection & Pagination & Specification 
 
     Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
-    Task<TProjection?> GetByIdProjectAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class;
+    Task<TProjection?> GetByIdProjectAsync<TProjection>(Guid id, CancellationToken cancellationToken = default) where TProjection : class;
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(int pageNumber, int pageSize,
     CancellationToken cancellationToken = default) where TProjection : class;
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,

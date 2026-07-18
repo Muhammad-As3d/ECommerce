@@ -1,8 +1,8 @@
 ﻿namespace ECommerce.Application.Features.Products.Commands.UpdateProduct;
 
 public record UpdateProductCommand(
-    int CategoryId,
-    int Id,
+    Guid CategoryId,
+    Guid Id,
     string Name,
     string Description,
     int Stock,

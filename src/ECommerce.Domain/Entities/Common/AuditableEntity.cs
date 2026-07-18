@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Domain.Entities.Common;
 
-public abstract class AuditableEntity : BaseEntity 
+public abstract class AuditableEntity : BaseEntity
 {
     public string CreatedById { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; } = DateTime.UtcNow;

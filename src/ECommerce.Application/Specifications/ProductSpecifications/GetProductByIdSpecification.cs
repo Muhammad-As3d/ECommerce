@@ -2,7 +2,7 @@
 
 public class GetProductByIdSpecification : Specification<Product>
 {
-    public GetProductByIdSpecification(int categoryId, int productId)
+    public GetProductByIdSpecification(Guid categoryId, Guid productId)
     {
         Predicate = x =>
             x.Category.Id == categoryId &&

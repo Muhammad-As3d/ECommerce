@@ -2,7 +2,7 @@
 
 namespace ECommerce.Application.Features.Categories.Queries.GetCategory;
 
-public record GetCategoryByIdQuery(int Id) : IRequest<Result<CategoryResponse>>;
+public record GetCategoryByIdQuery(Guid Id) : IRequest<Result<CategoryResponse>>;
 
 public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetCategoryByIdQuery, Result<CategoryResponse>>
 {

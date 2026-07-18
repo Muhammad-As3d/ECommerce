@@ -47,19 +47,19 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             entry.Property(expr).IsModified = true;
     }
 
-    public async Task<int> ToggleStatusAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<int> ToggleStatusAsync(Guid id, CancellationToken cancellationToken = default) =>
         await _dbSet
         .Where(c => c.Id == id)
         .ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => !x.IsDeleted), cancellationToken);
 
-    public async Task<int> SoftDeleteAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<int> SoftDeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
         await _dbSet
         .Where(c => c.Id == id)
         .ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => true), cancellationToken);
 
-    public async Task<int> DeleteAsync(int id, CancellationToken cancellationToken = default) =>
+    public async Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
         await _dbSet
         .Where(c => c.Id == id)
         .ExecuteDeleteAsync(cancellationToken);
@@ -93,7 +93,7 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
 
-    public async Task<TProjection?> GetByIdProjectAsync<TProjection>(int id, CancellationToken cancellationToken = default) where TProjection : class =>
+    public async Task<TProjection?> GetByIdProjectAsync<TProjection>(Guid id, CancellationToken cancellationToken = default) where TProjection : class =>
         await _dbSet
         .Where(x => x.Id == id)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)

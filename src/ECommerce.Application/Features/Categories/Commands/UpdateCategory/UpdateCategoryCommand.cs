@@ -1,11 +1,11 @@
 ﻿namespace ECommerce.Application.Features.Categories.Commands.UpdateCategory;
 
 public record UpdateCategoryCommand(
-    int Id,
+    Guid Id,
     string Name,
     string Description
 )
-    : IRequest<Result>;
+: IRequest<Result>;
 
 
 

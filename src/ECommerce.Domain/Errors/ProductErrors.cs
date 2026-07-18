@@ -4,7 +4,7 @@ namespace ECommerce.Domain.Errors;
 
 public static class ProductErrors
 {
-    public static Error NotFound(int id) =>
+    public static Error NotFound(Guid id) =>
         Error.NotFound("Product.NotFound", $"Product with ID '{id}' was not found");
 
     public static readonly Error NotfoundProductImages =

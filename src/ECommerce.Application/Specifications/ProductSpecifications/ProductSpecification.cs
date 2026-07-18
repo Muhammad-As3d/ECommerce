@@ -5,7 +5,7 @@ namespace ECommerce.Application.Specifications.ProductSpecifications;
 
 public class ProductSpecification : Specification<Product>
 {
-    public ProductSpecification(int categoryId, SpecificationRequest spec, int? id = default)
+    public ProductSpecification(Guid categoryId, SpecificationRequest spec, Guid? id = default)
     {
         Predicate = x =>
         x.Category.Id == categoryId &&

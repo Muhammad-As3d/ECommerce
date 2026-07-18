@@ -2,15 +2,15 @@
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
-internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService fileService) : IRequestHandler<CreateProductCommand, Result<int>>
+internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService fileService) : IRequestHandler<CreateProductCommand, Result<Guid>>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<int>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var categoryIsExist = await _unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.categoryId, cancellationToken);
+        var categoryIsExist = await _unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExist)
-            return Result.Failure<int>(CategoryErrors.NotFound(request.categoryId));
+            return Result.Failure<Guid>(CategoryErrors.NotFound(request.CategoryId));
 
         var product = Product.Create(
              request.Name,
@@ -18,7 +18,7 @@ internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService 
              request.Stock,
              request.ModelYear,
              request.Price,
-             request.categoryId
+             request.CategoryId
              );
 
         var imagesPaths = await fileService.UploadManyImageAsync(request.Images, cancellationToken);

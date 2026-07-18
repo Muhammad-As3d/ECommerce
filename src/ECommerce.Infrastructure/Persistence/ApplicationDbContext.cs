@@ -9,6 +9,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Product> Products { get; set; } = default!;
     public DbSet<Category> Categories { get; set; } = default!;
     public DbSet<ProductImage> ProductImages { get; set; } = default!;
+    public DbSet<Order> Orders { get; set; } = default!;
+    public DbSet<OrderItem> OrderItems { get; set; } = default!;
+    public DbSet<Cart> Carts { get; set; } = default!;
+    public DbSet<CartItem> CartItems { get; set; } = default!;
+    public DbSet<Notification> Notifications { get; set; } = default!;
+    public DbSet<Payment> Payments { get; set; } = default!;
+    public DbSet<Review> Reviews { get; set; } = default!;
+    public DbSet<Wishlist> Wishlists { get; set; } = default!;
+    public DbSet<WishlistItem> WishlistItems { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

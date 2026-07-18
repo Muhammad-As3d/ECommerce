@@ -2,7 +2,7 @@
 
 public class ProductImageSpecification : Specification<ProductImage>
 {
-    public ProductImageSpecification(int productId)
+    public ProductImageSpecification(Guid productId)
     {
         Predicate = x => x.ProductId == productId && !x.IsDeleted;
     }

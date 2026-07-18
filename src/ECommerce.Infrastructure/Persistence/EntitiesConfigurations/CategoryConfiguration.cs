@@ -1,11 +1,11 @@
-﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
+﻿using ECommerce.Infrastructure.Persistence.EntitiesConfigurations.Common;
 
-internal class CategoryConfiguration : AuditableEntityConfiguration<Category>
+namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
+
+public class CategoryConfiguration : AuditableEntityConfiguration<Category>
 {
-    public override void Configure(EntityTypeBuilder<Category> builder)
+    protected override void ConfigureEntity(EntityTypeBuilder<Category> builder)
     {
-        base.Configure(builder); 
-
         builder.Property(c => c.Name).HasMaxLength(100);
         builder.Property(c => c.Description).HasMaxLength(500);
     }

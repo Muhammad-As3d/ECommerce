@@ -28,16 +28,16 @@ public class CategoriesController(ISender sender) : ApiBaseController
         return Ok(response);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken)
+    [HttpGet("{id:Guid}")]
+    public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryByIdQuery(id), cancellationToken);
 
         return HandleResult(result);
     }
 
-    [HttpGet("{id:int}/products")]
-    public async Task<IActionResult> GetCategoryProducts([FromRoute] int id, CancellationToken cancellationToken)
+    [HttpGet("{id:Guid}/products")]
+    public async Task<IActionResult> GetCategoryProducts([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetCategoryProductsQuery(id), cancellationToken);
 
@@ -56,8 +56,8 @@ public class CategoriesController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id:Guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] CategoryRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateCategoryCommand(id, request.Name, request.Description);
 
@@ -67,8 +67,8 @@ public class CategoriesController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id:int}/toggle-status")]
-    public async Task<IActionResult> ToggleStatus([FromRoute] int id, CancellationToken cancellationToken)
+    [HttpPut("{id:Guid}/toggle-status")]
+    public async Task<IActionResult> ToggleStatus([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new ToggleStatusCategoryCommand(id), cancellationToken);
 

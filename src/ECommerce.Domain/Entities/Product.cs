@@ -9,16 +9,16 @@ public class Product : AuditableEntity
     public int Stock { get; set; }
     public int? ModelYear { get; set; }
     public double Price { get; set; }
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
 
     public ICollection<ProductImage> ProductImages { get; set; } = [];
     public Category Category { get; set; } = default!;
 
     private Product() { }
 
-    public static Product CreateStub(int id) => new() { Id = id };
+    public static Product CreateStub(Guid id) => new() { Id = id };
 
-    public static Product Create(string name, string description, int stock, int modelYear, double price, int categoryId)
+    public static Product Create(string name, string description, int stock, int modelYear, double price, Guid categoryId)
         =>
          new()
          {
@@ -41,7 +41,6 @@ public class Product : AuditableEntity
 
     public void AddImages(List<string> imageUrls)
     {
-
         List<ProductImage> uploadedImages = [];
 
         foreach (var image in imageUrls)

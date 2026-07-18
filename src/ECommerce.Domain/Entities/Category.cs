@@ -9,7 +9,7 @@ public class Category : AuditableEntity
     public ICollection<Product> Products { get; set; } = [];
 
     private Category() { }
-    public static Category CreateStub(int id) => new() { Id = id };
+    public static Category CreateStub(Guid id) => new() { Id = id };
 
     public static Category Create(string name, string description) =>
          new()

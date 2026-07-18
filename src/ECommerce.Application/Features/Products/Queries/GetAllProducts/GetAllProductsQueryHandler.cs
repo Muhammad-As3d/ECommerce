@@ -6,7 +6,6 @@ namespace ECommerce.Application.Features.Products.Queries.GetAllProducts;
 
 public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllProductsQuery, Result<PaginatedList<ProductResponse>>>
 {
-
     public async Task<Result<PaginatedList<ProductResponse>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         var categoryIsExists = await unitOfWork

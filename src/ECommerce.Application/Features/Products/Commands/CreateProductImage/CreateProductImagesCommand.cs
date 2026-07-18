@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 namespace ECommerce.Application.Features.Products.Commands.CreateProductImage;
 
 public record CreateProductImagesCommand(
-    int CategoryId,
-    int ProductId,
+    Guid CategoryId,
+    Guid ProductId,
     List<IFormFile> Images
 ) : IRequest<Result>;
 

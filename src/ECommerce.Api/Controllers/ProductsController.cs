@@ -14,14 +14,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
-[Route("api/{categoryId:int}/[controller]")]
+[Route("api/{categoryId:Guid}/[controller]")]
 [ApiController]
 public class ProductsController(ISender sender) : ApiBaseController
 {
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromRoute] int categoryId, [FromQuery] SpecificationRequest spec, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] SpecificationRequest spec, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
 
@@ -30,7 +30,7 @@ public class ProductsController(ISender sender) : ApiBaseController
 
     [Authorize]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromRoute] Guid categoryId, [FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetProductByIdQuery(categoryId, id), cancellationToken);
 
@@ -39,7 +39,7 @@ public class ProductsController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("")]
-    public async Task<IActionResult> Create([FromRoute] int categoryId, [FromForm] ProductRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromRoute] Guid categoryId, [FromForm] ProductRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateProductCommand(categoryId, request.Name, request.Description, request.Stock, request.ModelYear, request.Price, request.Images);
 
@@ -49,8 +49,8 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPost("{productId:int}/images")]
-    public async Task<IActionResult> CreateImages([FromRoute] int categoryId, [FromRoute] int productId, [FromForm] ProductImagesRequest request, CancellationToken cancellationToken)
+    [HttpPost("{productId:Guid}/images")]
+    public async Task<IActionResult> CreateImages([FromRoute] Guid categoryId, [FromRoute] Guid productId, [FromForm] ProductImagesRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateProductImagesCommand(categoryId, productId, request.Images);
 
@@ -60,8 +60,8 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int categoryId, [FromRoute] int id, [FromBody] ProductUpdateRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id:Guid}")]
+    public async Task<IActionResult> Update([FromRoute] Guid categoryId, [FromRoute] Guid id, [FromBody] ProductUpdateRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateProductCommand(categoryId, id, request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
 
@@ -71,8 +71,8 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpPut("{id:int}/toggle-status")]
-    public async Task<IActionResult> ToggleStatus([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    [HttpPut("{id:Guid}/toggle-status")]
+    public async Task<IActionResult> ToggleStatus([FromRoute] Guid categoryId, [FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new ToggleStatusProductCommand(categoryId, id);
 
@@ -82,8 +82,8 @@ public class ProductsController(ISender sender) : ApiBaseController
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpDelete("{id:int}/images")]
-    public async Task<IActionResult> DeleteImages([FromRoute] int categoryId, [FromRoute] int id, CancellationToken cancellationToken)
+    [HttpDelete("{id:Guid}/images")]
+    public async Task<IActionResult> DeleteImages([FromRoute] Guid categoryId, [FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteProductImagesCommand(categoryId, id);
 

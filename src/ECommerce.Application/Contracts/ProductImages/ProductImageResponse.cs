@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Application.Contracts.ProductImages;
 
 public record ProductImageResponse(
-    int Id,
+    Guid Id,
     string Url
 );

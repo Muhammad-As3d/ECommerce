@@ -1,6 +1,4 @@
-﻿using ECommerce.Infrastructure.Identity.Seeding;
-
-namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
+﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
 public class ApplicationRoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
 {

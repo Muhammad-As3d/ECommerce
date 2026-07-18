@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
 public record CreateProductCommand(
-    [property: FromRoute] int categoryId,
+    Guid CategoryId,
     string Name,
     string Description,
     int Stock,
@@ -12,4 +11,4 @@ public record CreateProductCommand(
     double Price,
     List<IFormFile> Images
 
-) : IRequest<Result<int>>;
+) : IRequest<Result<Guid>>;

@@ -4,7 +4,7 @@ using ECommerce.Application.Contracts.Products;
 namespace ECommerce.Application.Features.Products.Queries.GetAllProducts;
 
 public record GetAllProductsQuery(
-    int CategoryId,
+    Guid CategoryId,
     SpecificationRequest Spec
 )
 : IRequest<Result<PaginatedList<ProductResponse>>>;

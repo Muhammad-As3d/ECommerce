@@ -3,7 +3,7 @@
 public record CreateCategoryCommand(
     string Name,
     string Description
-) : IRequest<Result<int>>;
+) : IRequest<Result<Guid>>;
 
 
 # region Validation 
