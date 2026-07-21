@@ -1,6 +1,4 @@
-﻿using ECommerce.Application.Interfaces.Services;
-
-namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
+﻿namespace ECommerce.Application.Features.Products.Commands.CreateProduct;
 
 internal class CreateProductCommandHandler(IUnitOfWork unitOfWork, IFileService fileService) : IRequestHandler<CreateProductCommand, Result<Guid>>
 {

@@ -19,7 +19,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
 {
     private readonly ISender _sender = sender;
 
-    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    //[Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpGet("")]
     public async Task<IActionResult> GetAll([FromQuery] SpecificationRequest request, CancellationToken cancellationToken)
     {

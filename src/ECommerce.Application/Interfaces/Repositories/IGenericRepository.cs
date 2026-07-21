@@ -7,7 +7,7 @@ namespace ECommerce.Application.Interfaces.Repositories;
 public interface IGenericRepository<T> where T : BaseEntity
 {
     Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<IEnumerable<T>> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default);
     Task<T?> GetBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default);
     Task AddAsync(T entity, CancellationToken cancellationToken = default);

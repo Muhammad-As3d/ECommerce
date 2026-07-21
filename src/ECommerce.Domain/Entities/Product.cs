@@ -51,13 +51,4 @@ public class Product : AuditableEntity
         foreach (ProductImage image in uploadedImages)
             ProductImages.Add(image);
     }
-
-    public IReadOnlyList<string> GetAllImageUrls()
-    {
-        return ProductImages
-            .Select(img => img.ImageUrl)
-            .ToList()
-            .AsReadOnly();
-    }
 }
-

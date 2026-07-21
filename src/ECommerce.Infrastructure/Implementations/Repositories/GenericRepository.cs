@@ -16,8 +16,8 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<T>> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
-        => await _dbSet.Where(predicate).ToListAsync(cancellationToken);
+    public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        => await _dbSet.Where(predicate).FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec,
         CancellationToken cancellationToken = default) =>

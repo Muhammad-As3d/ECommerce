@@ -15,13 +15,12 @@ internal class CartConfiguration : AuditableEntityConfiguration<Cart>
         builder.HasIndex(c => c.UserId).IsUnique();
 
         builder.HasOne<ApplicationUser>()
-               .WithMany()
-               .HasForeignKey(c => c.UserId)
-               .OnDelete(DeleteBehavior.Restrict)
-               .IsRequired();
+               .WithOne(x => x.Cart)
+               .HasForeignKey<Cart>(c => c.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(c => c.CartItems)
-               .WithOne()
+               .WithOne(x => x.Cart)
                .HasForeignKey(ci => ci.CartId)
                .OnDelete(DeleteBehavior.Cascade);
     }
