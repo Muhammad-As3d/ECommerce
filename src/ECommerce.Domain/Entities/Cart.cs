@@ -6,5 +6,9 @@ public class Cart : AuditableEntity
 {
     public string UserId { get; set; } = null!;
 
-    public ICollection<CartItem> CartItems { get; set; } = [];
+    public ICollection<CartItem>? CartItems { get; set; } = [];
+    private Cart() { }
+
+    public static Cart Create(string userId) =>
+        new() { UserId = userId };
 }

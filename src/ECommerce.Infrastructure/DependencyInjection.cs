@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString)
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+            .EnableSensitiveDataLogging()
         );
 
         services.AddOptions<MailSetting>()
@@ -24,7 +25,7 @@ public static class DependencyInjection
         //caching
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString("Redis");      
+            options.Configuration = configuration.GetConnectionString("Redis");
         });
 
         services.AddHttpContextAccessor();
@@ -36,6 +37,7 @@ public static class DependencyInjection
         services.AddSingleton<IJwtProvider, JwtProvider>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ICurrentUser, CurrentUser>();
 
         return services;
     }

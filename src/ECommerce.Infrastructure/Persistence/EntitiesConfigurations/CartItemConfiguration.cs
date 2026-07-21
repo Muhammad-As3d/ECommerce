@@ -8,7 +8,11 @@ public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
 
         builder.Property(ci => ci.UnitPriceSnapshot).HasPrecision(18, 2);
 
-        builder.HasIndex(ci => ci.CartId).IsUnique();
+        builder.HasIndex(x => new { x.CartId, x.ProductId }).IsUnique();
 
+        builder.HasOne(ci => ci.Product)
+           .WithMany()
+           .HasForeignKey(ci => ci.ProductId)
+           .OnDelete(DeleteBehavior.Restrict);
     }
 }
