@@ -18,10 +18,11 @@ public class Category : AuditableEntity
              Description = description
          };
 
-    public void Update(string name, string description)
+    public IReadOnlyCollection<string> Update(string name, string description)
     {
         Name = name;
-        Description = description ?? string.Empty;
-    }
+        Description = description;
 
+        return [nameof(Name), nameof(Description)];
+    }
 }

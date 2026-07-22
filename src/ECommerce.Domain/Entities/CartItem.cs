@@ -24,4 +24,11 @@ public class CartItem : BaseEntity
             Quantity = quantity,
             UnitPriceSnapshot = unitPriceSnapshot
         };
+
+    public IReadOnlyCollection<string> UpdateQuantity(int quantity)
+    {
+        Quantity = quantity;
+
+        return [nameof(Quantity)];
+    }
 }

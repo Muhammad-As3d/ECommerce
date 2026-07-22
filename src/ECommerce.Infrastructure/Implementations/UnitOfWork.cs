@@ -23,6 +23,15 @@ public class UnitOfWork(ApplicationDbContext context, IMapper mapper)
         return newRepository;
     }
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        await _context.SaveChangesAsync(cancellationToken);
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return 0;
+        }
+    }
 }

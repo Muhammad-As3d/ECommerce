@@ -36,14 +36,14 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task AddRangeAsync(List<T> entities, CancellationToken cancellationToken = default) =>
         await _dbSet.AddRangeAsync(entities, cancellationToken);
 
-    public void PartialUpdate(T entity, params Expression<Func<T, object>>[] properties)
+    public void PartialUpdate(T entity, IEnumerable<string> propertyNames)
     {
         var entry = _context.Entry(entity);
 
         if (entry.State is EntityState.Detached)
             entry = _dbSet.Attach(entity);
 
-        foreach (var expr in properties)
+        foreach (var expr in propertyNames)
             entry.Property(expr).IsModified = true;
     }
 
