@@ -37,15 +37,16 @@ public class MappingProfile : Profile
             src.ProductId,
             src.Product.Name,
             src.Product.ProductImages.Select(x => x.ImageUrl).FirstOrDefault() ?? string.Empty,
-            src.UnitPriceSnapshot,
+            (double)src.UnitPriceSnapshot,
             src.Quantity,
             src.Quantity * src.UnitPriceSnapshot,
             src.Quantity < src.Product.Stock));
 
-        CreateMap<Product, CartProductResponse>();
+        CreateMap<Product, CartProductResponse>()
+            .ConstructUsing(src => new CartProductResponse(src.Stock, src.Price));
 
         CreateMap<Cart, CartResponse>()
-            .ConstructUsing(src => new CartResponse(src.Id, src.CartItems.Count()));
+            .ConstructUsing(src => new CartResponse(src.Id, src.CartItems!.Count()));
 
         #endregion
     }

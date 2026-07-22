@@ -15,19 +15,21 @@ public class UpdateProductCommandHandler(IUnitOfWork unitOfWork, IDistributedCac
 
         var repo = unitOfWork.Repository<Product>();
 
-        var exists = await repo.AnyAsync(x => x.Id == request.Id, cancellationToken);
+        var categoryIsExist = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
-        if (!exists)
-            return Result.Failure(ProductErrors.NotFound(request.Id));
+        if (!categoryIsExist)
+            return Result.Failure<Guid>(CategoryErrors.NotFound(request.CategoryId));
 
         var product = Product.CreateStub(request.Id);
 
-        product.Update(request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
+        var changedProperties = product.Update(request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
 
-        repo.PartialUpdate(product, x => x.Name, x => x.Description, x => x.Stock, x => x.ModelYear!, x => x.Price);
+        repo.PartialUpdate(product, changedProperties);
 
-        await unitOfWork.SaveChangesAsync(cancellationToken);
+        var rowsAffected = await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success();
+        return rowsAffected == 0
+           ? Result.Failure(ProductErrors.NotFound(request.Id))
+           : Result.Success();
     }
 }

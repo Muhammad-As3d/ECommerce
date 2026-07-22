@@ -8,9 +8,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
 {
     public async Task<Result<PaginatedList<ProductResponse>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var categoryIsExists = await unitOfWork
-            .Repository<Category>()
-            .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        var categoryIsExists = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
             return Result.Failure<PaginatedList<ProductResponse>>(CategoryErrors.NotFound(request.CategoryId));

@@ -14,9 +14,7 @@ internal class ToggleStatusProductCommandHandler(IUnitOfWork unitOfWork, IDistri
 
         await distributedCache.RemoveAsync(cacheKey, cancellationToken);
 
-        var categoryIsExists = await unitOfWork
-              .Repository<Category>()
-              .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        var categoryIsExists = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
             return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
@@ -25,9 +23,8 @@ internal class ToggleStatusProductCommandHandler(IUnitOfWork unitOfWork, IDistri
             .Repository<Product>()
             .ToggleStatusAsync(request.Id, cancellationToken);
 
-        if (affectedRows == 0)
-            return Result.Failure(ProductErrors.NotFound(request.Id));
-
-        return Result.Success();
+        return affectedRows == 0
+            ? Result.Failure(ProductErrors.NotFound(request.Id))
+            : Result.Success();
     }
 }

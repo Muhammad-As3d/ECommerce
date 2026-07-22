@@ -30,13 +30,15 @@ public class Product : AuditableEntity
              CategoryId = categoryId
          };
 
-    public void Update(string name, string description, int stock, int modelYear, double price)
+    public IReadOnlyCollection<string> Update(string name, string description, int stock, int modelYear, double price)
     {
         Name = name;
         Description = description;
         Stock = stock;
         ModelYear = modelYear;
         Price = price;
+
+        return [nameof(Name), nameof(Description), nameof(Stock), nameof(ModelYear), nameof(Price)];
     }
 
     public void AddImages(List<string> imageUrls)

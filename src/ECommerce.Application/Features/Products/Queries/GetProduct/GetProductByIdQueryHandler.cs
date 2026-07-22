@@ -1,5 +1,4 @@
 ﻿using ECommerce.Application.Contracts.Products;
-using ECommerce.Application.Interfaces.Services;
 using ECommerce.Application.Specifications.ProductSpecifications;
 
 namespace ECommerce.Application.Features.Products.Queries.GetProduct;
@@ -17,9 +16,7 @@ public class GetProductByIdQueryHandler(IUnitOfWork unitOfWork, ICacheService ca
         if (cachedProduct is not null)
             return Result.Success(cachedProduct);
 
-        var categoryIsExists = await unitOfWork
-                .Repository<Category>()
-                .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+        var categoryIsExists = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
             return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
