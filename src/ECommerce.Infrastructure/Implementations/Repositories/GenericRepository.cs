@@ -59,9 +59,9 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .ExecuteUpdateAsync(s => s
         .SetProperty(c => c.IsDeleted, x => true), cancellationToken);
 
-    public async Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken = default) =>
+    public async Task<int> DeleteAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
         await _dbSet
-        .Where(c => c.Id == id)
+        .Where(predicate)
         .ExecuteDeleteAsync(cancellationToken);
     public void DeleteRangeAsync(List<T> entities, CancellationToken cancellationToken = default) =>
          _dbSet.RemoveRange(entities);

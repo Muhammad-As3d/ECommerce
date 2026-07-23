@@ -15,7 +15,7 @@ public interface IGenericRepository<T> where T : BaseEntity
     void PartialUpdate(T entity, IEnumerable<string> propertyNames);
     Task<int> ToggleStatusAsync(Guid id, CancellationToken cancellationToken = default);
     Task<int> SoftDeleteAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<int> DeleteAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     void DeleteRangeAsync(List<T> entities, CancellationToken cancellationToken = default);
 
     #region Checks

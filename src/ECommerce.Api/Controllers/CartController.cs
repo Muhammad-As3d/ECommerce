@@ -1,5 +1,7 @@
 ﻿using ECommerce.Api.ViewModels.Cart;
 using ECommerce.Application.Features.Carts.Commands.AddCartItem;
+using ECommerce.Application.Features.Carts.Commands.ClearCart;
+using ECommerce.Application.Features.Carts.Commands.DeleteCartItem;
 using ECommerce.Application.Features.Carts.Commands.UpdateCartItem;
 using ECommerce.Application.Features.Carts.Queries.GetCart;
 using MediatR;
@@ -35,6 +37,24 @@ public class CartController(ISender sender) : ApiBaseController
     public async Task<IActionResult> UpdateItem(Guid id, UpdateItemRequest request, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new UpdateItemQuantityCommand(id, request.Quantity), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize]
+    [HttpDelete("item/{id:Guid}")]
+    public async Task<IActionResult> DeleteItem(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new DeleteCartItemCommand(id), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize]
+    [HttpDelete("clear")]
+    public async Task<IActionResult> ClearCart(CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new ClearCartCommand(), cancellationToken);
 
         return HandleResult(result);
     }
