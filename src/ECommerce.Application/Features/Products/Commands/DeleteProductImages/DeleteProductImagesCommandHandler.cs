@@ -1,6 +1,5 @@
 ﻿using ECommerce.Application.Contracts.ProductImages;
 using ECommerce.Application.Contracts.Products;
-using ECommerce.Application.Interfaces.Services;
 using ECommerce.Application.Specifications.ProductSpecifications;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -36,7 +35,7 @@ public class DeleteProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileServ
 
         foreach (var image in images)
         {
-            await repo.DeleteAsync(image.Id, cancellationToken);
+            await repo.DeleteAsync(x => x.Id == image.Id, cancellationToken);
         }
 
         var urls = images.Select(x => x.Url).ToList();
