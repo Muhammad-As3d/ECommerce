@@ -1,6 +1,8 @@
 ﻿using ECommerce.Api.Exceptions;
 using ECommerce.Application;
 using ECommerce.Infrastructure;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Http.Features;
 using System.Diagnostics;
 
@@ -44,6 +46,14 @@ public static class DependencyInjection
                 context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
             };
         });
+
+        var assembly = typeof(DependencyInjection).Assembly;
+
+        //Add Mapster
+        var mappingConfiguration = TypeAdapterConfig.GlobalSettings;
+        mappingConfiguration.Scan(assembly);
+
+        services.AddSingleton<IMapper>(new Mapper(mappingConfiguration));
 
         return services;
     }

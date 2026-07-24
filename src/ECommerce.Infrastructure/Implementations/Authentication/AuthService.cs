@@ -104,7 +104,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthS
 
         var userRoles = await _userManager.GetRolesAsync(user);
 
-        var (token, expiresIn) = await _jwtProvider.GenerateTokenAsync(user, userRoles);
+        var (token, expiresIn) = _jwtProvider.GenerateTokenAsync(user, userRoles);
 
         var refreshToken = GenerateRefreshToken();
         var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpirationDays);
@@ -152,7 +152,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthS
 
         var userRoles = await _userManager.GetRolesAsync(user);
 
-        var (newToken, expiresIn) = await _jwtProvider.GenerateTokenAsync(user, userRoles);
+        var (newToken, expiresIn) = _jwtProvider.GenerateTokenAsync(user, userRoles);
         var newRefreshToken = GenerateRefreshToken();
         var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpirationDays);
 

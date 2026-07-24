@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECommerce.Application.Contracts.Addresses;
 using ECommerce.Application.Contracts.Carts;
 using ECommerce.Application.Contracts.Category;
 using ECommerce.Application.Contracts.ProductImages;
@@ -48,6 +49,11 @@ public class MappingProfile : Profile
         CreateMap<Cart, CartResponse>()
             .ConstructUsing(src => new CartResponse(src.Id, src.CartItems!.Count()));
 
+        #endregion
+
+        #region Address
+
+        CreateMap<Address, AddressResponse>();
         #endregion
     }
 }

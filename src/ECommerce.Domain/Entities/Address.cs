@@ -13,4 +13,19 @@ public class Address : AuditableEntity
     public string PostalCode { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
     public bool IsDefault { get; set; }
+
+    private Address() { }
+
+    public static Address Create(string userId, string street, string city, string governorate, string country, string postalCode, string phoneNumber, bool isDefault)
+        => new()
+        {
+            UserId = userId,
+            Street = street,
+            City = city,
+            Governorate = governorate,
+            Country = country,
+            PostalCode = postalCode,
+            PhoneNumber = phoneNumber,
+            IsDefault = isDefault
+        };
 }
