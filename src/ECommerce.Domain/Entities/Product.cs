@@ -8,7 +8,7 @@ public class Product : AuditableEntity
     public string Description { get; set; } = string.Empty;
     public int Stock { get; set; }
     public int? ModelYear { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public Guid CategoryId { get; set; }
 
     public ICollection<ProductImage> ProductImages { get; set; } = [];
@@ -18,7 +18,7 @@ public class Product : AuditableEntity
 
     public static Product CreateStub(Guid id) => new() { Id = id };
 
-    public static Product Create(string name, string description, int stock, int modelYear, double price, Guid categoryId)
+    public static Product Create(string name, string description, int stock, int modelYear, decimal price, Guid categoryId)
         =>
          new()
          {
@@ -30,7 +30,7 @@ public class Product : AuditableEntity
              CategoryId = categoryId
          };
 
-    public IReadOnlyCollection<string> Update(string name, string description, int stock, int modelYear, double price)
+    public IReadOnlyCollection<string> Update(string name, string description, int stock, int modelYear, decimal price)
     {
         Name = name;
         Description = description;
@@ -39,6 +39,12 @@ public class Product : AuditableEntity
         Price = price;
 
         return [nameof(Name), nameof(Description), nameof(Stock), nameof(ModelYear), nameof(Price)];
+    }
+    public IReadOnlyCollection<string> DecreaseStock(int amount)
+    {
+        Stock = Stock - amount;
+
+        return [nameof(Stock)];
     }
 
     public void AddImages(List<string> imageUrls)

@@ -12,6 +12,10 @@ public static class CartErrors
         Error.NotFound("Cart.CartItemsNotFound", "You didn't add any items into basket");
     public static Error ItemsNotFound =>
         Error.NotFound("Cart.ItemsNotFound", "this item with Id are not found");
+    public static Error ProductNotFound =>
+        Error.NotFound("Cart.ProductNotFound", "this product with Id are not found");
     public static Error InsufficientStock =>
         Error.Conflict("Cart.InsufficientStock", "Sorry we not have all this quantity.");
+    public static Error Empty =>
+        Error.BadRequest("Cart.Empty", "This cart is Empty.");
 }

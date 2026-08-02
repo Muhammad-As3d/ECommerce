@@ -10,7 +10,7 @@ public class GetAddressQueryHandler(IUnitOfWork unitOfWork, ICurrentUser current
     {
         var address = await unitOfWork
             .Repository<Address>()
-            .GetByIdProjectAsync<AddressResponse>(x => x.UserId == currentUser.Id, cancellationToken);
+            .GetByPredicateProjectAsync<AddressResponse>(x => x.UserId == currentUser.Id, cancellationToken);
 
         var response = new AddressUserResponse(currentUser.FullName, address!);
 

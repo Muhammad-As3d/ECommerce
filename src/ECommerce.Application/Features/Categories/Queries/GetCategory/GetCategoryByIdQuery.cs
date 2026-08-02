@@ -12,7 +12,7 @@ public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandl
     {
         var category = await _unitOfWork
             .Repository<Category>()
-            .GetByIdProjectAsync<CategoryResponse>(x => x.Id == request.Id, cancellationToken);
+            .GetByPredicateProjectAsync<CategoryResponse>(x => x.Id == request.Id, cancellationToken);
 
         if (category is null)
             return Result.Failure<CategoryResponse>(CategoryErrors.NotFound(request.Id));

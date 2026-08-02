@@ -23,7 +23,7 @@ internal class UpdateItemQuantityCommandHandler(IUnitOfWork unitOfWork) : IReque
 
         unitOfWork.Repository<CartItem>().PartialUpdate(item, changedProperties);
 
-        var rowsAffected = await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

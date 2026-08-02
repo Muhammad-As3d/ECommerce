@@ -5,7 +5,7 @@ public record ProductRequest(
     string Description,
     int Stock,
     int ModelYear,
-    double Price,
+    decimal Price,
     List<IFormFile> Images
 );
 
@@ -14,7 +14,7 @@ public record ProductUpdateRequest(
     string Description,
     int Stock,
     int ModelYear,
-    double Price
+    decimal Price
 );
 
 

@@ -21,6 +21,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        //builder.HasSequence<long>("OrderNumberSequence")
+        //    .StartsAt(1)
+        //    .IncrementsBy(1);
+
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         var cascadeFks = builder.Model.GetEntityTypes()
