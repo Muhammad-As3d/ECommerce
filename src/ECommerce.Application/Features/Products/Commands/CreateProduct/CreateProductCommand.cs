@@ -8,7 +8,7 @@ public record CreateProductCommand(
     string Description,
     int Stock,
     int ModelYear,
-    double Price,
+    decimal Price,
     List<IFormFile> Images
 
 ) : IRequest<Result<Guid>>;

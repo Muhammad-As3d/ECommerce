@@ -38,7 +38,7 @@ public class MappingProfile : Profile
             src.ProductId,
             src.Product.Name,
             src.Product.ProductImages.Select(x => x.ImageUrl).FirstOrDefault() ?? string.Empty,
-            (double)src.UnitPriceSnapshot,
+            src.UnitPriceSnapshot,
             src.Quantity,
             src.Quantity * src.UnitPriceSnapshot,
             src.Quantity < src.Product.Stock));
@@ -54,6 +54,9 @@ public class MappingProfile : Profile
         #region Address
 
         CreateMap<Address, AddressResponse>();
+        #endregion
+
+        #region Order
         #endregion
     }
 }

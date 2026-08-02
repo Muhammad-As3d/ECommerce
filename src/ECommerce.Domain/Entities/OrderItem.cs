@@ -11,4 +11,15 @@ public class OrderItem : BaseEntity
     public int Quantity { get; set; }
 
     public Order Order { get; set; } = null!;
+
+    private OrderItem() { }
+
+    public static OrderItem Create(Guid orderId, string productNameSnapshot, decimal unitPriceSnapshot, int quantity) =>
+        new()
+        {
+            OrderId = orderId,
+            UnitPriceSnapshot = unitPriceSnapshot,
+            ProductNameSnapshot = productNameSnapshot,
+            Quantity = quantity
+        };
 }

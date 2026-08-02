@@ -23,16 +23,16 @@ public interface IGenericRepository<T> where T : BaseEntity
 
     #endregion
 
-    #region Projection & Pagination & Specification 
+    #region Projection & Pagination & Specification  
 
     Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
-    Task<TProjection?> GetByIdProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class;
+    Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class;
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(int pageNumber, int pageSize,
     CancellationToken cancellationToken = default) where TProjection : class;
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,
         int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class;
     Task<TProjection?> GetBySpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
-    Task<List<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
+    Task<IEnumerable<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
 
     #endregion
 }

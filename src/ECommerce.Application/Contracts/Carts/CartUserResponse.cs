@@ -2,10 +2,10 @@
 
 public record CartUserResponse(
     Guid Id,
-    List<CartItemResponse> CartItems,
-    double Subtotal,
-    double Discount,
-    double Total,
+    IEnumerable<CartItemResponse> CartItems,
+    decimal Subtotal,
+    decimal Discount,
+    decimal Total,
     int ItemCount
 );
 
@@ -19,8 +19,8 @@ public record CartItemResponse(
     Guid ProductId,
     string ProductName,
     string ImageUrl,
-    double UnitPrice,
+    decimal UnitPrice,
     int Quantity,
-    double Subtotal,
+    decimal Subtotal,
     bool IsInStock
 );

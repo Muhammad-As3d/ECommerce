@@ -11,7 +11,7 @@ internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser cu
 
         var product = await unitOfWork
             .Repository<Product>()
-            .GetByIdProjectAsync<CartProductResponse>(x => x.Id == request.ProductId, cancellationToken);
+            .GetByPredicateProjectAsync<CartProductResponse>(x => x.Id == request.ProductId, cancellationToken);
 
         if (product is null)
             return Result.Failure<Guid>(ProductErrors.NotFound(request.ProductId));

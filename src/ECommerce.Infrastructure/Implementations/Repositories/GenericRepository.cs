@@ -93,7 +93,7 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
 
-    public async Task<TProjection?> GetByIdProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class =>
+    public async Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class =>
         await _dbSet
         .Where(predicate)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
@@ -105,7 +105,7 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
         .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<List<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
+    public async Task<IEnumerable<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
         await SpecificationEvaluator
         .GetQuery(_dbSet, spec)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)

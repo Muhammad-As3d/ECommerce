@@ -7,5 +7,5 @@ public record UpdateProductCommand(
     string Description,
     int Stock,
     int ModelYear,
-    double Price
+    decimal Price
 ) : IRequest<Result>;

@@ -30,7 +30,7 @@ public class DeleteProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileServ
         var images = await repo
             .GetAllSpecProjectAsync<ProductImageResponse>(spec, cancellationToken);
 
-        if (images is null || images.Count == 0)
+        if (images is null || !images.Any())
             return Result.Failure(ProductErrors.NotfoundProductImages);
 
         foreach (var image in images)

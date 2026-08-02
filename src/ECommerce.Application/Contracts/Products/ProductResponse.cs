@@ -7,6 +7,6 @@ public record ProductResponse
     public string Description { get; init; } = string.Empty;
     public int Stock { get; init; }
     public int? ModelYear { get; init; }
-    public double Price { get; init; }
+    public decimal Price { get; init; }
     public List<string> ImageURLs { get; init; } = [];
 }

@@ -34,11 +34,12 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailSender, EmailService>();
-        services.AddSingleton<IJwtProvider, JwtProvider>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ICurrentUser, CurrentUser>();
+        services.AddScoped<IOrderNumberGenerator, SqlOrderNumberGenerator>();
 
+        services.AddSingleton<IJwtProvider, JwtProvider>();
         return services;
     }
 
