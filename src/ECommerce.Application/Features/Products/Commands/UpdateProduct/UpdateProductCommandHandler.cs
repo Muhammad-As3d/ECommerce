@@ -20,7 +20,7 @@ public class UpdateProductCommandHandler(IUnitOfWork unitOfWork, IDistributedCac
         if (!categoryIsExist)
             return Result.Failure<Guid>(CategoryErrors.NotFound(request.CategoryId));
 
-        var productIsExist = await repo.AnyAsync(x => x.Id == request.Id, cancellationToken);
+        var productIsExist = await repo.AnyAsync(x => x.Id == request.Id && x.CategoryId == request.CategoryId, cancellationToken);
 
         if (!productIsExist)
             return Result.Failure(ProductErrors.NotFound(request.Id));

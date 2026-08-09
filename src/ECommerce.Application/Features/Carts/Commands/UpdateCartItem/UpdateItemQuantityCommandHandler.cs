@@ -1,12 +1,12 @@
 ﻿namespace ECommerce.Application.Features.Carts.Commands.UpdateCartItem;
 
-internal class UpdateItemQuantityCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateItemQuantityCommand, Result>
+internal class UpdateItemQuantityCommandHandler(IUnitOfWork unitOfWork, ICurrentUser currentUser) : IRequestHandler<UpdateItemQuantityCommand, Result>
 {
     public async Task<Result> Handle(UpdateItemQuantityCommand request, CancellationToken cancellationToken)
     {
         var itemExists = await unitOfWork
             .Repository<CartItem>()
-            .AnyAsync(x => x.Id == request.CartItemId, cancellationToken);
+            .AnyAsync(x => x.Id == request.CartItemId && x.Cart.UserId == currentUser.Id, cancellationToken);
 
         if (!itemExists)
             return Result.Failure(CartErrors.CartItemsNotFound);

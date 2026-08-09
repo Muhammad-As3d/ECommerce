@@ -118,7 +118,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthS
 
         await _userManager.UpdateAsync(user);
 
-        var response = new AuthResponse(user.Id, user.FirstName, user.LastName, user.Email!, token, expiresIn, refreshToken, refreshTokenExpiration);
+        var response = new AuthResponse(user.Id, user.Email!, user.FirstName, user.LastName, token, expiresIn, refreshToken, refreshTokenExpiration);
 
         return Result.Success(response);
     }

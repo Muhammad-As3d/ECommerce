@@ -22,16 +22,16 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .GreaterThan(0);
 
         RuleFor(c => c.Images)
-            .Must((request, images) =>
-            {
-                return images.All(file =>
-                {
-                    var extension = Path.GetExtension(file.FileName).ToLower();
+           .Must((request, images) =>
+           {
+               return images.All(file =>
+               {
+                   var extension = Path.GetExtension(file.FileName).ToLower();
 
-                    return FileSettings.AllowedImagesExtensions.Contains(extension);
-                });
-            })
-            .WithMessage("File extension is not allowed, Allowed extension is (.jpg,.jpeg,.png)")
-            .When(x => x.Images is not null);
+                   return FileSettings.AllowedImagesExtensions.Contains(extension);
+               });
+           })
+           .WithMessage("File extension is not allowed, Allowed extension is (.jpg,.jpeg,.png)")
+           .When(x => x.Images is not null);
     }
 }
