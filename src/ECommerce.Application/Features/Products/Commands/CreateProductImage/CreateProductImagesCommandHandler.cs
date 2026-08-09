@@ -1,5 +1,4 @@
 ﻿using ECommerce.Application.Contracts.Products;
-using ECommerce.Application.Interfaces.Services;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace ECommerce.Application.Features.Products.Commands.CreateProductImage;
@@ -17,14 +16,14 @@ internal class CreateProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileSe
 
         var categoryIsExists = await unitOfWork
             .Repository<Category>()
-            .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
+            .AnyAsync(x => x.Id == request.CategoryId && !x.IsDeleted, cancellationToken);
 
         if (!categoryIsExists)
             return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
 
         var repo = unitOfWork.Repository<Product>();
 
-        var isExists = await repo.AnyAsync(x => x.Id == request.ProductId, cancellationToken);
+        var isExists = await repo.AnyAsync(x => x.Id == request.ProductId && x.CategoryId == request.CategoryId && !x.IsDeleted, cancellationToken);
 
         if (!isExists)
             return Result.Failure(ProductErrors.NotFound(request.ProductId));

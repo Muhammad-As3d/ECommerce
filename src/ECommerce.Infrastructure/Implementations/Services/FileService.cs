@@ -4,13 +4,13 @@ namespace ECommerce.Infrastructure.Implementations.Services;
 
 public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 {
-    private readonly string _imagePath = @$"{webHostEnvironment.WebRootPath}\Images";
+    private readonly string _imagePath = Path.Combine(webHostEnvironment.WebRootPath, "Images");
 
     public async Task<string> UploadImageAsync(IFormFile image, CancellationToken cancellationToken = default)
     {
-        var extension = Path.GetExtension(image.FileName);
-        var fileName = Path.GetFileName(image.FileName + Guid.NewGuid().ToString() + extension);
+        Directory.CreateDirectory(_imagePath);
 
+        var fileName = Path.GetRandomFileName();
         var path = Path.Combine(_imagePath, fileName);
 
         using var stream = File.Create(path);
@@ -25,12 +25,7 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
 
         foreach (var image in images)
         {
-            var fileName = Path.GetRandomFileName();
-
-            var path = Path.Combine(_imagePath, fileName);
-
-            using var stream = File.Create(path);
-            await image.CopyToAsync(stream, cancellationToken);
+            var path = await UploadImageAsync(image, cancellationToken);
 
             paths.Add(path);
         }

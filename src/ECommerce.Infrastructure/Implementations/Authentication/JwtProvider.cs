@@ -45,8 +45,8 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             {
                 IssuerSigningKey = symmetricSecurityKey,
                 ValidateIssuerSigningKey = true,
-                ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateIssuer = true,
+                ValidateAudience = true,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 

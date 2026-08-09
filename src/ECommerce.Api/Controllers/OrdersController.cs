@@ -9,7 +9,7 @@ namespace ECommerce.Api.Controllers;
 [Authorize]
 public class OrdersController(ISender sender) : ApiBaseController
 {
-    [HttpGet("checkout")]
+    [HttpPost("checkout")]
     public async Task<IActionResult> Checkout([FromQuery] Guid shippingAddressId, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new OrderCheckoutCommand(shippingAddressId), cancellationToken);
