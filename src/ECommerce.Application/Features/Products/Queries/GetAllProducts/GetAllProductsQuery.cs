@@ -5,6 +5,6 @@ namespace ECommerce.Application.Features.Products.Queries.GetAllProducts;
 
 public record GetAllProductsQuery(
     Guid CategoryId,
-    SpecificationRequest Spec
+    FiltersRequest Spec
 )
 : IRequest<Result<PaginatedList<ProductResponse>>>;

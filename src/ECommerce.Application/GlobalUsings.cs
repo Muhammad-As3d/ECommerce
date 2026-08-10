@@ -1,4 +1,12 @@
-﻿global using ECommerce.Application.Behaviors;
+﻿global using AutoMapper;
+global using ECommerce.Application.Abstractions.Pagination;
+global using ECommerce.Application.Behaviors;
+global using ECommerce.Application.Contracts.Addresses;
+global using ECommerce.Application.Contracts.Carts;
+global using ECommerce.Application.Contracts.Category;
+global using ECommerce.Application.Contracts.Orders;
+global using ECommerce.Application.Contracts.ProductImages;
+global using ECommerce.Application.Contracts.Products;
 global using ECommerce.Application.Interfaces;
 global using ECommerce.Application.Interfaces.Services;
 global using ECommerce.Domain.Abstractions;

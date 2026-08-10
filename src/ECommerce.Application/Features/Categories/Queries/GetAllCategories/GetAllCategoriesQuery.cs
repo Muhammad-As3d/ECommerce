@@ -4,7 +4,7 @@ using ECommerce.Application.Specifications.CategorySpecifications;
 
 namespace ECommerce.Application.Features.Categories.Queries.GetAllCategories;
 
-public record GetAllCategoriesQuery(SpecificationRequest Spec)
+public record GetAllCategoriesQuery(FiltersRequest Spec)
     : IRequest<PaginatedList<CategoryResponse>>;
 
 public class GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetAllCategoriesQuery, PaginatedList<CategoryResponse>>

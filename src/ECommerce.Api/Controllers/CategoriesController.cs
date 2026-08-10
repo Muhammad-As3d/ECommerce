@@ -21,7 +21,7 @@ public class CategoriesController(ISender sender) : ApiBaseController
 
     //[Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromQuery] SpecificationRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] FiltersRequest request, CancellationToken cancellationToken)
     {
         var response = await _sender.Send(new GetAllCategoriesQuery(request), cancellationToken);
 

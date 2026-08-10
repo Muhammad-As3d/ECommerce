@@ -1,11 +1,10 @@
-﻿using ECommerce.Application.Abstractions.Pagination;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace ECommerce.Application.Specifications.ProductSpecifications;
 
 public class ProductSpecification : Specification<Product>
 {
-    public ProductSpecification(Guid categoryId, SpecificationRequest spec, Guid? id = default)
+    public ProductSpecification(Guid categoryId, FiltersRequest spec, Guid? id = default)
     {
         Predicate = x =>
         x.Category.Id == categoryId &&
@@ -15,7 +14,7 @@ public class ProductSpecification : Specification<Product>
         ApplySorting(spec);
     }
 
-    private void ApplySorting(SpecificationRequest spec)
+    private void ApplySorting(FiltersRequest spec)
     {
         Action<Expression<Func<Product, object>>> sort = spec.IsDescending ? SortingByDescending : SortingBy;
 

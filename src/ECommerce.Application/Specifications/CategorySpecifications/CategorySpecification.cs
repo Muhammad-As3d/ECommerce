@@ -5,7 +5,7 @@ namespace ECommerce.Application.Specifications.CategorySpecifications;
 
 public class CategorySpecification : Specification<Category>
 {
-    public CategorySpecification(SpecificationRequest spec)
+    public CategorySpecification(FiltersRequest spec)
     {
         Predicate = x =>
         (string.IsNullOrEmpty(spec.SearchValue) || x.Name.Contains(spec.SearchValue.ToLower()));
@@ -13,7 +13,7 @@ public class CategorySpecification : Specification<Category>
         ApplySorting(spec);
     }
 
-    private void ApplySorting(SpecificationRequest spec)
+    private void ApplySorting(FiltersRequest spec)
     {
         Action<Expression<Func<Category, object>>> sort = spec.IsDescending ? SortingByDescending : SortingBy;
 
