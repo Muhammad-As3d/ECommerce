@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using ECommerce.Application.Contracts.Addresses;
-using ECommerce.Application.Contracts.Carts;
-using ECommerce.Application.Contracts.Category;
-using ECommerce.Application.Contracts.ProductImages;
-using ECommerce.Application.Contracts.Products;
-
-namespace ECommerce.Application.Mappings;
+﻿namespace ECommerce.Application.Mappings;
 
 public class MappingProfile : Profile
 {
@@ -57,6 +50,75 @@ public class MappingProfile : Profile
         #endregion
 
         #region Order
+
+        CreateMap<Order, OrderUserResponse>()
+            .ConstructUsing(src => new OrderUserResponse(
+                src.Id,
+                src.OrderNumber,
+                src.Status.ToString(),
+                src.CreatedOn,
+                src.Items.Count(),
+                src.WithinDays,
+                src.SubTotal,
+                src.DiscountAmount,
+                src.ShippingFee,
+                src.TaxAmount,
+                src.TotalAmount
+            ));
+
+        CreateMap<OrderItem, OrderItemResponse>()
+            .ConstructUsing(item => new OrderItemResponse(
+                item.Id,
+                item.ProductNameSnapshot,
+                item.UnitPriceSnapshot,
+                item.Quantity,
+                item.Quantity * item.UnitPriceSnapshot
+            ));
+
+        CreateMap<Order, OrderDetailsResponse>()
+            .ConstructUsing(src => new OrderDetailsResponse(
+                src.Id,
+                src.OrderNumber,
+                src.Status.ToString(),
+                src.CreatedOn,
+                src.WithinDays,
+                src.SubTotal,
+                src.DiscountAmount,
+                src.ShippingFee,
+                src.TaxAmount,
+                src.TotalAmount,
+                new AddressResponse(
+                    src.ShippingAddress.Id,
+                    src.ShippingAddress.Street,
+                    src.ShippingAddress.City,
+                    src.ShippingAddress.Governorate,
+                    src.ShippingAddress.Country,
+                    src.ShippingAddress.PostalCode,
+                    src.ShippingAddress.PhoneNumber,
+                    src.ShippingAddress.IsDefault
+                ),
+                src.Items.Select(item => new OrderItemResponse(
+                    item.Id,
+                    item.ProductNameSnapshot,
+                    item.UnitPriceSnapshot,
+                    item.Quantity,
+                    item.Quantity * item.UnitPriceSnapshot
+                )).ToList()
+            ));
+
+        CreateMap<Order, OrderAdminResponse>()
+            .ConstructUsing(src => new OrderAdminResponse(
+                src.Id,
+                src.OrderNumber,
+                src.Status.ToString(),
+                src.Payment.Status.ToString() ?? "Pending",
+                src.CreatedOn,
+                src.WithinDays,
+                src.SubTotal,
+                src.TotalAmount,
+                src.UserId
+            ));
+
         #endregion
     }
 }

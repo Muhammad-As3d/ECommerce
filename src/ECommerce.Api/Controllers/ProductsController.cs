@@ -21,7 +21,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
-    public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] SpecificationRequest spec, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] FiltersRequest spec, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
 

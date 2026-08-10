@@ -17,3 +17,26 @@ public record OrderResponse(
     AddressResponse ShippingAddress,
     IEnumerable<CartItemResponse> Items
 );
+
+public record OrderDetailsResponse(
+    Guid Id,
+    string OrderNumber,
+    string Status,
+    DateTime CreatedOn,
+    int WithinDays,
+    decimal SubTotal,
+    decimal DiscountAmount,
+    decimal ShippingFee,
+    decimal TaxAmount,
+    decimal TotalAmount,
+    AddressResponse ShippingAddress,
+    IEnumerable<OrderItemResponse> Items
+);
+
+public record OrderItemResponse(
+    Guid Id,
+    string ProductName,
+    decimal UnitPrice,
+    int Quantity,
+    decimal TotalPrice
+);

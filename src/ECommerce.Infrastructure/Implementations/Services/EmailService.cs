@@ -1,7 +1,4 @@
-﻿using ECommerce.Infrastructure.Identity.Settings;
-using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
 
 namespace ECommerce.Infrastructure.Implementations.Services;
@@ -19,6 +16,7 @@ public class EmailService(IOptions<MailSetting> mailSettings) : IEmailSender
         };
 
         message.To.Add(MailboxAddress.Parse(email));
+        message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
 
         var builder = new BodyBuilder
         {
@@ -29,9 +27,9 @@ public class EmailService(IOptions<MailSetting> mailSettings) : IEmailSender
 
         using var smtp = new SmtpClient();
 
-        smtp.Connect(_mailSettings.Host, _mailSettings.Port);
-        smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+        await smtp.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
+        await smtp.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
         await smtp.SendAsync(message);
-        smtp.Disconnect(true);
+        await smtp.DisconnectAsync(true);
     }
 }

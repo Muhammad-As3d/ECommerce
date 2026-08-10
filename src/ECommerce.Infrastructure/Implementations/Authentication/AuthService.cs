@@ -2,12 +2,11 @@
 
 namespace ECommerce.Infrastructure.Implementations.Authentication;
 
-public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthService> logger,
-    IEmailSender emailSender, IHttpContextAccessor httpContextAccessor, SignInManager<ApplicationUser> signInManager,
+public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender emailSender,
+    IHttpContextAccessor httpContextAccessor, SignInManager<ApplicationUser> signInManager,
     IJwtProvider jwtProvider, ApplicationDbContext context) : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
-    private readonly ILogger<AuthService> _logger = logger;
     private readonly IEmailSender _emailSender = emailSender;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
@@ -199,7 +198,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthS
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-        _logger.LogInformation("Confirmation  {Code} => ", code);
+        //_logger.LogInformation("Confirmation  {Code} => ", code);
 
         var route = "Auth/confirmation-email";
 
