@@ -5,6 +5,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Http.Features;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace ECommerce.Api;
 
@@ -13,7 +14,13 @@ public static class DependencyInjection
     public static IServiceCollection AddPresentationServices(this IServiceCollection services, IConfiguration configuration)
     {
 
-        services.AddControllers();
+        services.AddControllers()
+             .AddJsonOptions(options =>
+             {
+                 options.JsonSerializerOptions.Converters.Add(
+                     new JsonStringEnumConverter());
+             });
+
         services.AddOpenApi();
 
         var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();

@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Domain.Enums;
 
-public enum DiscountType
+public enum DiscountType : byte
 {
     Percentage = 1,
     FixedAmount = 2

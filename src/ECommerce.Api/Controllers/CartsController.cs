@@ -4,17 +4,18 @@ using ECommerce.Application.Features.Carts.Commands.ClearCart;
 using ECommerce.Application.Features.Carts.Commands.DeleteCartItem;
 using ECommerce.Application.Features.Carts.Commands.UpdateCartItem;
 using ECommerce.Application.Features.Carts.Queries.GetCart;
+using ECommerce.Infrastructure.Identity.Seeding;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
-[Route("api/[controller]")]
+[Authorize(Roles = DefaultRoles.Customer.Name)]
+[Route("api/v1/[controller]")]
 [ApiController]
-public class CartController(ISender sender) : ApiBaseController
+public class CartsController(ISender sender) : ApiBaseController
 {
-    [Authorize]
     [HttpGet("")]
     public async Task<IActionResult> GetItems(CancellationToken cancellationToken = default)
     {
@@ -23,7 +24,6 @@ public class CartController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpPost("item")]
     public async Task<IActionResult> AddItems(CartItemRequest request, CancellationToken cancellationToken = default)
     {
@@ -32,7 +32,6 @@ public class CartController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpPut("item/{id:Guid}")]
     public async Task<IActionResult> UpdateItem(Guid id, UpdateItemRequest request, CancellationToken cancellationToken = default)
     {
@@ -41,7 +40,6 @@ public class CartController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpDelete("item/{id:Guid}")]
     public async Task<IActionResult> DeleteItem(Guid id, CancellationToken cancellationToken = default)
     {
@@ -50,7 +48,6 @@ public class CartController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpDelete("clear")]
     public async Task<IActionResult> ClearCart(CancellationToken cancellationToken = default)
     {

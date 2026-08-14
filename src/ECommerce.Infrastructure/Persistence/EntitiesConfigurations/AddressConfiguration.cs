@@ -9,6 +9,7 @@ public class AddressConfiguration : AuditableEntityConfiguration<Address>
         builder.ToTable("Addresses");
 
         builder.Property(a => a.UserId).IsRequired().HasMaxLength(450);
+        builder.Property(a => a.FullName).IsRequired().HasMaxLength(200);
         builder.Property(a => a.Street).IsRequired().HasMaxLength(200);
         builder.Property(a => a.City).IsRequired().HasMaxLength(100);
         builder.Property(a => a.Governorate).IsRequired().HasMaxLength(100);

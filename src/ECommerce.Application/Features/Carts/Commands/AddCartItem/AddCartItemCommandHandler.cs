@@ -1,43 +1,49 @@
-﻿using ECommerce.Application.Contracts.Carts;
-
-namespace ECommerce.Application.Features.Carts.Commands.AddCartItem;
+﻿namespace ECommerce.Application.Features.Carts.Commands.AddCartItem;
 
 internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser currentUser) : IRequestHandler<AddCartItemCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
     {
-        var itemRepo = unitOfWork.Repository<CartItem>();
-        var cartRepo = unitOfWork.Repository<Cart>();
+        var productRepository = unitOfWork.Repository<Product>();
+        var cartRepository = unitOfWork.Repository<Cart>();
+        var cartItemRepository = unitOfWork.Repository<CartItem>();
 
-        var product = await unitOfWork
-            .Repository<Product>()
-            .GetByPredicateProjectAsync<CartProductResponse>(x => x.Id == request.ProductId, cancellationToken);
+        var product = await productRepository
+            .GetByPredicateProjectAsync(
+            x => x.Id == request.ProductId && !x.IsDeleted && x.IsActive,
+            x => new ProductCartInfo(
+                x.Stock,
+                x.Price), cancellationToken);
 
         if (product is null)
             return Result.Failure<Guid>(ProductErrors.NotFound(request.ProductId));
 
-        if (request.Quantity > product.Stock)
+        if (product.Stock < request.Quantity)
             return Result.Failure<Guid>(CartErrors.QuantityNotAvailable);
 
-        var cart = await cartRepo.GetByPredicateAsync(x => x.UserId == currentUser.Id, cancellationToken);
+        var cartId = await cartRepository
+            .GetByPredicateProjectAsync(x => x.UserId == currentUser.Id, x => (Guid?)x.Id,
+            cancellationToken);
 
-        if (cart is null)
+        if (cartId is null)
         {
-            cart = Cart.Create(currentUser.Id);
-            await cartRepo.AddAsync(cart, cancellationToken);
+            var cart = Cart.Create(currentUser.Id);
+            await cartRepository.AddAsync(cart, cancellationToken);
+
+            cartId = cart.Id;
         }
 
-        var productIsExistsInItem = await itemRepo
-            .AnyAsync(x => x.ProductId == request.ProductId && x.CartId == cart.Id, cancellationToken);
+        var productAlreadyExists = await cartItemRepository
+            .AnyAsync(x => x.ProductId == request.ProductId && x.CartId == cartId.Value, cancellationToken);
 
-        if (productIsExistsInItem)
+        if (productAlreadyExists)
             return Result.Failure<Guid>(CartErrors.ProductIsOnCart);
 
-        var cartItem = CartItem.Create(cart.Id, request.ProductId, request.Quantity, product.Price);
-        await itemRepo.AddAsync(cartItem, cancellationToken);
+        var cartItem = CartItem.Create(cartId.Value, request.ProductId, request.Quantity, product.Price);
+        await cartItemRepository.AddAsync(cartItem, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(cart.Id);
+        return Result.Success(cartId.Value);
     }
 }

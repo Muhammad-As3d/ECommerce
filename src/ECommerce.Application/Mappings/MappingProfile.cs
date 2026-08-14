@@ -36,9 +36,6 @@ public class MappingProfile : Profile
             src.Quantity * src.UnitPriceSnapshot,
             src.Quantity < src.Product.Stock));
 
-        CreateMap<Product, CartProductResponse>()
-            .ConstructUsing(src => new CartProductResponse(src.Stock, src.Price));
-
         CreateMap<Cart, CartResponse>()
             .ConstructUsing(src => new CartResponse(src.Id, src.CartItems!.Count()));
 
@@ -51,6 +48,16 @@ public class MappingProfile : Profile
 
         #region Order
 
+        CreateMap<ShippingAddressSnapshot, ShippingAddressResponse>()
+            .ConstructUsing(address => new ShippingAddressResponse(
+                address.FullName,
+                address.Street,
+                address.City,
+                address.Governorate,
+                address.Country,
+                address.PostalCode,
+                address.PhoneNumber));
+
         CreateMap<Order, OrderUserResponse>()
             .ConstructUsing(src => new OrderUserResponse(
                 src.Id,
@@ -58,7 +65,8 @@ public class MappingProfile : Profile
                 src.Status.ToString(),
                 src.CreatedOn,
                 src.Items.Count(),
-                src.WithinDays,
+                src.EstimatedDeliveryFrom,
+                src.EstimatedDeliveryTo,
                 src.SubTotal,
                 src.DiscountAmount,
                 src.ShippingFee,
@@ -81,21 +89,23 @@ public class MappingProfile : Profile
                 src.OrderNumber,
                 src.Status.ToString(),
                 src.CreatedOn,
-                src.WithinDays,
+                src.PaymentMethod.ToString(),
+                src.Currency,
+                src.EstimatedDeliveryFrom,
+                src.EstimatedDeliveryTo,
                 src.SubTotal,
                 src.DiscountAmount,
                 src.ShippingFee,
                 src.TaxAmount,
                 src.TotalAmount,
-                new AddressResponse(
-                    src.ShippingAddress.Id,
+                new ShippingAddressResponse(
+                    src.ShippingAddress.FullName,
                     src.ShippingAddress.Street,
                     src.ShippingAddress.City,
                     src.ShippingAddress.Governorate,
                     src.ShippingAddress.Country,
                     src.ShippingAddress.PostalCode,
-                    src.ShippingAddress.PhoneNumber,
-                    src.ShippingAddress.IsDefault
+                    src.ShippingAddress.PhoneNumber
                 ),
                 src.Items.Select(item => new OrderItemResponse(
                     item.Id,
@@ -110,14 +120,20 @@ public class MappingProfile : Profile
             .ConstructUsing(src => new OrderAdminResponse(
                 src.Id,
                 src.OrderNumber,
+                src.ShippingAddress.FullName,
                 src.Status.ToString(),
-                src.Payment.Status.ToString() ?? "Pending",
+                src.Payments.OrderByDescending(x => x.CreatedOn)
+                    .Select(x => x.Status.ToString())
+                    .FirstOrDefault() ?? "Pending",
                 src.CreatedOn,
-                src.WithinDays,
+                src.PaymentMethod.ToString(),
                 src.SubTotal,
                 src.TotalAmount,
                 src.UserId
             ));
+
+        CreateMap<CartItem, CartItemCheckoutInfo>();
+        CreateMap<Address, ShippingAddressInfo>();
 
         #endregion
     }
