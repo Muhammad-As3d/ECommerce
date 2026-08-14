@@ -16,14 +16,16 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.ToListAsync(cancellationToken);
 
-    public async Task<T?> GetByPredicateAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
-        => await _dbSet.Where(predicate).FirstOrDefaultAsync(cancellationToken);
-
-    public async Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec,
-        CancellationToken cancellationToken = default) =>
+    public async Task<IEnumerable<T>> GetAllBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default) =>
         await SpecificationEvaluator
         .GetQuery(_dbSet, spec)
         .ToListAsync(cancellationToken);
+    public async Task<IEnumerable<TProjection>> GetAllBySpecAsync<TProjection>(Specification<T> specification, Expression<Func<T, TProjection>> selector,
+    CancellationToken cancellationToken = default) =>
+         await SpecificationEvaluator
+            .GetQuery(_dbSet.AsNoTracking(), specification)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
 
     public async Task<T?> GetBySpecAsync(Specification<T> spec, CancellationToken cancellationToken = default) =>
         await SpecificationEvaluator
@@ -92,8 +94,20 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             .GetQuery(_dbSet, spec)
             .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
+    public async Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> selector,
+    CancellationToken cancellationToken = default) =>
+         await _dbSet
+            .AsNoTracking()
+            .Where(predicate)
+            .Select(selector)
+            .FirstOrDefaultAsync(cancellationToken);
 
+<<<<<<< Updated upstream
     public async Task<TProjection?> GetByIdProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class =>
+=======
+    public async Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate,
+        CancellationToken cancellationToken = default) where TProjection : class =>
+>>>>>>> Stashed changes
         await _dbSet
         .Where(predicate)
         .ProjectTo<TProjection>(_mapper.ConfigurationProvider)

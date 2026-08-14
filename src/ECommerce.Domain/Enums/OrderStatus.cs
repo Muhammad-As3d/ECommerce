@@ -2,8 +2,14 @@
 
 public enum OrderStatus : byte
 {
-    Pending = 1,
-    Processing = 2,
-    Rejected = 3,
-    Completed = 4
+    PendingPayment = 1,
+    Confirmed = 2,
+    Processing = 3,
+    Shipped = 4,
+    Delivered = 5,
+    Cancelled = 6,
+    PaymentFailed = 7,
+    ReturnRequested = 8,
+    Returned = 9,
+    Refunded = 10
 }

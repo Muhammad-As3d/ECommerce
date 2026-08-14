@@ -5,30 +5,26 @@ namespace ECommerce.Infrastructure.Persistence;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
     : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
 {
-    public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
-    public DbSet<Product> Products { get; set; } = default!;
-    public DbSet<Category> Categories { get; set; } = default!;
-    public DbSet<ProductImage> ProductImages { get; set; } = default!;
-    public DbSet<Order> Orders { get; set; } = default!;
-    public DbSet<OrderItem> OrderItems { get; set; } = default!;
-    public DbSet<Cart> Carts { get; set; } = default!;
-    public DbSet<CartItem> CartItems { get; set; } = default!;
-    public DbSet<Notification> Notifications { get; set; } = default!;
-    public DbSet<Payment> Payments { get; set; } = default!;
-    public DbSet<Review> Reviews { get; set; } = default!;
-    public DbSet<Wishlist> Wishlists { get; set; } = default!;
-    public DbSet<WishlistItem> WishlistItems { get; set; } = default!;
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+    public DbSet<Cart> Carts => Set<Cart>();
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+    public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<Wishlist> Wishlists => Set<Wishlist>();
+    public DbSet<WishlistItem> WishlistItems => Set<WishlistItem>();
+    public DbSet<OrderStatusHistory> OrderStatusHistories => Set<OrderStatusHistory>();
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Refund> Refunds => Set<Refund>();
+    public DbSet<StripeWebhookEvent> StripeWebhookEvents => Set<StripeWebhookEvent>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        var cascadeFks = builder.Model.GetEntityTypes()
-            .SelectMany(t => t.GetForeignKeys())
-            .Where(fk => fk.DeleteBehavior == DeleteBehavior.Cascade && !fk.IsOwnership);
-
-        foreach (var fk in cascadeFks)
-            fk.DeleteBehavior = DeleteBehavior.Restrict;
 
         base.OnModelCreating(builder);
     }

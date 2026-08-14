@@ -2,22 +2,42 @@
 
 namespace ECommerce.Domain.Entities;
 
-public class Product : AuditableEntity
+public sealed class Product : AuditableEntity
 {
+<<<<<<< Updated upstream
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public int Stock { get; set; }
     public int? ModelYear { get; set; }
     public double Price { get; set; }
     public Guid CategoryId { get; set; }
+=======
+    public string Name { get; private set; } = string.Empty;
+    public string Slug { get; private set; } = string.Empty;
+    public string Sku { get; private set; } = string.Empty;
+    public string Description { get; private set; } = string.Empty;
+>>>>>>> Stashed changes
 
-    public ICollection<ProductImage> ProductImages { get; set; } = [];
-    public Category Category { get; set; } = default!;
+    public decimal Price { get; private set; }
+    public int Stock { get; private set; }
+    public int ReservedStock { get; private set; }
+    public int? ModelYear { get; private set; }
+
+    public bool IsActive { get; private set; }
+    public Guid CategoryId { get; private set; }
+
+    public byte[] RowVersion { get; private set; } = [];
+
+    public int AvailableStock => Stock - ReservedStock;
+
+    public Category Category { get; private set; } = null!;
+    public ICollection<ProductImage> ProductImages { get; private set; } = [];
 
     private Product() { }
 
     public static Product CreateStub(Guid id) => new() { Id = id };
 
+<<<<<<< Updated upstream
     public static Product Create(string name, string description, int stock, int modelYear, double price, Guid categoryId)
         =>
          new()
@@ -29,6 +49,21 @@ public class Product : AuditableEntity
              Price = price,
              CategoryId = categoryId
          };
+=======
+    public static Product Create(string name, string description, int stock, int modelYear, decimal price, Guid categoryId) =>
+        new()
+        {
+            Name = name,
+            Slug = name.Trim().ToLowerInvariant().Replace(' ', '-'),
+            Sku = $"SKU-{Guid.NewGuid():N}"[..16].ToUpperInvariant(),
+            Description = description,
+            Stock = stock,
+            ModelYear = modelYear,
+            Price = price,
+            CategoryId = categoryId,
+            IsActive = true
+        };
+>>>>>>> Stashed changes
 
     public IReadOnlyCollection<string> Update(string name, string description, int stock, int modelYear, double price)
     {
@@ -40,17 +75,38 @@ public class Product : AuditableEntity
 
         return [nameof(Name), nameof(Description), nameof(Stock), nameof(ModelYear), nameof(Price)];
     }
+<<<<<<< Updated upstream
+=======
 
-    public void AddImages(List<string> imageUrls)
+    public void AddImages(IEnumerable<string> imageUrls)
     {
-        List<ProductImage> uploadedImages = [];
+        foreach (var imageUrl in imageUrls)
+            ProductImages.Add(new ProductImage { ImageUrl = imageUrl });
+    }
+>>>>>>> Stashed changes
 
-        foreach (var image in imageUrls)
-        {
-            uploadedImages.Add(new ProductImage { ImageUrl = image });
-        }
+    public void ReserveStock(int quantity)
+    {
+        if (quantity <= 0 || AvailableStock < quantity)
+            throw new InvalidOperationException("Insufficient stock.");
 
-        foreach (ProductImage image in uploadedImages)
-            ProductImages.Add(image);
+        ReservedStock += quantity;
+    }
+
+    public void ConfirmReservedStock(int quantity)
+    {
+        if (quantity <= 0 || ReservedStock < quantity)
+            throw new InvalidOperationException("Invalid reserved quantity.");
+
+        ReservedStock -= quantity;
+        Stock -= quantity;
+    }
+
+    public void ReleaseReservedStock(int quantity)
+    {
+        if (quantity <= 0 || ReservedStock < quantity)
+            throw new InvalidOperationException("Invalid reserved quantity.");
+
+        ReservedStock -= quantity;
     }
 }

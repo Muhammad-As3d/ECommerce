@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
-[Route("api/{categoryId:Guid}/[controller]")]
+[Route("api/v1/{categoryId:Guid}/[controller]")]
 [ApiController]
 public class ProductsController(ISender sender) : ApiBaseController
 {
