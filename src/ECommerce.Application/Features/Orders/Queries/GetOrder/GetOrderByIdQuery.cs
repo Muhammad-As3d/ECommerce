@@ -1,6 +1,4 @@
-﻿using ECommerce.Application.Contracts.Orders;
-
-namespace ECommerce.Application.Features.Orders.Queries.GetOrder;
+﻿namespace ECommerce.Application.Features.Orders.Queries.GetOrder;
 
 public record GetOrderByIdQuery(Guid Id) : IRequest<Result<OrderDetailsResponse>>;
 

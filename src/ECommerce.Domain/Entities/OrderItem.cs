@@ -2,24 +2,37 @@
 
 namespace ECommerce.Domain.Entities;
 
-public class OrderItem : BaseEntity
+public sealed class OrderItem : BaseEntity
 {
-    public Guid OrderId { get; set; }
-    public string ProductNameSnapshot { get; set; } = string.Empty;
-    public string? VariantAttributesSnapshot { get; set; }
-    public decimal UnitPriceSnapshot { get; set; }
-    public int Quantity { get; set; }
+    public Guid OrderId { get; private set; }
+    public Guid? ProductId { get; private set; }
 
-    public Order Order { get; set; } = null!;
+    public string ProductNameSnapshot { get; private set; } = string.Empty;
+    public string? SkuSnapshot { get; private set; }
+    public string? VariantAttributesSnapshot { get; private set; }
+
+    public decimal UnitPriceSnapshot { get; private set; }
+    public decimal DiscountSnapshot { get; private set; }
+    public decimal TaxSnapshot { get; private set; }
+
+    public int Quantity { get; private set; }
+
+    public decimal LineTotal => (UnitPriceSnapshot * Quantity) - DiscountSnapshot + TaxSnapshot;
+
+    public Order Order { get; private set; } = null!;
+    public Product? Product { get; private set; }
 
     private OrderItem() { }
 
-    public static OrderItem Create(Guid orderId, string productNameSnapshot, decimal unitPriceSnapshot, int quantity) =>
-        new()
-        {
-            OrderId = orderId,
-            UnitPriceSnapshot = unitPriceSnapshot,
-            ProductNameSnapshot = productNameSnapshot,
-            Quantity = quantity
-        };
+    internal static OrderItem Create(Guid orderId, Guid productId, string productName, string? sku, decimal unitPrice, int quantity)
+        =>
+         new()
+         {
+             OrderId = orderId,
+             ProductId = productId,
+             ProductNameSnapshot = productName,
+             SkuSnapshot = sku,
+             UnitPriceSnapshot = unitPrice,
+             Quantity = quantity
+         };
 }

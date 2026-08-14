@@ -1,42 +1,18 @@
-﻿using ECommerce.Application.Contracts.Addresses;
-using ECommerce.Application.Contracts.Carts;
-
-namespace ECommerce.Application.Contracts.Orders;
+﻿namespace ECommerce.Application.Contracts.Orders;
 
 public record OrderResponse(
     Guid Id,
     string OrderNumber,
     string Status,
-    DateTime CreatedOn,
-    int WithinDays,
-    decimal SubTotal,
-    decimal DiscountAmount,
-    decimal ShippingFee,
-    decimal TaxAmount,
     decimal TotalAmount,
-    AddressResponse ShippingAddress,
-    IEnumerable<CartItemResponse> Items
-);
+    string Currency,
+    PaymentResponse Payment);
 
-public record OrderDetailsResponse(
-    Guid Id,
-    string OrderNumber,
+public record PaymentResponse(
+    Guid PaymentId,
+    string Method,
     string Status,
-    DateTime CreatedOn,
-    int WithinDays,
-    decimal SubTotal,
-    decimal DiscountAmount,
-    decimal ShippingFee,
-    decimal TaxAmount,
-    decimal TotalAmount,
-    AddressResponse ShippingAddress,
-    IEnumerable<OrderItemResponse> Items
-);
-
-public record OrderItemResponse(
-    Guid Id,
-    string ProductName,
-    decimal UnitPrice,
-    int Quantity,
-    decimal TotalPrice
+    string? ClientSecret,
+    decimal Amount,
+    string Currency
 );

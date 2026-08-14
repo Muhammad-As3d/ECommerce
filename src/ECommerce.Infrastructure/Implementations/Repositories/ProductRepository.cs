@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ECommerce.Application.Contracts.Products;
 
 namespace ECommerce.Infrastructure.Implementations.Repositories;
 
@@ -15,7 +16,15 @@ internal class ProductRepository(ApplicationDbContext context, IMapper mapper)
 
         return affected > 0;
     }
-    public async Task<List<Product>> GetAllByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default) =>
+    public async Task<List<ProductCheckoutInfo>> GetCheckoutInfoByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default) =>
          await _context.Products.Where(p => ids.Contains(p.Id))
+        .Select(s => new ProductCheckoutInfo(
+            s.Id,
+            s.Name,
+            s.Sku,
+            s.Price,
+            s.Stock,
+            s.IsDeleted,
+            s.IsActive))
         .ToListAsync(cancellationToken);
 }

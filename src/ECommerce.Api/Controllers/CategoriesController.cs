@@ -13,13 +13,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [ApiController]
 public class CategoriesController(ISender sender) : ApiBaseController
 {
     private readonly ISender _sender = sender;
 
-    //[Authorize(Roles = DefaultRoles.Admin.Name)]
+    //[Authorize(Roles = DefaultRoles.Admin.Name)] 
     [HttpGet("")]
     public async Task<IActionResult> GetAll([FromQuery] FiltersRequest request, CancellationToken cancellationToken)
     {

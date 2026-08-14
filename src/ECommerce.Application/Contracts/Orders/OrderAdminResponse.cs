@@ -3,10 +3,11 @@
 public record OrderAdminResponse(
      Guid Id,
     string OrderNumber,
+    string CustomerName,
     string Status,
     string PaymentStatus,
     DateTime CreatedOn,
-    int WithinDays,
+    string PaymentMethod,
     decimal SubTotal,
     decimal TotalAmount,
     string UserId
