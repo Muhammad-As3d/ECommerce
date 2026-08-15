@@ -73,7 +73,6 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
         var orderNumber = await orderNumberGenerator.GenerateAsync(cancellationToken);
         var order = Order.Create(currentUser.Id, orderNumber, request.PaymentMethod, shippingAddress, Currency, ShippingFee);
 
-        // Snapshot current product data. Cart/client prices are never trusted.
         foreach (var item in cartItems)
         {
             var product = productsById[item.ProductId];
@@ -87,7 +86,6 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
 
         try
         {
-            // Conditional UPDATE is the authoritative check under concurrent checkouts.
             foreach (var item in cartItems)
             {
                 var decreased = await productRepository.TryDecreaseStockAsync(item.ProductId, item.Quantity, cancellationToken);
@@ -99,7 +97,6 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
                 }
             }
 
-            // EF tracks Items and Payment through the Order aggregate.
             await unitOfWork.Repository<Order>().AddAsync(order, cancellationToken);
 
             await unitOfWork.Repository<CartItem>().DeleteAsync(x => x.Cart.UserId == currentUser.Id, cancellationToken);

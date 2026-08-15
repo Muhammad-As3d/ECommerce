@@ -42,6 +42,19 @@ public class Order : AuditableEntity
 
     private Order() { }
 
+    public static Order CreateStub(Guid id, byte[] rowVersion, OrderStatus status = default)
+    {
+        if (rowVersion is null || rowVersion.Length == 0)
+            throw new ArgumentException("RowVersion is required.", nameof(rowVersion));
+
+        return new Order
+        {
+            Id = id,
+            RowVersion = rowVersion,
+            Status = status
+        };
+    }
+
     public static Order Create(string userId, string orderNumber, PaymentMethod paymentMethod, ShippingAddressSnapshot shippingAddress,
         string currency = "EGP", decimal discountAmount = 0, decimal shippingFee = 0, decimal taxAmount = 0)
     {
@@ -103,10 +116,12 @@ public class Order : AuditableEntity
         _payments.Add(payment);
     }
 
-    public void StartProcessing()
+    public IReadOnlyCollection<string> StartProcessing()
     {
         EnsureStatus(OrderStatus.Confirmed);
         Status = OrderStatus.Processing;
+
+        return [nameof(Status)];
     }
 
     public void MarkShipped(DateTimeOffset estimatedFrom, DateTimeOffset estimatedTo)
@@ -137,20 +152,19 @@ public class Order : AuditableEntity
         Status = OrderStatus.PaymentFailed;
     }
 
-    public void Cancel(string reason)
+    public IReadOnlyCollection<string> Cancel(string reason)
     {
-        if (Status is OrderStatus.Shipped
-            or OrderStatus.Delivered
-            or OrderStatus.Cancelled
-            or OrderStatus.Refunded)
-        {
-            throw new InvalidOperationException(
-                "Order cannot be cancelled in its current status.");
-        }
+        if (string.IsNullOrWhiteSpace(reason))
+            throw new ArgumentException("Cancellation reason is required.", nameof(reason));
+
+        if (Status is OrderStatus.Shipped or OrderStatus.Delivered or OrderStatus.Cancelled or OrderStatus.Refunded)
+            throw new InvalidOperationException("Order cannot be cancelled in its current status.");
 
         Status = OrderStatus.Cancelled;
-        CancellationReason = reason;
+        CancellationReason = reason.Trim();
         CancelledAt = DateTimeOffset.UtcNow;
+
+        return [nameof(Status), nameof(CancellationReason), nameof(CancelledAt)];
     }
 
     private void RecalculateTotals()

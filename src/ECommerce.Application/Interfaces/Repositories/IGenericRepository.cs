@@ -26,6 +26,8 @@ public interface IGenericRepository<T> where T : BaseEntity
     Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class;
     Task<IEnumerable<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class;
     Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> selector, CancellationToken cancellationToken = default);
+    Task<IEnumerable<TProjection>?> GetAllByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate,
+        Expression<Func<T, TProjection>> selector, CancellationToken cancellationToken = default);
     Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) where TProjection : class;
     Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(int pageNumber, int pageSize,
     CancellationToken cancellationToken = default) where TProjection : class;

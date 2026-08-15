@@ -15,4 +15,10 @@ public static class OrderErrors
 
     public static Error ProductNotAvailable =>
         Error.Conflict("Order.ProductNotAvailable", "One or more products are no longer available.");
+
+    public static Error NotAllowedCancel =>
+        Error.Conflict("Order.NotAllowedCancel", "You are not allowed to cancel this order.");
+
+    public static Error StatusNotConfirmed =>
+        Error.Conflict("Order.StatusNotConfirmed", "The order status is not confirmed.");
 }

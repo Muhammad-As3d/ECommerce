@@ -1,6 +1,8 @@
 ﻿using ECommerce.Api.ViewModels.Orders;
 using ECommerce.Application.Abstractions.Pagination;
+using ECommerce.Application.Features.Orders.Commands.CancelOrder;
 using ECommerce.Application.Features.Orders.Commands.OrderCheckout;
+using ECommerce.Application.Features.Orders.Commands.StartProcessing;
 using ECommerce.Application.Features.Orders.Queries.GetAllOrders;
 using ECommerce.Application.Features.Orders.Queries.GetOrder;
 using ECommerce.Application.Features.Orders.Queries.GetOrders;
@@ -16,7 +18,7 @@ namespace ECommerce.Api.Controllers;
 public class OrdersController(ISender sender) : ApiBaseController
 {
     [Authorize(Roles = DefaultRoles.Admin.Name)]
-    [HttpGet("Admin/orders")]
+    [HttpGet("admin/orders")]
     public async Task<IActionResult> GetAll([FromQuery] FiltersRequest filters, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new GetAllOrdersQuery(filters), cancellationToken);
@@ -51,4 +53,21 @@ public class OrdersController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
+    [Authorize(Roles = DefaultRoles.Customer.Name)]
+    [HttpPost("orders/{id:guid}/cancel")]
+    public async Task<IActionResult> Cancel(Guid id, [FromBody] CancelOrderRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new CancelOrderCommand(id, request.Reason), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPost("admin/orders/{id:guid}/process")]
+    public async Task<IActionResult> StartProcessing(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new StartProcessingCommand(id), cancellationToken);
+
+        return HandleResult(result);
+    }
 }
