@@ -101,6 +101,13 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             .Where(predicate)
             .Select(selector)
             .FirstOrDefaultAsync(cancellationToken);
+    public async Task<IEnumerable<TProjection>?> GetAllByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> selector,
+    CancellationToken cancellationToken = default) =>
+         await _dbSet
+            .AsNoTracking()
+            .Where(predicate)
+            .Select(selector)
+            .ToListAsync(cancellationToken);
 
     public async Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default) where TProjection : class =>

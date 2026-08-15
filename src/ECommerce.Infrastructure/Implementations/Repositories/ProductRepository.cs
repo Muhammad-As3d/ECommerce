@@ -16,6 +16,17 @@ internal class ProductRepository(ApplicationDbContext context, IMapper mapper)
 
         return affected > 0;
     }
+
+    public async Task IncreaseStockAsync(Guid productId, int quantity, CancellationToken cancellationToken = default)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
+
+        await _context.Products
+            .Where(product => product.Id == productId)
+            .ExecuteUpdateAsync(
+                update => update.SetProperty(product => product.Stock, product => product.Stock + quantity),
+                cancellationToken);
+    }
     public async Task<List<ProductCheckoutInfo>> GetCheckoutInfoByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default) =>
          await _context.Products.Where(p => ids.Contains(p.Id))
         .Select(s => new ProductCheckoutInfo(

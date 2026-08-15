@@ -17,21 +17,16 @@ public sealed class OrderStatusHistory : BaseEntity
 
     private OrderStatusHistory() { }
 
-    public static OrderStatusHistory Create(
-        Guid orderId,
-        OrderStatus? from,
-        OrderStatus to,
-        string? changedById,
-        string? reason)
-    {
-        return new OrderStatusHistory
-        {
-            OrderId = orderId,
-            FromStatus = from,
-            ToStatus = to,
-            ChangedById = changedById,
-            Reason = reason,
-            ChangedAt = DateTimeOffset.UtcNow
-        };
-    }
+    public static OrderStatusHistory Create(Guid orderId, OrderStatus? from, OrderStatus to, string? changedById,
+        string? reason) =>
+         new()
+         {
+             OrderId = orderId,
+             FromStatus = from,
+             ToStatus = to,
+             ChangedById = changedById,
+             Reason = reason,
+             ChangedAt = DateTimeOffset.UtcNow
+         };
+
 }
