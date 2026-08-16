@@ -10,7 +10,8 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
 A RESTful API that covers the core workflows of a modern online store—from secure
-authentication and catalog management to shopping carts and order checkout.
+authentication and catalog management to transactional checkout and order lifecycle
+management.
 
 [Features](#-key-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [API Reference](#-api-reference)
 
@@ -51,7 +52,12 @@ consistent error responses, efficient querying, and an easy developer experience
 - User-specific shopping carts
 - Add, update, remove, and clear cart items
 - Address management
-- Order checkout with SQL-backed sequential order numbers
+- Transactional order checkout with server-side price and product snapshots
+- SQL-backed sequential order numbers and atomic stock updates
+- Customer order cancellation with inventory restoration
+- Admin order lifecycle management: processing, shipping, tracking, and delivery
+- Cash-on-delivery payment collection when an order is delivered
+- Order status history with customer ownership checks and admin access
 - Product caching and cache invalidation with Redis
 
 ### API quality
@@ -63,6 +69,16 @@ consistent error responses, efficient querying, and an easy developer experience
 - Structured request and application logging with Serilog
 - Interactive OpenAPI documentation powered by Scalar
 - Automatic database migrations on Docker startup
+
+### Reliability and performance
+
+- Optimistic concurrency control with SQL Server `rowversion`
+- Transaction boundaries around checkout and inventory-sensitive operations
+- Projection-first read and update workflows to avoid loading unnecessary entities
+- Partial updates for focused SQL `UPDATE` statements
+- `AsNoTracking` read queries and paginated collection endpoints
+- Role- and ownership-aware data access
+- Product and address snapshots that preserve historical order accuracy
 
 ## 🏗 Architecture
 
@@ -102,6 +118,47 @@ flowchart LR
 | Documentation | OpenAPI, Scalar |
 | Messaging | SMTP email delivery with MailKit |
 | DevOps | Docker, Docker Compose, Linux containers, health checks, persistent volumes |
+
+## 🧠 Engineering Highlights
+
+This project goes beyond CRUD endpoints and explores problems that commonly appear in
+real commerce systems:
+
+- **Never trust client totals:** checkout retrieves current product data from the
+  database and calculates order totals on the server.
+- **Preserve historical truth:** order items store product name, SKU, and price
+  snapshots, while orders store a shipping-address snapshot.
+- **Protect inventory:** stock changes are performed atomically and cancellation
+  restores quantities inside a transaction.
+- **Handle concurrent updates:** orders, products, and payments use SQL Server
+  `rowversion` tokens to detect stale writes.
+- **Keep queries lean:** command handlers use explicit projections when only a small
+  subset of columns is required, then apply focused partial updates.
+- **Enforce state transitions:** domain methods prevent invalid changes such as
+  delivering an order before it has been shipped.
+- **Make operations traceable:** every important order transition is recorded in an
+  order-status history.
+
+## 📦 Order Lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> Confirmed: Cash-on-delivery checkout
+    [*] --> PendingPayment: Card checkout foundation
+    PendingPayment --> Confirmed: Payment succeeds
+    PendingPayment --> PaymentFailed: Payment fails
+    PaymentFailed --> Confirmed: Payment retry succeeds
+    Confirmed --> Processing: Admin starts processing
+    Processing --> Shipped: Admin adds tracking details
+    Shipped --> Delivered: Admin confirms delivery
+    Confirmed --> Cancelled: Customer cancels
+    Processing --> Cancelled: Customer cancels
+    PendingPayment --> Cancelled: Customer cancels
+    PaymentFailed --> Cancelled: Customer cancels
+```
+
+Current checkout supports cash on delivery. The domain model and persistence layer
+include the foundations for card payments, refunds, and idempotent payment webhooks.
 
 ## 📁 Project Structure
 
@@ -222,7 +279,18 @@ Scalar documentation:
 | Products | Browse, retrieve, create, update, toggle status, upload/delete images |
 | Cart | View cart, add/update/remove items, clear cart |
 | Addresses | View, create, and delete user addresses |
-| Orders | Checkout the authenticated user's cart |
+| Orders | Checkout, personal/admin order queries, cancellation, lifecycle transitions, tracking, delivery, and status history |
+
+### Order capabilities
+
+| Actor | Capabilities |
+|---|---|
+| Customer | Checkout, list personal orders, view order details, cancel eligible orders, view status history |
+| Admin | List all orders, start processing, mark as shipped with tracking information, mark as delivered, view any order history |
+
+Order transitions are validated by domain rules. Shipping requires a `Processing`
+order, delivery requires a `Shipped` order, and delivery marks cash-on-delivery
+payments as successfully collected.
 
 Protected endpoints require a JWT access token:
 
@@ -258,12 +326,14 @@ variables. The local `.env` file is intentionally excluded from Git; only
 2. MediatR dispatches a command or query to its application handler.
 3. FluentValidation validates the request through the pipeline.
 4. The handler coordinates domain logic through application interfaces.
-5. Infrastructure implementations access SQL Server, Redis, files, or email services.
-6. The API returns a consistent success response or traceable Problem Details error.
+5. Projection-based queries retrieve only the columns required by the use case.
+6. Infrastructure implementations access SQL Server, Redis, files, or email services.
+7. Transactions and concurrency tokens protect inventory and workflow updates.
+8. The API returns a consistent success response or traceable Problem Details error.
 
 ## 🗺 Roadmap
 
-- Payment gateway integration
+- Stripe payment gateway and webhook integration
 - Wishlist, reviews, and notifications endpoints
 - Automated unit and integration test suites
 - CI/CD pipeline and cloud deployment
