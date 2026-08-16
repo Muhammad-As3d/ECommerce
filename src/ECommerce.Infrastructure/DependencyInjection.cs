@@ -14,7 +14,6 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString)
             .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-            .EnableSensitiveDataLogging()
         );
 
         services.AddOptions<MailSetting>()

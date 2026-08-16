@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Application.Features.Orders.Commands.StartProcessing;
 
-public class StartProcessingCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<StartProcessingCommand, Result<StartProcessingResponse>>
+public class StartProcessingCommandHandler(IUnitOfWork unitOfWork, ICurrentUser currentUser) : IRequestHandler<StartProcessingCommand, Result<StartProcessingResponse>>
 {
     public async Task<Result<StartProcessingResponse>> Handle(StartProcessingCommand request, CancellationToken cancellationToken)
     {
@@ -25,6 +25,15 @@ public class StartProcessingCommandHandler(IUnitOfWork unitOfWork) : IRequestHan
         var order = Order.CreateStub(orderInfo.Id, orderInfo.RowVersion, orderInfo.Status);
         var updatedProperties = order.StartProcessing();
         orderRepository.PartialUpdate(order, updatedProperties);
+
+        var history = OrderStatusHistory.Create(
+            order.Id,
+            orderInfo.Status,
+            OrderStatus.Processing,
+            currentUser.Id,
+            null);
+
+        await unitOfWork.Repository<OrderStatusHistory>().AddAsync(history, cancellationToken);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

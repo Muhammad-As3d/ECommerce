@@ -1,11 +1,14 @@
 ﻿using ECommerce.Api.ViewModels.Orders;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Orders.Commands.CancelOrder;
+using ECommerce.Application.Features.Orders.Commands.MarkOrderAsDelivered;
+using ECommerce.Application.Features.Orders.Commands.MarkOrderAsShipped;
 using ECommerce.Application.Features.Orders.Commands.OrderCheckout;
 using ECommerce.Application.Features.Orders.Commands.StartProcessing;
 using ECommerce.Application.Features.Orders.Queries.GetAllOrders;
 using ECommerce.Application.Features.Orders.Queries.GetOrder;
 using ECommerce.Application.Features.Orders.Queries.GetOrders;
+using ECommerce.Application.Features.Orders.Queries.GetOrderStatusHistory;
 using ECommerce.Infrastructure.Identity.Seeding;
 using Mapster;
 using MediatR;
@@ -67,6 +70,37 @@ public class OrdersController(ISender sender) : ApiBaseController
     public async Task<IActionResult> StartProcessing(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new StartProcessingCommand(id), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPost("admin/orders/{id:guid}/ship")]
+    public async Task<IActionResult> MarkAsShipped(Guid id, [FromBody] MarkOrderAsShippedRequest request, CancellationToken cancellationToken = default)
+    {
+        var command = new MarkOrderAsShippedCommand(id, request.EstimatedDeliveryFrom, request.EstimatedDeliveryTo,
+            request.TrackingNumber, request.ShippingProvider);
+
+        var result = await sender.Send(command, cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HttpPost("admin/orders/{id:guid}/deliver")]
+    public async Task<IActionResult> MarkAsDelivered(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new MarkOrderAsDeliveredCommand(id), cancellationToken);
+
+        return HandleResult(result);
+    }
+
+    [Authorize(Roles = DefaultRoles.Admin.Name + "," + DefaultRoles.Customer.Name)]
+    [HttpGet("orders/{id:guid}/status-history")]
+    public async Task<IActionResult> GetStatusHistory(Guid id, CancellationToken cancellationToken = default)
+    {
+        var canAccessAnyOrder = User.IsInRole(DefaultRoles.Admin.Name);
+        var result = await sender.Send(new GetOrderStatusHistoryQuery(id, canAccessAnyOrder), cancellationToken);
 
         return HandleResult(result);
     }

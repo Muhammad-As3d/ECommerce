@@ -34,6 +34,20 @@ public sealed class Payment : AuditableEntity
 
     private Payment() { }
 
+    public static Payment CreateStub(Guid id, byte[] rowVersion, PaymentMethod method, PaymentStatus status)
+    {
+        if (rowVersion is null || rowVersion.Length == 0)
+            throw new ArgumentException("RowVersion is required.", nameof(rowVersion));
+
+        return new Payment
+        {
+            Id = id,
+            RowVersion = rowVersion,
+            Method = method,
+            Status = status
+        };
+    }
+
     public static Payment CreateCash(Guid orderId, decimal amount, string currency)
     {
         return new Payment
@@ -104,12 +118,21 @@ public sealed class Payment : AuditableEntity
         FailedAt = DateTimeOffset.UtcNow;
     }
 
-    public void MarkCashCollected()
+    public IReadOnlyCollection<string> MarkCashCollected()
     {
         if (Method != PaymentMethod.CashOnDelivery)
             throw new InvalidOperationException("Payment is not cash.");
 
         MarkSucceeded(null, DateTimeOffset.UtcNow);
+
+        return
+        [
+            nameof(Status),
+            nameof(ProviderChargeId),
+            nameof(PaidAt),
+            nameof(FailureCode),
+            nameof(FailureMessage)
+        ];
     }
 
     public void ApplyRefund(decimal amount)

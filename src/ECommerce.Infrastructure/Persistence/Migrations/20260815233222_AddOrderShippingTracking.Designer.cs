@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260815233222_AddOrderShippingTracking")]
+    partial class AddOrderShippingTracking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +72,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(20)
+            b.Property<string>("PostalCode")
+                .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Street")
@@ -214,7 +217,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Notification", b =>
@@ -705,7 +708,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("ProductImages", (string)null);
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Refund", b =>
@@ -1133,7 +1136,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1398,7 +1401,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Orders", (string)null);
+                            b1.ToTable("Orders");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");

@@ -99,6 +99,15 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
 
             await unitOfWork.Repository<Order>().AddAsync(order, cancellationToken);
 
+            var initialHistory = OrderStatusHistory.Create(
+                order.Id,
+                null,
+                order.Status,
+                currentUser.Id,
+                null);
+
+            await unitOfWork.Repository<OrderStatusHistory>().AddAsync(initialHistory, cancellationToken);
+
             await unitOfWork.Repository<CartItem>().DeleteAsync(x => x.Cart.UserId == currentUser.Id, cancellationToken);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -21,4 +21,13 @@ public static class OrderErrors
 
     public static Error StatusNotConfirmed =>
         Error.Conflict("Order.StatusNotConfirmed", "The order status is not confirmed.");
+
+    public static Error StatusNotProcessing =>
+        Error.Conflict("Order.StatusNotProcessing", "The order status is not processing.");
+
+    public static Error StatusNotShipped =>
+        Error.Conflict("Order.StatusNotShipped", "The order status is not shipped.");
+
+    public static Error CashPaymentNotFound =>
+        Error.Conflict("Order.CashPaymentNotFound", "The cash payment for this order was not found.");
 }

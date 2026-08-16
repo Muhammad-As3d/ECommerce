@@ -32,6 +32,8 @@ public sealed class OrderConfiguration : AuditableEntityConfiguration<Order>
         builder.Property(x => x.TaxAmount).HasPrecision(18, 2);
         builder.Property(x => x.TotalAmount).HasPrecision(18, 2);
         builder.Property(x => x.CancellationReason).HasMaxLength(500);
+        builder.Property(x => x.TrackingNumber).HasMaxLength(100);
+        builder.Property(x => x.ShippingProvider).HasMaxLength(100);
 
         builder.Property(x => x.RowVersion)
             .IsRowVersion();

@@ -32,6 +32,8 @@ public class Order : AuditableEntity
     public DateTimeOffset? DeliveredAt { get; private set; }
     public DateTimeOffset? CancelledAt { get; private set; }
     public string? CancellationReason { get; private set; }
+    public string? TrackingNumber { get; private set; }
+    public string? ShippingProvider { get; private set; }
 
     // Optimistic concurrency
     public byte[] RowVersion { get; private set; } = [];
@@ -124,24 +126,45 @@ public class Order : AuditableEntity
         return [nameof(Status)];
     }
 
-    public void MarkShipped(DateTimeOffset estimatedFrom, DateTimeOffset estimatedTo)
+    public IReadOnlyCollection<string> MarkShipped(DateTimeOffset estimatedFrom, DateTimeOffset estimatedTo, string trackingNumber,
+        string shippingProvider)
     {
         EnsureStatus(OrderStatus.Processing);
 
         if (estimatedTo < estimatedFrom)
             throw new ArgumentException("Invalid delivery range.");
 
+        if (string.IsNullOrWhiteSpace(trackingNumber))
+            throw new ArgumentException("Tracking number is required.", nameof(trackingNumber));
+
+        if (string.IsNullOrWhiteSpace(shippingProvider))
+            throw new ArgumentException("Shipping provider is required.", nameof(shippingProvider));
+
         Status = OrderStatus.Shipped;
         ShippedAt = DateTimeOffset.UtcNow;
         EstimatedDeliveryFrom = estimatedFrom;
         EstimatedDeliveryTo = estimatedTo;
+        TrackingNumber = trackingNumber.Trim();
+        ShippingProvider = shippingProvider.Trim();
+
+        return
+        [
+            nameof(Status),
+            nameof(ShippedAt),
+            nameof(EstimatedDeliveryFrom),
+            nameof(EstimatedDeliveryTo),
+            nameof(TrackingNumber),
+            nameof(ShippingProvider)
+        ];
     }
 
-    public void MarkDelivered()
+    public IReadOnlyCollection<string> MarkDelivered()
     {
         EnsureStatus(OrderStatus.Shipped);
         Status = OrderStatus.Delivered;
         DeliveredAt = DateTimeOffset.UtcNow;
+
+        return [nameof(Status), nameof(DeliveredAt)];
     }
 
     public void MarkPaymentFailed()
