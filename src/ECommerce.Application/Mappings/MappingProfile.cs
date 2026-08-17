@@ -15,14 +15,14 @@ public class MappingProfile : Profile
         //Product Mappings
         CreateMap<Product, ProductResponse>()
             .ForMember(dest => dest.ImageURLs,
-            opt => opt.MapFrom(src => src.ProductImages.Select(x => x.ImageUrl).ToList()));
+            opt => opt.MapFrom(src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList()));
 
         CreateMap<Product, ProductImagesResponse>()
             .ForMember(dest => dest.ImagesUrls,
-            opt => opt.MapFrom(src => src.ProductImages.Select(x => x.ImageUrl).ToList()));
+            opt => opt.MapFrom(src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList()));
 
         CreateMap<ProductImage, ProductImageResponse>()
-            .ConstructUsing(src => new ProductImageResponse(src.Id, src.ImageUrl));
+            .ConstructUsing(src => new ProductImageResponse(src.Id, ToPublicImageUrl(src.ImageUrl)));
 
         #region Cart
         CreateMap<CartItem, CartItemResponse>()
@@ -30,7 +30,7 @@ public class MappingProfile : Profile
             new CartItemResponse(src.Id,
             src.ProductId,
             src.Product.Name,
-            src.Product.ProductImages.Select(x => x.ImageUrl).FirstOrDefault() ?? string.Empty,
+            ToPublicImageUrl(src.Product.ProductImages.Select(x => x.ImageUrl).FirstOrDefault()),
             src.UnitPriceSnapshot,
             src.Quantity,
             src.Quantity * src.UnitPriceSnapshot,
@@ -136,5 +136,16 @@ public class MappingProfile : Profile
         CreateMap<Address, ShippingAddressInfo>();
 
         #endregion
+    }
+
+    private static string ToPublicImageUrl(string? imagePath)
+    {
+        if (string.IsNullOrWhiteSpace(imagePath))
+            return string.Empty;
+
+        var normalizedPath = imagePath.Replace('\\', '/');
+        var fileName = normalizedPath[(normalizedPath.LastIndexOf('/') + 1)..];
+
+        return $"/Images/{fileName}";
     }
 }

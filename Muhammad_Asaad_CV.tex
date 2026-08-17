@@ -1,0 +1,148 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[sfdefault]{roboto}
+\usepackage[T1]{fontenc}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.58in}
+\addtolength{\evensidemargin}{-0.58in}
+\addtolength{\textwidth}{1.16in}
+\addtolength{\topmargin}{-0.68in}
+\addtolength{\textheight}{1.36in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+\setlength{\parindent}{0pt}
+\pdfgentounicode=1
+
+\titleformat{\section}
+  {\vspace{-5pt}\large\bfseries\scshape\raggedright}
+  {}{0em}{}[\color{black}\titlerule\vspace{-7pt}]
+
+\newcommand{\resumeItem}[1]{\item\small{#1}}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+  \begin{tabularx}{0.98\textwidth}[t]{
+    >{\raggedright\arraybackslash}X
+    >{\raggedleft\arraybackslash}r
+  }
+    \textbf{#1} & \textbf{\small #2} \\
+    \textit{\small #3} & \textit{\small #4}
+  \end{tabularx}
+  \vspace{-8pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{
+  \begin{itemize}[leftmargin=0.12in,label={},itemsep=0pt,topsep=1pt]
+}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{-3pt}}
+\newcommand{\resumeItemListStart}{
+  \begin{itemize}[leftmargin=0.20in,label=\textbullet,itemsep=0pt,topsep=2pt,parsep=0pt]
+}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\textbf{Muhammad Asaad}} \\[-1pt]
+  {\normalsize Junior .NET Backend Developer} \\[3pt]
+  \small
+  Rosetta, Beheira, Egypt $|$
+  \href{tel:+201098092766}{+20 109 809 2766} $|$
+  \href{mailto:muhammad.as3d@gmail.com}{muhammad.as3d@gmail.com} \\[-1pt]
+  \href{https://linkedin.com/in/muhammad-as3d}{linkedin.com/in/muhammad-as3d} $|$
+  \href{https://github.com/Muhammad-As3d}{github.com/Muhammad-As3d}
+\end{center}
+\vspace{-8pt}
+
+\section{Summary}
+\small{Junior .NET Backend Developer building secure, maintainable REST APIs with C\#,
+ASP.NET Core, EF Core, and SQL Server. Hands-on experience with Clean Architecture,
+CQRS, JWT authentication, Redis, Docker, and data-consistency patterns.}
+
+\section{Technical Skills}
+\resumeSubHeadingListStart
+  \resumeItem{\textbf{Backend:} C\#, .NET 10, ASP.NET Core Web API/MVC, LINQ, REST, EF Core}
+  \resumeItem{\textbf{Architecture:} Clean Architecture, Vertical Slice, CQRS, MediatR, SOLID, Repository, Unit of Work, Specification}
+  \resumeItem{\textbf{Data \& Security:} SQL Server, PostgreSQL, Redis, Identity, JWT, Refresh Tokens, Role/Claims Authorization}
+  \resumeItem{\textbf{Tools:} Git, GitHub, Docker, Docker Compose, RabbitMQ, Hangfire, FluentValidation, Serilog, OpenAPI, Postman}
+\resumeSubHeadingListEnd
+
+\section{Experience}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {5D IT Consulting}{Oct 2024 -- Dec 2024}
+    {Backend .NET Developer}{Remote}
+  \resumeItemListStart
+    \resumeItem{Implemented business features for ASP.NET Core Web APIs using EF Core and SQL Server.}
+    \resumeItem{Diagnosed API and data-access defects, refactored code using SOLID principles, and collaborated through Git workflows.}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Training}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {Elevate Bootcamp}{Feb 2026 -- Present}
+    {Backend .NET Developer Trainee}{Remote}
+  \resumeItemListStart
+    \resumeItem{Built three backend applications using ASP.NET Core, Clean Architecture, Vertical Slice Architecture, CQRS, and MediatR.}
+    \resumeItem{Developed containerized services using SQL Server, Redis, RabbitMQ, FluentValidation, and OpenAPI documentation.}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Projects}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {E-Commerce Backend API}{Apr 2026 -- Present}
+    {ASP.NET Core, .NET 10, Clean Architecture, CQRS, SQL Server, Redis, Docker}
+    {\href{https://github.com/Muhammad-As3d/ECommerce}{GitHub}}
+  \resumeItemListStart
+    \resumeItem{Engineered authentication, catalog, cart, transactional checkout, and role-aware order lifecycle workflows using Clean Architecture and CQRS.}
+    \resumeItem{Implemented atomic inventory updates, optimistic concurrency with SQL Server \texttt{rowversion}, order snapshots, and cancellation with stock restoration.}
+    \resumeItem{Optimized data access with projections, partial updates, pagination, dynamic filtering/sorting, and Redis caching; containerized the stack with Docker Compose.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {SurveyBasket API}{Dec 2025 -- Mar 2026}
+    {ASP.NET Core, SQL Server, Identity, JWT, Hangfire, Serilog}
+    {\href{https://github.com/Muhammad-As3d/SurveyBasket}{GitHub}}
+  \resumeItemListStart
+    \resumeItem{Built a survey and voting REST API with result aggregation, JWT/refresh-token security, and role-based administration.}
+    \resumeItem{Added Hangfire jobs, rate limiting, FluentValidation, structured logging, and centralized exception handling.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {GameZone MVC}{Jan 2024 -- Feb 2024}
+    {ASP.NET Core MVC, EF Core, SQL Server, Bootstrap}
+    {\href{https://github.com/Muhammad-As3d/GameZone}{GitHub}}
+  \resumeItemListStart
+    \resumeItem{Built a game-catalog MVC application with CRUD operations, image uploads, validation, and SQL Server persistence.}
+  \resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Education}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {Kafr El-Sheikh University}{Graduated Jul 2024}
+    {B.Sc. in Computer Science, Faculty of Computers and Information}
+    {Kafr El-Sheikh, Egypt}
+\resumeSubHeadingListEnd
+
+\end{document}

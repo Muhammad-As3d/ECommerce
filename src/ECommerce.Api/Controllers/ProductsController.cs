@@ -28,7 +28,6 @@ public class ProductsController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid categoryId, [FromRoute] Guid id, CancellationToken cancellationToken)
     {
