@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace ECommerce.Infrastructure.Identity.Entities;
+﻿namespace ECommerce.Infrastructure.Identity.Entities;
 
 public class ApplicationRole : IdentityRole
 {

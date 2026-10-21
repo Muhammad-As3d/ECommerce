@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.ViewModels.Orders;
+﻿using ECommerce.Api.Controllers.Base;
+using ECommerce.Api.ViewModels.Orders;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Orders.Commands.CancelOrder;
 using ECommerce.Application.Features.Orders.Commands.MarkOrderAsDelivered;
@@ -40,7 +41,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Customer.Name)]
     [HttpGet("orders/{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new GetOrderByIdQuery(id), cancellationToken);
 
@@ -58,7 +59,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Customer.Name)]
     [HttpPost("orders/{id:guid}/cancel")]
-    public async Task<IActionResult> Cancel(Guid id, [FromBody] CancelOrderRequest request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Cancel([FromRoute] Guid id, [FromBody] CancelOrderRequest request, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new CancelOrderCommand(id, request.Reason), cancellationToken);
 
@@ -67,7 +68,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("admin/orders/{id:guid}/process")]
-    public async Task<IActionResult> StartProcessing(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> StartProcessing([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new StartProcessingCommand(id), cancellationToken);
 
@@ -76,7 +77,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("admin/orders/{id:guid}/ship")]
-    public async Task<IActionResult> MarkAsShipped(Guid id, [FromBody] MarkOrderAsShippedRequest request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> MarkAsShipped([FromRoute] Guid id, [FromBody] MarkOrderAsShippedRequest request, CancellationToken cancellationToken = default)
     {
         var command = new MarkOrderAsShippedCommand(id, request.EstimatedDeliveryFrom, request.EstimatedDeliveryTo,
             request.TrackingNumber, request.ShippingProvider);
@@ -88,7 +89,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpPost("admin/orders/{id:guid}/deliver")]
-    public async Task<IActionResult> MarkAsDelivered(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> MarkAsDelivered([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new MarkOrderAsDeliveredCommand(id), cancellationToken);
 
@@ -97,7 +98,7 @@ public class OrdersController(ISender sender) : ApiBaseController
 
     [Authorize(Roles = DefaultRoles.Admin.Name + "," + DefaultRoles.Customer.Name)]
     [HttpGet("orders/{id:guid}/status-history")]
-    public async Task<IActionResult> GetStatusHistory(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetStatusHistory([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var canAccessAnyOrder = User.IsInRole(DefaultRoles.Admin.Name);
         var result = await sender.Send(new GetOrderStatusHistoryQuery(id, canAccessAnyOrder), cancellationToken);

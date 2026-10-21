@@ -1,4 +1,5 @@
-﻿using ECommerce.Application.Contracts.Authentication;
+﻿using ECommerce.Api.Controllers.Base;
+using ECommerce.Application.Contracts.Authentication;
 using ECommerce.Application.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
 

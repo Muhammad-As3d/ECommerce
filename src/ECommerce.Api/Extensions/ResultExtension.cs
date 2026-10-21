@@ -11,11 +11,9 @@ public static class ResultExtension
             throw new InvalidOperationException("Cannot convert success result to ProblemDetails.");
 
         var statusCode = GetStatusCode(result.Error.ErrorType);
-
         var problem = Results.Problem(statusCode: statusCode);
 
         var problemDetails = problem.GetType().GetProperty(nameof(ProblemDetails))!.GetValue(problem) as ProblemDetails;
-
 
         problemDetails!.Extensions = new Dictionary<string, object?>
         {

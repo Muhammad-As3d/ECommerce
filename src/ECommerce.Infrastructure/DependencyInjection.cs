@@ -38,7 +38,6 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IOrderNumberGenerator, SqlOrderNumberGenerator>();
 
-        services.AddSingleton<IJwtProvider, JwtProvider>();
         return services;
     }
 
@@ -47,6 +46,8 @@ public static class DependencyInjection
         services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddSingleton<IJwtProvider, JwtProvider>();
 
         services.AddOptions<JwtOptions>()
             .BindConfiguration(JwtOptions.SectionName)

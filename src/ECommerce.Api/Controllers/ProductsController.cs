@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.ViewModels.Products;
+﻿using ECommerce.Api.Controllers.Base;
+using ECommerce.Api.ViewModels.Products;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Products.Commands.CreateProduct;
 using ECommerce.Application.Features.Products.Commands.CreateProductImage;
@@ -18,12 +19,11 @@ namespace ECommerce.Api.Controllers;
 [ApiController]
 public class ProductsController(ISender sender) : ApiBaseController
 {
-    private readonly ISender _sender = sender;
 
     [HttpGet("")]
     public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] FiltersRequest spec, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
+        var result = await sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
 
         return HandleResult(result);
     }
@@ -31,7 +31,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid categoryId, [FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _sender.Send(new GetProductByIdQuery(categoryId, id), cancellationToken);
+        var result = await sender.Send(new GetProductByIdQuery(categoryId, id), cancellationToken);
 
         return HandleResult(result);
     }
@@ -42,7 +42,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var command = new CreateProductCommand(categoryId, request.Name, request.Description, request.Stock, request.ModelYear, request.Price, request.Images);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return HandleCreatedResult(result, nameof(Get), value => new { categoryId, id = result.Value });
     }
@@ -53,7 +53,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var command = new CreateProductImagesCommand(categoryId, productId, request.Images);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return HandleResult(result);
     }
@@ -64,7 +64,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var command = new UpdateProductCommand(categoryId, id, request.Name, request.Description, request.Stock, request.ModelYear, request.Price);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return HandleResult(result);
     }
@@ -75,7 +75,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var command = new ToggleStatusProductCommand(categoryId, id);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return HandleResult(result);
     }
@@ -86,7 +86,7 @@ public class ProductsController(ISender sender) : ApiBaseController
     {
         var command = new DeleteProductImagesCommand(categoryId, id);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
         return HandleResult(result);
     }

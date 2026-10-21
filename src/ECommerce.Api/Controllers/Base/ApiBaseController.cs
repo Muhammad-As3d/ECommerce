@@ -2,18 +2,15 @@
 using ECommerce.Domain.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce.Api.Controllers;
+namespace ECommerce.Api.Controllers.Base;
 
 [ApiController]
 public abstract class ApiBaseController : ControllerBase
 {
-    protected IActionResult HandleResult(Result result) =>
-        result.IsSuccess ? NoContent() : result.ToProblem();
+    protected IActionResult HandleResult(Result result) => result.IsSuccess ? NoContent() : result.ToProblem();
 
     protected IActionResult HandleResult<TValue>(Result<TValue> result) =>
-        result.IsSuccess
-        ? Ok(result.Value)
-        : result.ToProblem();
+        result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 
     protected IActionResult HandleCreatedResult<TValue>(Result<TValue> result, string routeName, Func<TValue, object> routeValues) =>
         result.IsSuccess

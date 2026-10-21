@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.ViewModels.Categories;
+﻿using ECommerce.Api.Controllers.Base;
+using ECommerce.Api.ViewModels.Categories;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Categories.Commands.CreateCategory;
 using ECommerce.Application.Features.Categories.Commands.ToggleStatus;
@@ -19,7 +20,6 @@ public class CategoriesController(ISender sender) : ApiBaseController
 {
     private readonly ISender _sender = sender;
 
-    //[Authorize(Roles = DefaultRoles.Admin.Name)]
     [HttpGet("")]
     public async Task<IActionResult> GetAll([FromQuery] FiltersRequest request, CancellationToken cancellationToken)
     {

@@ -214,7 +214,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Notification", b =>
@@ -705,7 +705,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UpdatedById");
 
-                    b.ToTable("ProductImages", (string)null);
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Refund", b =>
@@ -1133,7 +1133,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1159,6 +1159,225 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:read",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:update",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:delete",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClaimType = "permissions",
+                            ClaimValue = "cart:read",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClaimType = "permissions",
+                            ClaimValue = "cart:add",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClaimType = "permissions",
+                            ClaimValue = "cart:remove",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ClaimType = "permissions",
+                            ClaimValue = "cart:update",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ClaimType = "permissions",
+                            ClaimValue = "cart:clear",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:read",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:read all",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:read user",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:checkout",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:cancel",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:process",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:ship",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:deliver",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:status-history",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:update",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ClaimType = "permissions",
+                            ClaimValue = "order:delete",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:read",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:read all",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:read products",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:update",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:add",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            ClaimType = "permissions",
+                            ClaimValue = "category:toggle",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:read",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:add",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:update",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:toggle",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:add images",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            ClaimType = "permissions",
+                            ClaimValue = "product:remove images",
+                            RoleId = "b0d60c5c-4d20-4991-9171-772a0a8bd2f8"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -1398,7 +1617,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Orders", (string)null);
+                            b1.ToTable("Orders");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");

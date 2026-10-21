@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.ViewModels.Cart;
+﻿using ECommerce.Api.Controllers.Base;
+using ECommerce.Api.ViewModels.Cart;
 using ECommerce.Application.Features.Carts.Commands.AddCartItem;
 using ECommerce.Application.Features.Carts.Commands.ClearCart;
 using ECommerce.Application.Features.Carts.Commands.DeleteCartItem;

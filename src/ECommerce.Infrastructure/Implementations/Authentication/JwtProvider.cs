@@ -4,7 +4,7 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
     private readonly JwtOptions _options = options.Value;
 
-    public (string token, int ExpiresIn) GenerateTokenAsync(ApplicationUser user, IEnumerable<string> roles)
+    public (string token, int ExpiresIn) GenerateTokenAsync(ApplicationUser user, IEnumerable<string> roles, IEnumerable<string> permissions)
     {
         List<Claim> claims =
         [
@@ -13,14 +13,11 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             new(JwtRegisteredClaimNames.GivenName,user.FirstName),
             new(JwtRegisteredClaimNames.FamilyName,user.LastName),
             new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-            new(nameof(roles),JsonSerializer.Serialize(roles),JsonClaimValueTypes.JsonArray)
+            new(nameof(roles),JsonSerializer.Serialize(roles),JsonClaimValueTypes.JsonArray),
+            new(nameof(permissions),JsonSerializer.Serialize(permissions),JsonClaimValueTypes.JsonArray)
         ];
 
-        foreach (var role in roles)
-            claims.Add(new Claim(ClaimTypes.Role, role));
-
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
-
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
