@@ -38,8 +38,6 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
     {
         foreach (var imagePath in imagePaths)
         {
-            // New records contain a public URL. Older records may still contain
-            // an absolute Windows path, so support both formats safely.
             var normalizedPath = imagePath.Replace('\\', '/');
             var fileName = normalizedPath[(normalizedPath.LastIndexOf('/') + 1)..];
             var path = Path.Combine(_imagePath, fileName);

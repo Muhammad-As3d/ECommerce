@@ -1,6 +1,5 @@
 using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Specifications.CartSpecification;
-using ECommerce.Domain.Enums;
 
 namespace ECommerce.Application.Features.Orders.Commands.OrderCheckout;
 
@@ -107,7 +106,6 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
                 null);
 
             await unitOfWork.Repository<OrderStatusHistory>().AddAsync(initialHistory, cancellationToken);
-
             await unitOfWork.Repository<CartItem>().DeleteAsync(x => x.Cart.UserId == currentUser.Id, cancellationToken);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

@@ -1,15 +1,17 @@
-﻿using System.Security.Cryptography;
+﻿using ECommerce.Application.Contracts.Users;
+using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace ECommerce.Infrastructure.Implementations.Authentication;
 
-public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender emailSender,
-    IHttpContextAccessor httpContextAccessor, SignInManager<ApplicationUser> signInManager,
-    IJwtProvider jwtProvider, ApplicationDbContext context) : IAuthService
+public class AuthService(UserManager<User> userManager, IEmailSender emailSender,
+    IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager,
+    IJwtProvider jwtProvider, ApplicationDbContext context, ILogger<AuthService> logger) : IAuthService
 {
-    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly UserManager<User> _userManager = userManager;
     private readonly IEmailSender _emailSender = emailSender;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly SignInManager<User> _signInManager = signInManager;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly int _refreshTokenExpirationDays = 14;
 
@@ -20,7 +22,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
         if (emailIsExists)
             return Result.Failure(UserErrors.DuplicatedEmail);
 
-        var user = new ApplicationUser
+        var user = new User
         {
             Email = request.Email,
             FirstName = request.FirstName,
@@ -44,7 +46,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
             return Result.Failure(UserErrors.InvalidCode);
 
         if (user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailIsConfirmed);
+            return Result.Failure(UserErrors.EmailAlreadyConfirmed);
 
         var code = request.Code;
 
@@ -73,7 +75,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
             return Result.Success();
 
         if (user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailIsConfirmed);
+            return Result.Failure(UserErrors.EmailAlreadyConfirmed);
 
         await SendConfirmationEmailAsync(user);
 
@@ -83,10 +85,10 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
     public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
         if (await _userManager.FindByEmailAsync(request.Email) is not { } user)
-            return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
+            return UserErrors.InvalidCredentials;
 
         if (user.IsDisabled)
-            return Result.Failure<AuthResponse>(UserErrors.IsDisabled);
+            return UserErrors.IsDisabled;
 
         var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, true);
 
@@ -192,17 +194,62 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
         return Result.Success();
     }
 
-    private async Task SendConfirmationEmailAsync(ApplicationUser user)
+    public async Task<Result> SendResetPasswordCodeAsync(string email)
+    {
+        if (await _userManager.FindByEmailAsync(email) is not { } user)
+            return Result.Success();
+
+        if (!user.EmailConfirmed)
+            return UserErrors.EmailIsNotConfirmed;
+
+        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+        logger.LogInformation("Reset code => {code}", code);
+
+        var route = "auth/forget-password";
+        var origin = _httpContextAccessor.HttpContext!.Request.Headers.Origin;
+        var Url = $"{origin}/{route}?userId={user.Id}&code={code}";
+
+        await _emailSender.SendEmailAsync(user.Email!, "Change your password", Url);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user is null || !user.EmailConfirmed)
+            return UserErrors.InvalidCode;
+
+        IdentityResult result;
+
+        try
+        {
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Code));
+            result = await _userManager.ResetPasswordAsync(user, code, request.NewPassword);
+        }
+        catch (FormatException)
+        {
+            result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
+        }
+
+        if (!result.Succeeded)
+            return result.ToFailureIdentityResult();
+
+        return Result.Success();
+    }
+
+    private async Task SendConfirmationEmailAsync(User user)
     {
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-        //_logger.LogInformation("Confirmation  {Code} => ", code);
+        logger.LogInformation("Confirmation  {Code} => ", code);
 
-        var route = "Auth/confirmation-email";
-
+        var route = "auth/confirmation-email";
         var origin = _httpContextAccessor.HttpContext!.Request.Headers.Origin;
-
         var Url = $"{origin}/{route}?userId={user.Id}&code={code}";
 
         await _emailSender.SendEmailAsync(user.Email!, "Confirmation Email", Url);
@@ -211,7 +258,7 @@ public class AuthService(UserManager<ApplicationUser> userManager, IEmailSender 
     private static string GenerateRefreshToken() =>
         Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 
-    private async Task<(IEnumerable<string> roles, IEnumerable<string> permissions)> GetUserRolesAndPermissionsAsync(ApplicationUser user, CancellationToken cancellationToken)
+    private async Task<(IEnumerable<string> roles, IEnumerable<string> permissions)> GetUserRolesAndPermissionsAsync(User user, CancellationToken cancellationToken)
     {
         var userRoles = await _userManager.GetRolesAsync(user);
 

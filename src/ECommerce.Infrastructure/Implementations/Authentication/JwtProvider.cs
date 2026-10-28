@@ -4,7 +4,7 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
     private readonly JwtOptions _options = options.Value;
 
-    public (string token, int ExpiresIn) GenerateTokenAsync(ApplicationUser user, IEnumerable<string> roles, IEnumerable<string> permissions)
+    public (string token, int ExpiresIn) GenerateTokenAsync(User user, IEnumerable<string> roles, IEnumerable<string> permissions)
     {
         List<Claim> claims =
         [

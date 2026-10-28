@@ -11,7 +11,7 @@ public class WishlistConfiguration : AuditableEntityConfiguration<Wishlist>
         builder.Property(w => w.UserId).IsRequired().HasMaxLength(450);
         builder.HasIndex(w => w.UserId).IsUnique();
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
                .WithMany()
                .HasForeignKey(w => w.UserId)
                .OnDelete(DeleteBehavior.Restrict)

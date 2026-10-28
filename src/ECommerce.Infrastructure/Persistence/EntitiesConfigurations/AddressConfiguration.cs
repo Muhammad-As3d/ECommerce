@@ -19,7 +19,7 @@ public class AddressConfiguration : AuditableEntityConfiguration<Address>
 
         builder.HasIndex(a => a.UserId);
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
                .WithMany()
                .HasForeignKey(a => a.UserId)
                .OnDelete(DeleteBehavior.Restrict)

@@ -1,8 +1,8 @@
 ﻿namespace ECommerce.Infrastructure.Identity.Entities;
 
-public class ApplicationRole : IdentityRole
+public class Role : IdentityRole
 {
-    public ApplicationRole()
+    public Role()
     {
         Id = Guid.CreateVersion7().ToString();
     }

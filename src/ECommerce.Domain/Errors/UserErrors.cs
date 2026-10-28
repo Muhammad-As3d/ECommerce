@@ -10,8 +10,8 @@ public static class UserErrors
         Error.Conflict("User.DuplicatedEmail", "You entered email is already exists");
     public static Error EmailNotFound =>
         Error.NotFound("User.DuplicatedEmail", "You entered email is already exists");
-    public static Error EmailIsConfirmed =>
-        Error.BadRequest("User.EmailIsConfirmed", "Your email is already confirmed");
+    public static Error EmailAlreadyConfirmed =>
+        Error.BadRequest("User.EmailAlreadyConfirmed", "Your email is already confirmed");
     public static Error EmailIsNotConfirmed =>
         Error.Conflict("User.EmailIsNotConfirmed", "Please confirm your email first.");
     public static Error InvalidCredentials =>

@@ -1,14 +1,10 @@
-﻿using ECommerce.Api.Controllers.Base;
-using ECommerce.Api.ViewModels.Cart;
+﻿using ECommerce.Api.ViewModels.Cart;
 using ECommerce.Application.Features.Carts.Commands.AddCartItem;
 using ECommerce.Application.Features.Carts.Commands.ClearCart;
 using ECommerce.Application.Features.Carts.Commands.DeleteCartItem;
 using ECommerce.Application.Features.Carts.Commands.UpdateCartItem;
 using ECommerce.Application.Features.Carts.Queries.GetCart;
 using ECommerce.Infrastructure.Identity.Seeding;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 

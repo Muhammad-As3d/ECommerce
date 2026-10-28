@@ -1,5 +1,4 @@
-﻿using ECommerce.Api.Controllers.Base;
-using ECommerce.Api.ViewModels.Orders;
+﻿using ECommerce.Api.ViewModels.Orders;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Application.Features.Orders.Commands.CancelOrder;
 using ECommerce.Application.Features.Orders.Commands.MarkOrderAsDelivered;
@@ -11,10 +10,6 @@ using ECommerce.Application.Features.Orders.Queries.GetOrder;
 using ECommerce.Application.Features.Orders.Queries.GetOrders;
 using ECommerce.Application.Features.Orders.Queries.GetOrderStatusHistory;
 using ECommerce.Infrastructure.Identity.Seeding;
-using Mapster;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 

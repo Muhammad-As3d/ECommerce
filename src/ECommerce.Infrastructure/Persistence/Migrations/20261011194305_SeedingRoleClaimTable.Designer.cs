@@ -954,7 +954,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("WishlistItems", (string)null);
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.ApplicationRole", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -1007,7 +1007,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -1473,18 +1473,18 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Address", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1493,18 +1493,18 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Cart", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithOne("Cart")
                         .HasForeignKey("ECommerce.Domain.Entities.Cart", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1532,13 +1532,13 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Category", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1546,7 +1546,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1555,18 +1555,18 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1650,7 +1650,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.OrderStatusHistory", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("ChangedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1666,7 +1666,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Payment", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1678,7 +1678,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1694,13 +1694,13 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1710,7 +1710,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.ProductImage", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1722,7 +1722,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1732,7 +1732,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Refund", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1744,7 +1744,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1754,7 +1754,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Review", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1772,12 +1772,12 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1790,18 +1790,18 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Domain.Entities.Wishlist", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UpdatedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1829,7 +1829,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", "User")
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1840,7 +1840,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationRole", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1849,7 +1849,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1858,7 +1858,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1867,13 +1867,13 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationRole", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1882,7 +1882,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", null)
+                    b.HasOne("ECommerce.Infrastructure.Identity.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1923,7 +1923,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Identity.Entities.User", b =>
                 {
                     b.Navigation("Cart");
 

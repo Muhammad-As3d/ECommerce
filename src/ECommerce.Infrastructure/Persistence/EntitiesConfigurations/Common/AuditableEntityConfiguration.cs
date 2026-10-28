@@ -11,13 +11,13 @@ public abstract class AuditableEntityConfiguration<TEntity> : IEntityTypeConfigu
         builder.Property(e => e.UpdatedById)
               .HasMaxLength(450);
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.CreatedById)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.UpdatedById)
             .OnDelete(DeleteBehavior.Restrict);

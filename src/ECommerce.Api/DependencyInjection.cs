@@ -1,10 +1,6 @@
-﻿using ECommerce.Api.Exceptions;
+using ECommerce.Api.Exceptions;
 using ECommerce.Application;
 using ECommerce.Infrastructure;
-using Mapster;
-using MapsterMapper;
-using Microsoft.AspNetCore.Http.Features;
-using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace ECommerce.Api;
@@ -39,28 +35,13 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
-
-        services.AddProblemDetails(options =>
-        {
-            options.CustomizeProblemDetails = context =>
-            {
-                context.ProblemDetails.Instance =
-                    $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
-
-                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-
-                Activity? activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
-                context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
-            };
-        });
+        services.AddProblemDetails();
 
         var assembly = typeof(DependencyInjection).Assembly;
 
         //Add Mapster
         var mappingConfiguration = TypeAdapterConfig.GlobalSettings;
         mappingConfiguration.Scan(assembly);
-
-        services.AddSingleton<IMapper>(new Mapper(mappingConfiguration));
 
         return services;
     }

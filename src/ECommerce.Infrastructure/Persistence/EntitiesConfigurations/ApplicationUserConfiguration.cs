@@ -1,13 +1,13 @@
 ﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
-public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
+public class ApplicationUserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.Property(x => x.FirstName).HasMaxLength(100);
         builder.Property(x => x.LastName).HasMaxLength(100);
 
-        var adminUser = new ApplicationUser
+        var adminUser = new User
         {
             Id = DefaultUsers.Admin.Id,
             FirstName = DefaultUsers.Admin.FirstName,

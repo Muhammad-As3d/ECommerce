@@ -1,14 +1,4 @@
-﻿using ECommerce.Api.Controllers.Base;
-using ECommerce.Api.ViewModels.Addresses;
-using ECommerce.Application.Features.Addresses.Commands.AddAddress;
-using ECommerce.Application.Features.Addresses.Commands.DeleteAddress;
-using ECommerce.Application.Features.Addresses.Queries;
-using Mapster;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ECommerce.Api.Controllers;
+﻿namespace ECommerce.Api.Controllers;
 
 [Authorize]
 [Route("api/v1/[controller]")]

@@ -1,10 +1,10 @@
 ﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
-public class ApplicationRoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
+public class ApplicationRoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    public void Configure(EntityTypeBuilder<ApplicationRole> builder)
+    public void Configure(EntityTypeBuilder<Role> builder)
     {
-        var adminRole = new ApplicationRole
+        var adminRole = new Role
         {
             Id = DefaultRoles.Admin.Id,
             Name = DefaultRoles.Admin.Name,
@@ -12,7 +12,7 @@ public class ApplicationRoleConfiguration : IEntityTypeConfiguration<Application
             ConcurrencyStamp = DefaultRoles.Admin.ConcurrencyStamp
         };
 
-        var customerRole = new ApplicationRole
+        var customerRole = new Role
         {
             Id = DefaultRoles.Customer.Id,
             Name = DefaultRoles.Customer.Name,

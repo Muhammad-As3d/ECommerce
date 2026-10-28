@@ -19,6 +19,7 @@ public class Result
     public static Result Failure(Error error) => new(false, error);
     public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
     public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
+    public static implicit operator Result(Error error) => Failure(error);
 }
 
 public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result(isSuccess, error)
@@ -27,4 +28,5 @@ public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result
 
     public TValue Value => IsSuccess ? _value!
         : throw new InvalidOperationException("Failure result cannot have value");
+    public static implicit operator Result<TValue>(Error error) => Failure<TValue>(error);
 }

@@ -1,8 +1,8 @@
 ﻿namespace ECommerce.Infrastructure.Identity.Entities;
 
-public class ApplicationUser : IdentityUser
+public class User : IdentityUser
 {
-    public ApplicationUser()
+    public User()
     {
         Id = Guid.CreateVersion7().ToString();
         SecurityStamp = Guid.CreateVersion7().ToString();

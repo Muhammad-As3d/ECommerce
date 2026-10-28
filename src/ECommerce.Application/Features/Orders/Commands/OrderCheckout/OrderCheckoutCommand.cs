@@ -1,6 +1,4 @@
-﻿using ECommerce.Domain.Enums;
-
-namespace ECommerce.Application.Features.Orders.Commands.OrderCheckout;
+﻿namespace ECommerce.Application.Features.Orders.Commands.OrderCheckout;
 
 public record OrderCheckoutCommand(
     Guid ShippingAddressId,

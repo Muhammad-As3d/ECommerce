@@ -14,7 +14,7 @@ internal class CartConfiguration : AuditableEntityConfiguration<Cart>
 
         builder.HasIndex(c => c.UserId).IsUnique();
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
                .WithOne(x => x.Cart)
                .HasForeignKey<Cart>(c => c.UserId)
                .OnDelete(DeleteBehavior.Restrict);

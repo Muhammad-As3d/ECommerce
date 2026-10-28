@@ -113,7 +113,7 @@ flowchart LR
 | Caching | Redis, `IDistributedCache` |
 | Security | ASP.NET Core Identity, JWT Bearer Authentication, role-based authorization |
 | Architecture | Clean Architecture, CQRS, Repository, Unit of Work, Specification Pattern |
-| Application | MediatR, FluentValidation, AutoMapper, Mapster |
+| Application | MediatR, FluentValidation, Mapster |
 | Observability | Serilog, request logging, trace-aware Problem Details |
 | Documentation | OpenAPI, Scalar |
 | Messaging | SMTP email delivery with MailKit |

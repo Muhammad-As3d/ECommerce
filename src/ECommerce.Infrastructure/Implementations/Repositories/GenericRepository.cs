@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using MapsterMapper;
+using Mapster;
 using ECommerce.Application.Abstractions.Pagination;
 using ECommerce.Domain.Specifications;
 using ECommerce.Infrastructure.Specifications;
@@ -79,20 +79,20 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     #region Projection & Pagination & Specification 
     public async Task<IEnumerable<TProjection>> GetAllProjectAsync<TProjection>(CancellationToken cancellationToken = default) where TProjection : class
         => await _dbSet
-        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ProjectToType<TProjection>(_mapper.Config)
         .ToListAsync(cancellationToken);
 
     public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(int pageNumber, int pageSize,
         CancellationToken cancellationToken = default) where TProjection : class =>
          await _dbSet
-            .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+            .ProjectToType<TProjection>(_mapper.Config)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
 
     public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,
          int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class =>
         await SpecificationEvaluator
             .GetQuery(_dbSet, spec)
-            .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+            .ProjectToType<TProjection>(_mapper.Config)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
     public async Task<TProjection?> GetByPredicateProjectAsync<TProjection>(Expression<Func<T, bool>> predicate, Expression<Func<T, TProjection>> selector,
     CancellationToken cancellationToken = default) =>
@@ -113,19 +113,19 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
         CancellationToken cancellationToken = default) where TProjection : class =>
         await _dbSet
         .Where(predicate)
-        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ProjectToType<TProjection>(_mapper.Config)
         .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<TProjection?> GetBySpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
         await SpecificationEvaluator
         .GetQuery(_dbSet, spec)
-        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ProjectToType<TProjection>(_mapper.Config)
         .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<TProjection>?> GetAllSpecProjectAsync<TProjection>(Specification<T> spec, CancellationToken cancellationToken = default) where TProjection : class =>
         await SpecificationEvaluator
         .GetQuery(_dbSet, spec)
-        .ProjectTo<TProjection>(_mapper.ConfigurationProvider)
+        .ProjectToType<TProjection>(_mapper.Config)
         .ToListAsync(cancellationToken);
 
     #endregion

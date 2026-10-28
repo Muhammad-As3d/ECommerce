@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ECommerce.Infrastructure.Implementations;

@@ -1,32 +1,34 @@
-﻿namespace ECommerce.Application.Mappings;
+namespace ECommerce.Application.Mappings;
 
-public class MappingProfile : Profile
+public class MappingProfile : IRegister
 {
-    public MappingProfile()
+    public void Register(TypeAdapterConfig config)
     {
-        #region Category
-        CreateMap<Category, CategoryResponse>();
+        config.Default.MapToConstructor(true);
 
-        CreateMap<Category, CategoryProductsResponse>()
-            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+        #region Category
+        config.NewConfig<Category, CategoryResponse>();
+
+        config.NewConfig<Category, CategoryProductsResponse>()
+            .Map(dest => dest.Products, src => src.Products);
 
         #endregion
 
         //Product Mappings
-        CreateMap<Product, ProductResponse>()
-            .ForMember(dest => dest.ImageURLs,
-            opt => opt.MapFrom(src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList()));
+        config.NewConfig<Product, ProductResponse>()
+            .Map(dest => dest.ImageURLs,
+                src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList());
 
-        CreateMap<Product, ProductImagesResponse>()
-            .ForMember(dest => dest.ImagesUrls,
-            opt => opt.MapFrom(src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList()));
+        config.NewConfig<Product, ProductImagesResponse>()
+            .Map(dest => dest.ImagesUrls,
+                src => src.ProductImages.Select(x => ToPublicImageUrl(x.ImageUrl)).ToList());
 
-        CreateMap<ProductImage, ProductImageResponse>()
-            .ConstructUsing(src => new ProductImageResponse(src.Id, ToPublicImageUrl(src.ImageUrl)));
+        config.NewConfig<ProductImage, ProductImageResponse>()
+            .MapWith(src => new ProductImageResponse(src.Id, ToPublicImageUrl(src.ImageUrl)));
 
         #region Cart
-        CreateMap<CartItem, CartItemResponse>()
-            .ConstructUsing(src =>
+        config.NewConfig<CartItem, CartItemResponse>()
+            .MapWith(src =>
             new CartItemResponse(src.Id,
             src.ProductId,
             src.Product.Name,
@@ -36,20 +38,20 @@ public class MappingProfile : Profile
             src.Quantity * src.UnitPriceSnapshot,
             src.Quantity < src.Product.Stock));
 
-        CreateMap<Cart, CartResponse>()
-            .ConstructUsing(src => new CartResponse(src.Id, src.CartItems!.Count()));
+        config.NewConfig<Cart, CartResponse>()
+            .MapWith(src => new CartResponse(src.Id, src.CartItems!.Count()));
 
         #endregion
 
         #region Address
 
-        CreateMap<Address, AddressResponse>();
+        config.NewConfig<Address, AddressResponse>();
         #endregion
 
         #region Order
 
-        CreateMap<ShippingAddressSnapshot, ShippingAddressResponse>()
-            .ConstructUsing(address => new ShippingAddressResponse(
+        config.NewConfig<ShippingAddressSnapshot, ShippingAddressResponse>()
+            .MapWith(address => new ShippingAddressResponse(
                 address.FullName,
                 address.Street,
                 address.City,
@@ -58,8 +60,8 @@ public class MappingProfile : Profile
                 address.PostalCode,
                 address.PhoneNumber));
 
-        CreateMap<Order, OrderUserResponse>()
-            .ConstructUsing(src => new OrderUserResponse(
+        config.NewConfig<Order, OrderUserResponse>()
+            .MapWith(src => new OrderUserResponse(
                 src.Id,
                 src.OrderNumber,
                 src.Status.ToString(),
@@ -74,8 +76,8 @@ public class MappingProfile : Profile
                 src.TotalAmount
             ));
 
-        CreateMap<OrderItem, OrderItemResponse>()
-            .ConstructUsing(item => new OrderItemResponse(
+        config.NewConfig<OrderItem, OrderItemResponse>()
+            .MapWith(item => new OrderItemResponse(
                 item.Id,
                 item.ProductNameSnapshot,
                 item.UnitPriceSnapshot,
@@ -83,8 +85,8 @@ public class MappingProfile : Profile
                 item.Quantity * item.UnitPriceSnapshot
             ));
 
-        CreateMap<Order, OrderDetailsResponse>()
-            .ConstructUsing(src => new OrderDetailsResponse(
+        config.NewConfig<Order, OrderDetailsResponse>()
+            .MapWith(src => new OrderDetailsResponse(
                 src.Id,
                 src.OrderNumber,
                 src.Status.ToString(),
@@ -116,8 +118,8 @@ public class MappingProfile : Profile
                 )).ToList()
             ));
 
-        CreateMap<Order, OrderAdminResponse>()
-            .ConstructUsing(src => new OrderAdminResponse(
+        config.NewConfig<Order, OrderAdminResponse>()
+            .MapWith(src => new OrderAdminResponse(
                 src.Id,
                 src.OrderNumber,
                 src.ShippingAddress.FullName,
@@ -132,8 +134,8 @@ public class MappingProfile : Profile
                 src.UserId
             ));
 
-        CreateMap<CartItem, CartItemCheckoutInfo>();
-        CreateMap<Address, ShippingAddressInfo>();
+        config.NewConfig<CartItem, CartItemCheckoutInfo>();
+        config.NewConfig<Address, ShippingAddressInfo>();
 
         #endregion
     }

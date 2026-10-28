@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using MapsterMapper;
 using ECommerce.Application.Contracts.Products;
 
 namespace ECommerce.Infrastructure.Implementations.Repositories;

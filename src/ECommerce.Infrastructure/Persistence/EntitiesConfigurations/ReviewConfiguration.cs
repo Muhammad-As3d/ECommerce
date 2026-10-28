@@ -16,7 +16,7 @@ public class ReviewConfiguration : AuditableEntityConfiguration<Review>
 
         builder.HasIndex(r => r.OrderItemId).IsUnique();
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
                .WithMany()
                .HasForeignKey(r => r.UserId)
                .OnDelete(DeleteBehavior.Restrict)

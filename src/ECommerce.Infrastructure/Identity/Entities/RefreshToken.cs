@@ -11,5 +11,5 @@ public class RefreshToken
     public bool IsActive => RevokedOn is null && !IsExpired;
     public string UserId { get; set; } = string.Empty;
 
-    public ApplicationUser? User { get; set; }
+    public User? User { get; set; }
 }

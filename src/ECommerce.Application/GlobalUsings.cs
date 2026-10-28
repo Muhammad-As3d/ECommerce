@@ -1,4 +1,3 @@
-﻿global using AutoMapper;
 global using ECommerce.Application.Abstractions.Pagination;
 global using ECommerce.Application.Behaviors;
 global using ECommerce.Application.Contracts.Addresses;
@@ -7,7 +6,9 @@ global using ECommerce.Application.Contracts.Category;
 global using ECommerce.Application.Contracts.Orders;
 global using ECommerce.Application.Contracts.ProductImages;
 global using ECommerce.Application.Contracts.Products;
+global using ECommerce.Application.Contracts.Users;
 global using ECommerce.Application.Interfaces;
+global using ECommerce.Application.Interfaces.Repositories;
 global using ECommerce.Application.Interfaces.Services;
 global using ECommerce.Domain.Abstractions;
 global using ECommerce.Domain.Entities;
@@ -15,6 +16,8 @@ global using ECommerce.Domain.Enums;
 global using ECommerce.Domain.Errors;
 global using ECommerce.Domain.Specifications;
 global using FluentValidation;
+global using Mapster;
 global using MediatR;
 global using Microsoft.Extensions.DependencyInjection;
 global using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+

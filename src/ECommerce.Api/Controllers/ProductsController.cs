@@ -1,19 +1,4 @@
-﻿using ECommerce.Api.Controllers.Base;
-using ECommerce.Api.ViewModels.Products;
-using ECommerce.Application.Abstractions.Pagination;
-using ECommerce.Application.Features.Products.Commands.CreateProduct;
-using ECommerce.Application.Features.Products.Commands.CreateProductImage;
-using ECommerce.Application.Features.Products.Commands.DeleteProductImages;
-using ECommerce.Application.Features.Products.Commands.ToggleStatus;
-using ECommerce.Application.Features.Products.Commands.UpdateProduct;
-using ECommerce.Application.Features.Products.Queries.GetAllProducts;
-using ECommerce.Application.Features.Products.Queries.GetProduct;
-using ECommerce.Infrastructure.Identity.Seeding;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ECommerce.Api.Controllers;
+﻿namespace ECommerce.Api.Controllers;
 
 [Route("api/v1/{categoryId:Guid}/[controller]")]
 [ApiController]
@@ -44,7 +29,7 @@ public class ProductsController(ISender sender) : ApiBaseController
 
         var result = await sender.Send(command, cancellationToken);
 
-        return HandleCreatedResult(result, nameof(Get), value => new { categoryId, id = result.Value });
+        return HandleResult(result, nameof(Get), value => new { categoryId, id = result.Value });
     }
 
     [Authorize(Roles = DefaultRoles.Admin.Name)]

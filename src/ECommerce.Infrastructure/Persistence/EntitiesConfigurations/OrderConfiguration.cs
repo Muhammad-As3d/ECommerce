@@ -82,7 +82,7 @@ public sealed class OrderConfiguration : AuditableEntityConfiguration<Order>
                 .HasMaxLength(20);
         });
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);

@@ -3,7 +3,7 @@
 namespace ECommerce.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
-    : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
+    : IdentityDbContext<User, Role, string>(options)
 {
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Product> Products => Set<Product>();

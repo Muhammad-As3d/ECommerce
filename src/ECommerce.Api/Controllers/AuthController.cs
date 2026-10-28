@@ -1,7 +1,6 @@
-﻿using ECommerce.Api.Controllers.Base;
-using ECommerce.Application.Contracts.Authentication;
+﻿using ECommerce.Application.Contracts.Authentication;
+using ECommerce.Application.Contracts.Users;
 using ECommerce.Application.Interfaces.Authentication;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Controllers;
 
@@ -50,10 +49,27 @@ public class AuthController(IAuthService authService) : ApiBaseController
 
         return HandleResult(result);
     }
+
     [HttpPost("revoke-refresh")]
     public async Task<IActionResult> RevokeRefreshAsync([FromBody] RefreshTokenRequest request)
     {
         var result = await _authService.RevokeRefreshTokenAsync(request.Token, request.RefreshToken);
+
+        return HandleResult(result);
+    }
+
+    [HttpPost("forget-password")]
+    public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request)
+    {
+        var result = await _authService.SendResetPasswordCodeAsync(request.Email);
+
+        return HandleResult(result);
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var result = await _authService.ResetPasswordAsync(request);
 
         return HandleResult(result);
     }

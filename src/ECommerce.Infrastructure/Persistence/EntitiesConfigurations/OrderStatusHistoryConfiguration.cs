@@ -16,7 +16,7 @@ public sealed class OrderStatusHistoryConfiguration : IEntityTypeConfiguration<O
             .HasForeignKey(x => x.OrderId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<ApplicationUser>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(x => x.ChangedById)
             .OnDelete(DeleteBehavior.Restrict);

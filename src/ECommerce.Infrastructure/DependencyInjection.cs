@@ -31,6 +31,9 @@ public static class DependencyInjection
         services.AddAuthenticationConfig(configuration);
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailSender, EmailService>();
         services.AddScoped<IFileService, FileService>();
@@ -43,7 +46,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddAuthenticationConfig(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<ApplicationUser, ApplicationRole>()
+        services.AddIdentity<User, Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
