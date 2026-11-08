@@ -4,9 +4,9 @@ public static class Permissions
 {
     public static string Type => "permissions";
 
-    public const string GetAddress = "product:read";
-    public const string UpdateAddress = "product:update";
-    public const string DeleteAddress = "product:delete";
+    public const string GetAddress = "address:read";
+    public const string UpdateAddress = "address:update";
+    public const string DeleteAddress = "address:delete";
 
     public const string GetCarts = "cart:read";
     public const string AddToCart = "cart:add";
@@ -41,5 +41,5 @@ public static class Permissions
     public const string RemoveProductImages = "product:remove images";
 
     public static IList<string?> GetAllPermissions() =>
-        typeof(Permissions).GetFields().Select(f => f.GetValue(f) as string).ToList(); 
+        typeof(Permissions).GetFields().Select(f => f.GetValue(f) as string).ToList();
 }

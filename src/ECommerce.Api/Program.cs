@@ -1,6 +1,8 @@
 using ECommerce.Api;
 using ECommerce.Infrastructure.Persistence;
 using FluentValidation;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
@@ -8,7 +10,7 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddPresentationServices(builder.Configuration);
+builder.Services.AddDependencies(builder.Configuration);
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
@@ -29,8 +31,15 @@ app.UseSerilogRequestLogging(options =>
         : httpContext.Response.StatusCode >= 500
             ? LogEventLevel.Error
             : LogEventLevel.Information;
+
+    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+    {
+        diagnosticContext.Set(
+            "ResponseTraceId", Activity.Current?.Id ?? httpContext.TraceIdentifier);
+    };
 });
 
+app.UseRequestLocalization();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
@@ -51,5 +60,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
 
 app.Run();

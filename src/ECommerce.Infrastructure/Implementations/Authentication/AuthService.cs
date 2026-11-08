@@ -33,7 +33,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
-            return result.ToFailureIdentityResult();
+            return result.ToError();
 
         await SendConfirmationEmailAsync(user);
 
@@ -62,7 +62,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var result = await _userManager.ConfirmEmailAsync(user, code);
 
         if (!result.Succeeded)
-            return result.ToFailureIdentityResult();
+            return result.ToError();
 
         await _userManager.AddToRoleAsync(user, DefaultRoles.Customer.Name);
 
@@ -236,7 +236,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         }
 
         if (!result.Succeeded)
-            return result.ToFailureIdentityResult();
+            return result.ToError();
 
         return Result.Success();
     }

@@ -2,12 +2,9 @@
 
 public static class UserExtensions
 {
-    public static Result ToFailureIdentityResult(this IdentityResult result)
+    public static Error ToError(this IdentityResult result)
     {
-        var error = result.Errors
-            .Select(e => new Error(e.Code, e.Description, ErrorType.BadRequest))
-            .First();
-
-        return Result.Failure(error);
+        var error = result.Errors.First();
+        return new Error(error.Code, error.Description, ErrorType.BadRequest);
     }
 }

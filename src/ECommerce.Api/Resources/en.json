@@ -1,0 +1,9 @@
+{
+  "Category.NotFound": "Category with ID '{0}' was not found.",
+  "Category.DuplicatedName": "A category with this name already exists.",
+  "Category.CategoryHasProducts": "A category containing products cannot be deleted.",
+  "Fields.Name": "Name",
+  "Validation.Title": "One or more validation errors occurred.",
+  "Validation.Required": "'{0}' must not be empty.",
+  "Validation.Length": "'{0}' must be between {1} and {2} characters."
+} 

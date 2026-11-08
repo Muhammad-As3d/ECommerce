@@ -1,6 +1,9 @@
 ﻿using ECommerce.Infrastructure.Implementations.Authentication;
 using ECommerce.Infrastructure.Implementations.Services;
+using ECommerce.Infrastructure.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 
 namespace ECommerce.Infrastructure;
 
@@ -22,25 +25,43 @@ public static class DependencyInjection
             .ValidateOnStart();
 
         //caching
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = configuration.GetConnectionString("Redis");
-        });
+        //services.AddStackExchangeRedisCache(options =>
+        //{
+        //    options.Configuration = configuration.GetConnectionString("Redis");
+        //});
 
+        services.AddDistributedMemoryCache();
         services.AddHttpContextAccessor();
         services.AddAuthenticationConfig(configuration);
+        services.AddLocalizationConfig();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
-
+        services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEmailSender, EmailService>();
         services.AddScoped<IFileService, FileService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IOrderNumberGenerator, SqlOrderNumberGenerator>();
+        services.AddScoped<IRoleService, RoleService>();
 
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>(name: "Database");
+
+        return services;
+    }
+
+    private static IServiceCollection AddLocalizationConfig(this IServiceCollection services)
+    {
+        services.AddLocalization();
+        services.AddSingleton<JsonStringLocalizer>(provider =>
+        {
+            var environment = provider.GetRequiredService<IHostEnvironment>();
+            return new JsonStringLocalizer(Path.Combine(environment.ContentRootPath, "Resources"));
+        });
+        services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+        services.AddSingleton<IStringLocalizer>(provider => provider.GetRequiredService<JsonStringLocalizer>());
         return services;
     }
 
@@ -88,6 +109,9 @@ public static class DependencyInjection
             options.Password.RequiredLength = 8;
             options.SignIn.RequireConfirmedEmail = true;
             options.User.RequireUniqueEmail = true;
+
+            options.Lockout.AllowedForNewUsers = true;
+            options.Lockout.MaxFailedAccessAttempts = 5;
         });
 
         return services;

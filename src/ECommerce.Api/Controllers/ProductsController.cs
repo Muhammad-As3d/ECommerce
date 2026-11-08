@@ -1,11 +1,13 @@
-﻿namespace ECommerce.Api.Controllers;
+﻿using ECommerce.Api.Authorization;
+
+namespace ECommerce.Api.Controllers;
 
 [Route("api/v1/{categoryId:Guid}/[controller]")]
 [ApiController]
 public class ProductsController(ISender sender) : ApiBaseController
 {
 
-    [HttpGet("")]
+    [HttpGet("")]     
     public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] FiltersRequest spec, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);
@@ -21,7 +23,8 @@ public class ProductsController(ISender sender) : ApiBaseController
         return HandleResult(result);
     }
 
-    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    //[Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HasPermission(Permissions.AddProduct)]
     [HttpPost("")]
     public async Task<IActionResult> Create([FromRoute] Guid categoryId, [FromForm] ProductRequest request, CancellationToken cancellationToken)
     {
@@ -32,7 +35,8 @@ public class ProductsController(ISender sender) : ApiBaseController
         return HandleResult(result, nameof(Get), value => new { categoryId, id = result.Value });
     }
 
-    [Authorize(Roles = DefaultRoles.Admin.Name)]
+    //[Authorize(Roles = DefaultRoles.Admin.Name)]
+    [HasPermission(Permissions.AddProductImages)]
     [HttpPost("{productId:Guid}/images")]
     public async Task<IActionResult> CreateImages([FromRoute] Guid categoryId, [FromRoute] Guid productId, [FromForm] ProductImagesRequest request, CancellationToken cancellationToken)
     {

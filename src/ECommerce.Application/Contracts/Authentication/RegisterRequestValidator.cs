@@ -1,5 +1,4 @@
 ﻿using ECommerce.Application.Abstractions.Constants;
-using FluentValidation;
 
 namespace ECommerce.Application.Contracts.Authentication;
 

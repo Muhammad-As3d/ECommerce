@@ -1,36 +1,34 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Api.Exceptions;
 
-internal sealed class ValidationExceptionHandler(IProblemDetailsService problemDetailsService) : IExceptionHandler
+internal sealed class ValidationExceptionHandler(IProblemDetailsService problemDetailsService,
+    IStringLocalizer localizer) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
         if (exception is not ValidationException validationException)
             return false;
 
-        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-
         var errors = validationException.Errors
             .GroupBy(e => e.PropertyName)
             .ToDictionary(
-                g => g.Key.ToLowerInvariant(),
+                g => g.Key,
                 g => g.Select(e => e.ErrorMessage).ToArray()
             );
+
+        httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
-            Exception = exception,
-            ProblemDetails = new ProblemDetails
+            Exception = validationException,
+            ProblemDetails = new ValidationProblemDetails(errors)
             {
-                Title = "Validation Error",
-                Detail = "One or more validation errors occurred.",
+                Title = localizer["Validation.Title"].Value,
                 Status = StatusCodes.Status400BadRequest,
-                Type = "https://httpstatuses.com/400",
-                Extensions = { ["errors"] = errors }
+                Type = "https://www.rfc-editor.org/rfc/rfc9110#section-15.5.1"
             }
         });
     }

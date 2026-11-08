@@ -1,6 +1,4 @@
-﻿using ECommerce.Application.Contracts.Category;
-
-namespace ECommerce.Application.Features.Categories.Queries.GetCategory;
+﻿namespace ECommerce.Application.Features.Categories.Queries.GetCategory;
 
 public record GetCategoryByIdQuery(Guid Id) : IRequest<Result<CategoryResponse>>;
 
@@ -15,7 +13,7 @@ public class GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandl
             .GetByPredicateProjectAsync<CategoryResponse>(x => x.Id == request.Id, cancellationToken);
 
         if (category is null)
-            return Result.Failure<CategoryResponse>(CategoryErrors.NotFound(request.Id));
+            return CategoryErrors.NotFound(request.Id);
 
         return Result.Success(category);
     }

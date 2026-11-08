@@ -2,7 +2,7 @@
 using ECommerce.Application.Contracts.Users;
 using ECommerce.Application.Interfaces.Authentication;
 
-namespace ECommerce.Api.Controllers;
+namespace ECommerce.Api.Controllers; 
 
 [Route("/[controller]")]
 [ApiController]

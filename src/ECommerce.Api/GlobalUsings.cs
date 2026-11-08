@@ -1,6 +1,9 @@
 ﻿global using ECommerce.Api.Controllers.Base;
+global using ECommerce.Api.Exceptions;
 global using ECommerce.Api.ViewModels.Addresses;
 global using ECommerce.Api.ViewModels.Products;
+global using ECommerce.Application;
+global using ECommerce.Application.Abstractions.Constants;
 global using ECommerce.Application.Abstractions.Pagination;
 global using ECommerce.Application.Features.Addresses.Commands.AddAddress;
 global using ECommerce.Application.Features.Addresses.Commands.DeleteAddress;
@@ -12,8 +15,15 @@ global using ECommerce.Application.Features.Products.Commands.ToggleStatus;
 global using ECommerce.Application.Features.Products.Commands.UpdateProduct;
 global using ECommerce.Application.Features.Products.Queries.GetAllProducts;
 global using ECommerce.Application.Features.Products.Queries.GetProduct;
+global using ECommerce.Domain.Abstractions;
+global using ECommerce.Infrastructure;
 global using ECommerce.Infrastructure.Identity.Seeding;
 global using Mapster;
 global using MediatR;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Infrastructure;
+global using Microsoft.Extensions.Localization;
+global using System.Diagnostics;
+global using System.Text.Json.Serialization;
+

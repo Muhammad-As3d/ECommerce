@@ -1,0 +1,10 @@
+{
+  "Category.NotFound": "القسم بالمعرّف '{0}' غير موجود.",
+  "Category.DuplicatedName": "يوجد قسم بهذا الاسم بالفعل.",
+  "Category.CategoryHasProducts": "لا يمكن حذف قسم يحتوي على منتجات.",
+  
+  "Fields.Name": "الاسم",
+  "Validation.Title": "حدث خطأ أو أكثر أثناء التحقق من البيانات.",
+  "Validation.Required": "حقل '{0}' مطلوب.",
+  "Validation.Length": "يجب أن يتراوح طول '{0}' بين {1} و{2} حرفًا."
+}

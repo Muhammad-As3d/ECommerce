@@ -1,6 +1,6 @@
-﻿namespace ECommerce.Application.Interfaces.Repositories;
+﻿namespace ECommerce.Application.Interfaces.Authentication;
 
-public interface IUserRepository
+public interface IAccountService
 {
     Task<UserProfileResponse> GetProfileAsync(string userId, CancellationToken cancellationToken = default);
     Task<Result> UpdateProfileAsync(string userId, UpdateProfileRequest request, CancellationToken cancellationToken = default);

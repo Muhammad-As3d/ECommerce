@@ -1,28 +1,35 @@
-﻿using ECommerce.Domain.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-
-namespace ECommerce.Api.Extensions;
+﻿namespace ECommerce.Api.Extensions;
 
 public static class ResultExtension
 {
-    public static IActionResult ToProblem(this Result result)
+    public static ObjectResult ToProblem(this Result result, HttpContext httpContext)
     {
         if (result.IsSuccess)
-            throw new InvalidOperationException("Cannot convert success result to ProblemDetails.");
+            throw new InvalidOperationException("Cannot convert success result to a Problem.");
+
+        var localizer = httpContext.RequestServices.GetRequiredService<IStringLocalizer>();
+        var localized = localizer[result.Error.Code, result.Error.Arguments];
+        var detail = localized.ResourceNotFound ? result.Error.Description : localized.Value;
 
         var statusCode = GetStatusCode(result.Error.ErrorType);
-        var problem = Results.Problem(statusCode: statusCode);
 
-        var problemDetails = problem.GetType().GetProperty(nameof(ProblemDetails))!.GetValue(problem) as ProblemDetails;
+        var factory = httpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
+        var problemDetails = factory.CreateProblemDetails(httpContext, statusCode: statusCode, detail: detail);
 
-        problemDetails!.Extensions = new Dictionary<string, object?>
+        if (problemDetails.Type is { } type)
         {
-            {
-                "errors" , new[] { result.Error.Code, result.Error.Description }
-            }
-        };
+            problemDetails.Type = type.Replace("https://tools.ietf.org/html/rfc9110", "https://www.rfc-editor.org/rfc/rfc9110");
+        }
 
-        return new ObjectResult(problemDetails);
+        problemDetails.Extensions.Remove("traceId");
+        problemDetails.Extensions["code"] = result.Error.Code;
+        problemDetails.Extensions["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier;
+
+
+        return new ObjectResult(problemDetails)
+        {
+            StatusCode = statusCode
+        };
     }
 
     private static int GetStatusCode(ErrorType errorType) => errorType switch

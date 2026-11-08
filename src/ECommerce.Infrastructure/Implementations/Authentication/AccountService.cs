@@ -1,16 +1,16 @@
 ﻿using ECommerce.Application.Contracts.Users;
 using Mapster;
 
-namespace ECommerce.Infrastructure.Implementations.Repositories;
+namespace ECommerce.Infrastructure.Implementations.Authentication;
 
-public class UserRepository(UserManager<User> userManager, ApplicationDbContext context) : IUserRepository
+public class AccountService(UserManager<User> userManager, ApplicationDbContext context) : IAccountService
 {
     public async Task<UserProfileResponse> GetProfileAsync(string userId, CancellationToken cancellationToken = default)
-        => await userManager.Users
-            .AsNoTracking()
-            .Where(u => u.Id == userId)
-            .ProjectToType<UserProfileResponse>()
-            .SingleAsync(cancellationToken);
+      => await userManager.Users
+          .AsNoTracking()
+          .Where(u => u.Id == userId)
+          .ProjectToType<UserProfileResponse>()
+          .SingleAsync(cancellationToken);
 
     public async Task<Result> UpdateProfileAsync(string userId, UpdateProfileRequest request, CancellationToken cancellationToken = default)
     {
@@ -31,7 +31,7 @@ public class UserRepository(UserManager<User> userManager, ApplicationDbContext 
         var result = await userManager.ChangePasswordAsync(user!, request.CurrentPassword, request.NewPassword);
 
         if (!result.Succeeded)
-            return result.ToFailureIdentityResult();
+            return result.ToError();
 
         return Result.Success();
     }

@@ -1,21 +1,18 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace ECommerce.Api.Exceptions;
 
-internal sealed class GlobalExceptionHandler(
-    IProblemDetailsService problemDetailsService,
+internal sealed class GlobalExceptionHandler(IProblemDetailsService problemDetailsService,
     ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        logger.LogError(exception, "Unhandled exception occurred");
+        var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-        httpContext.Response.StatusCode = exception switch
-        {
-            ApplicationException => StatusCodes.Status400BadRequest,
-            _ => StatusCodes.Status500InternalServerError
-        };
+        logger.LogError(exception, "An unexpected error occurred. TraceId: {TraceId}", traceId);
+
+        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
@@ -23,9 +20,10 @@ internal sealed class GlobalExceptionHandler(
             Exception = exception,
             ProblemDetails = new ProblemDetails
             {
-                Type = exception.GetType().Name,
-                Title = "An error occurred",
-                Detail = exception.Message
+                Type = "https://www.rfc-editor.org/rfc/rfc9110#section-15.6.1",
+                Title = "An unexpected error occurred.",
+                Status = StatusCodes.Status500InternalServerError,
+                Extensions = { ["traceId"] = traceId }
             }
         });
     }
