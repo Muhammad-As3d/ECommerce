@@ -26,4 +26,6 @@ public static class UserErrors
         Error.Unauthorized("User.InvalidRefreshToken", "You entered Invalid Refresh token");
     public static Error IsDisabled =>
     Error.Unauthorized("User.IsDisabled", "Disabled User, Please contact your administrator");
+    public static readonly Error InvalidRoles =
+    Error.BadRequest("User.InvalidRoles", "this Roles is invalid.");
 }

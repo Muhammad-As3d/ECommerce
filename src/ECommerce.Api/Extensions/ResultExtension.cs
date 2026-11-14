@@ -7,29 +7,19 @@ public static class ResultExtension
         if (result.IsSuccess)
             throw new InvalidOperationException("Cannot convert success result to a Problem.");
 
-        var localizer = httpContext.RequestServices.GetRequiredService<IStringLocalizer>();
-        var localized = localizer[result.Error.Code, result.Error.Arguments];
-        var detail = localized.ResourceNotFound ? result.Error.Description : localized.Value;
+        var error = result.Error;
+        var services = httpContext.RequestServices;
 
-        var statusCode = GetStatusCode(result.Error.ErrorType);
+        var localized = services.GetRequiredService<IStringLocalizer>()[error.Code, error.Arguments];
+        var detail = localized.ResourceNotFound ? error.Description : localized.Value;
+        var statusCode = GetStatusCode(error.ErrorType);
 
-        var factory = httpContext.RequestServices.GetRequiredService<ProblemDetailsFactory>();
-        var problemDetails = factory.CreateProblemDetails(httpContext, statusCode: statusCode, detail: detail);
+        var problem = services.GetRequiredService<ProblemDetailsFactory>()
+            .CreateProblemDetails(httpContext, statusCode: statusCode, detail: detail);
 
-        if (problemDetails.Type is { } type)
-        {
-            problemDetails.Type = type.Replace("https://tools.ietf.org/html/rfc9110", "https://www.rfc-editor.org/rfc/rfc9110");
-        }
+        problem.Extensions["code"] = error.Code;
 
-        problemDetails.Extensions.Remove("traceId");
-        problemDetails.Extensions["code"] = result.Error.Code;
-        problemDetails.Extensions["traceId"] = Activity.Current?.Id ?? httpContext.TraceIdentifier;
-
-
-        return new ObjectResult(problemDetails)
-        {
-            StatusCode = statusCode
-        };
+        return new ObjectResult(problem) { StatusCode = statusCode };
     }
 
     private static int GetStatusCode(ErrorType errorType) => errorType switch
@@ -40,6 +30,7 @@ public static class ResultExtension
         ErrorType.InvalidCredentials => StatusCodes.Status401Unauthorized,
         ErrorType.Conflict => StatusCodes.Status409Conflict,
         ErrorType.BadRequest => StatusCodes.Status400BadRequest,
+        ErrorType.Failure => StatusCodes.Status422UnprocessableEntity,
         _ => StatusCodes.Status500InternalServerError
     };
 }

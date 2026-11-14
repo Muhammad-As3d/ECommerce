@@ -1,5 +1,6 @@
 using ECommerce.Api.Authorization;
 using Microsoft.AspNetCore.Localization;
+using System.Net;
 
 namespace ECommerce.Api;
 
@@ -32,7 +33,34 @@ public static class DependencyInjection
 
         services.AddExceptionHandler<ValidationExceptionHandler>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
-        services.AddProblemDetails();
+        services.AddProblemDetails(options =>
+        {
+            options.CustomizeProblemDetails = ctx =>
+            {
+                var problem = ctx.ProblemDetails;
+                var httpContext = ctx.HttpContext;
+                var request = httpContext.Request;
+                var status = problem.Status ?? httpContext.Response.StatusCode;
+
+                problem.Instance ??= $"{request.Method} {request.Path}"; // RFC 9457
+
+                problem.Extensions.TryAdd("code", problem is ValidationProblemDetails
+                    ? "General.Validation"
+                    : $"General.{(HttpStatusCode)status}");
+
+                var localizer = httpContext.RequestServices.GetRequiredService<IStringLocalizer>();
+                var title = localizer[problem is ValidationProblemDetails ? "Validation.Title" : $"ProblemTitle.{status}"];
+                if (!title.ResourceNotFound)
+                    problem.Title = title.Value;
+            };
+        });
+
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            foreach (var mapping in options.ClientErrorMapping.Values)
+                mapping.Link = mapping.Link?.Replace(
+                    "https://tools.ietf.org/html/rfc9110", "https://www.rfc-editor.org/rfc/rfc9110");
+        });
 
         services.Configure<RequestLocalizationOptions>(options =>
         {

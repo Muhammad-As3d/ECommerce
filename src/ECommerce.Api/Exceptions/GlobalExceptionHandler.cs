@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Diagnostics;
 
 namespace ECommerce.Api.Exceptions;
 
@@ -21,9 +20,7 @@ internal sealed class GlobalExceptionHandler(IProblemDetailsService problemDetai
             ProblemDetails = new ProblemDetails
             {
                 Type = "https://www.rfc-editor.org/rfc/rfc9110#section-15.6.1",
-                Title = "An unexpected error occurred.",
-                Status = StatusCodes.Status500InternalServerError,
-                Extensions = { ["traceId"] = traceId }
+                Status = StatusCodes.Status500InternalServerError
             }
         });
     }

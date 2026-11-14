@@ -24,6 +24,11 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<AppSettings>()
+            .BindConfiguration(AppSettings.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         //caching
         //services.AddStackExchangeRedisCache(options =>
         //{
@@ -45,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IOrderNumberGenerator, SqlOrderNumberGenerator>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>(name: "Database");
@@ -109,9 +115,6 @@ public static class DependencyInjection
             options.Password.RequiredLength = 8;
             options.SignIn.RequireConfirmedEmail = true;
             options.User.RequireUniqueEmail = true;
-
-            options.Lockout.AllowedForNewUsers = true;
-            options.Lockout.MaxFailedAccessAttempts = 5;
         });
 
         return services;

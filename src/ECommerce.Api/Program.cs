@@ -17,11 +17,14 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
-if (builder.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    await using var scope = app.Services.CreateAsyncScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
+
+    if (builder.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+        await dbContext.Database.MigrateAsync();
+
+    await PermissionSeeder.SeedAdminPermissionsAsync(dbContext);
 }
 
 app.UseSerilogRequestLogging(options =>

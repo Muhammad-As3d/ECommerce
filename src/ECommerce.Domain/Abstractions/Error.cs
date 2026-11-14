@@ -35,4 +35,13 @@ public record Error(string Code, string Description, ErrorType ErrorType)
         new(code, description, ErrorType.InvalidCredentials) { Arguments = arguments };
 }
 
-public enum ErrorType { Failure, NotFound, Conflict, BadRequest, Unauthorized, Forbidden, InvalidCredentials }
+public enum ErrorType
+{
+    Failure,
+    NotFound,
+    Conflict,
+    BadRequest,
+    Unauthorized,
+    Forbidden,
+    InvalidCredentials
+}

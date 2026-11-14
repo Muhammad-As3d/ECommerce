@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
-public class ApplicationRoleConfiguration : IEntityTypeConfiguration<Role>
+public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {

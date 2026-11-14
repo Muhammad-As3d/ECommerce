@@ -72,6 +72,9 @@ internal class RoleService(RoleManager<Role> roleManager, ApplicationDbContext c
         if (role.IsDefault)
             return RoleErrors.DefaultRoleCannotBeModified;
 
+        if (role.Name == DefaultRoles.Admin.Name)
+            return RoleErrors.AdminRoleCannotBeModified;
+
         var roleIsExists = await roleManager.Roles.AnyAsync(x => x.Name == request.Name && x.Id != Id, cancellationToken);
 
         if (roleIsExists)
@@ -83,7 +86,6 @@ internal class RoleService(RoleManager<Role> roleManager, ApplicationDbContext c
             return RoleErrors.InvalidPermissions;
 
         role.Name = request.Name;
-
         var result = await roleManager.UpdateAsync(role);
 
         if (!result.Succeeded)
@@ -121,6 +123,9 @@ internal class RoleService(RoleManager<Role> roleManager, ApplicationDbContext c
 
         if (role.IsDefault)
             return RoleErrors.DefaultRoleCannotBeModified;
+
+        if (role.Name == DefaultRoles.Admin.Name)
+            return RoleErrors.AdminRoleCannotBeModified;
 
         role.IsDeleted = !role.IsDeleted;
         var result = await roleManager.UpdateAsync(role);

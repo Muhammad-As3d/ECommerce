@@ -40,6 +40,14 @@ public static class Permissions
     public const string AddProductImages = "product:add images";
     public const string RemoveProductImages = "product:remove images";
 
+    //Users
+    public const string UsersGetAll = "user:getAll";
+    public const string UsersGet = "user:get";
+    public const string UsersAdd = "user:Add";
+    public const string UsersUpdate = "user:update";
+    public const string UsersDisable = "user:disable";
+    public const string UsersUnlock = "user:unlock";
+
     public static IList<string?> GetAllPermissions() =>
-        typeof(Permissions).GetFields().Select(f => f.GetValue(f) as string).ToList();
+        [.. typeof(Permissions).GetFields().Select(f => f.GetValue(f) as string)];
 }

@@ -1,6 +1,7 @@
 ﻿namespace ECommerce.Application.Features.Carts.Commands.AddCartItem;
 
-internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser currentUser) : IRequestHandler<AddCartItemCommand, Result<Guid>>
+internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser currentUser)
+    : IRequestHandler<AddCartItemCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AddCartItemCommand request, CancellationToken cancellationToken)
     {
@@ -16,7 +17,7 @@ internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser cu
                 x.Price), cancellationToken);
 
         if (product is null)
-            return Result.Failure<Guid>(ProductErrors.NotFound(request.ProductId));
+            return ProductErrors.NotFound(request.ProductId);
 
         if (product.Stock < request.Quantity)
             return Result.Failure<Guid>(CartErrors.QuantityNotAvailable);

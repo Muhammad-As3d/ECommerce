@@ -12,6 +12,6 @@ public abstract class ApiBaseController : ControllerBase
 
     protected IActionResult HandleResult<TValue>(Result<TValue> result, string routeName, Func<TValue, object> routeValues) =>
         result.IsSuccess
-            ? CreatedAtAction(routeName, routeValues(result.Value), null)
+            ? CreatedAtAction(routeName, routeValues(result.Value), result.Value)
             : result.ToProblem(HttpContext);
 }

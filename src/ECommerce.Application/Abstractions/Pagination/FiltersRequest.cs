@@ -1,6 +1,4 @@
-﻿using ECommerce.Domain.Enums;
-
-namespace ECommerce.Application.Abstractions.Pagination;
+﻿namespace ECommerce.Application.Abstractions.Pagination;
 
 public sealed class FiltersRequest
 {

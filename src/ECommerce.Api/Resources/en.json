@@ -5,5 +5,14 @@
   "Fields.Name": "Name",
   "Validation.Title": "One or more validation errors occurred.",
   "Validation.Required": "'{0}' must not be empty.",
-  "Validation.Length": "'{0}' must be between {1} and {2} characters."
+  "Validation.Length": "'{0}' must be between {1} and {2} characters.",
+  "ProblemTitle.400": "Bad request.",
+  "ProblemTitle.401": "Unauthorized.",
+  "ProblemTitle.403": "Forbidden.",
+  "ProblemTitle.404": "Resource not found.",
+  "ProblemTitle.405": "Method not allowed.",
+  "ProblemTitle.409": "Conflict.",
+  "ProblemTitle.415": "Unsupported media type.",
+  "ProblemTitle.422": "The request could not be processed.",
+  "ProblemTitle.500": "An unexpected error occurred."
 } 

@@ -4,7 +4,6 @@ using ECommerce.Application.Features.Carts.Commands.ClearCart;
 using ECommerce.Application.Features.Carts.Commands.DeleteCartItem;
 using ECommerce.Application.Features.Carts.Commands.UpdateCartItem;
 using ECommerce.Application.Features.Carts.Queries.GetCart;
-using ECommerce.Infrastructure.Identity.Seeding;
 
 namespace ECommerce.Api.Controllers;
 
@@ -24,7 +23,7 @@ public class CartsController(ISender sender) : ApiBaseController
     [HttpPost("item")]
     public async Task<IActionResult> AddItems(CartItemRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await sender.Send(new AddCartItemCommand(request.ProductId, request.Quantity), cancellationToken);
+        var result = await sender.Send(request.Adapt<AddCartItemCommand>(), cancellationToken);
 
         return HandleResult(result);
     }

@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Infrastructure.Persistence.EntitiesConfigurations;
 
-public class ApplicationUserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

@@ -12,4 +12,6 @@ public static class RoleErrors
         Error.BadRequest("Role.InvalidPermissions", "this permissions is invalid.");
     public static readonly Error DefaultRoleCannotBeModified =
     Error.BadRequest("Role.DefaultRoleCannotBeModified", "default roles cannot be modified.");
+    public static readonly Error AdminRoleCannotBeModified =
+    Error.BadRequest("Role.AdminRoleCannotBeModified", "Administrator roles cannot be modified.");
 }

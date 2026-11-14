@@ -1,16 +1,17 @@
 ﻿using ECommerce.Application.Contracts.Users;
+using ECommerce.Infrastructure.Helpers;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 
 namespace ECommerce.Infrastructure.Implementations.Authentication;
 
 public class AuthService(UserManager<User> userManager, IEmailSender emailSender,
-    IHttpContextAccessor httpContextAccessor, SignInManager<User> signInManager,
+    IOptions<AppSettings> appSettings, SignInManager<User> signInManager,
     IJwtProvider jwtProvider, ApplicationDbContext context, ILogger<AuthService> logger) : IAuthService
 {
     private readonly UserManager<User> _userManager = userManager;
     private readonly IEmailSender _emailSender = emailSender;
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly AppSettings _appSettings = appSettings.Value;
     private readonly SignInManager<User> _signInManager = signInManager;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly int _refreshTokenExpirationDays = 14;
@@ -207,11 +208,18 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
 
         logger.LogInformation("Reset code => {code}", code);
 
-        var route = "auth/forget-password";
-        var origin = _httpContextAccessor.HttpContext!.Request.Headers.Origin;
-        var Url = $"{origin}/{route}?userId={user.Id}&code={code}";
+        var url = $"{_appSettings.FrontendUrl.TrimEnd('/')}/auth/reset-password" +
+                  $"?email={Uri.EscapeDataString(user.Email!)}&code={code}";
 
-        await _emailSender.SendEmailAsync(user.Email!, "Change your password", Url);
+        var body = EmailBodyBuilder.Generate("ResetPassword", new Dictionary<string, string>
+        {
+            ["app_name"] = _appSettings.Name,
+            ["name"] = user.FirstName,
+            ["action_url"] = url,
+            ["year"] = DateTime.UtcNow.Year.ToString()
+        });
+
+        await _emailSender.SendEmailAsync(user.Email!, $"Reset your {_appSettings.Name} password", body);
 
         return Result.Success();
     }
@@ -246,13 +254,20 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-        logger.LogInformation("Confirmation  {Code} => ", code);
+        logger.LogInformation("Confirmation code => {Code}", code);
 
-        var route = "auth/confirmation-email";
-        var origin = _httpContextAccessor.HttpContext!.Request.Headers.Origin;
-        var Url = $"{origin}/{route}?userId={user.Id}&code={code}";
+        var url = $"{_appSettings.FrontendUrl.TrimEnd('/')}/auth/confirm-email" +
+                  $"?userId={user.Id}&code={code}";
 
-        await _emailSender.SendEmailAsync(user.Email!, "Confirmation Email", Url);
+        var body = EmailBodyBuilder.Generate("EmailConfirmation", new Dictionary<string, string>
+        {
+            ["app_name"] = _appSettings.Name,
+            ["name"] = user.FirstName,
+            ["action_url"] = url,
+            ["year"] = DateTime.UtcNow.Year.ToString()
+        });
+
+        await _emailSender.SendEmailAsync(user.Email!, $"Confirm your {_appSettings.Name} email", body);
     }
 
     private static string GenerateRefreshToken() =>
