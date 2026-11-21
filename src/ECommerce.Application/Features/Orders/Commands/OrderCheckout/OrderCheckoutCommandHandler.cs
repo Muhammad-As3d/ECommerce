@@ -12,16 +12,16 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
 
     public async Task<Result<OrderResponse>> Handle(OrderCheckoutCommand request, CancellationToken cancellationToken)
     {
-        if (request.PaymentMethod != PaymentMethod.CashOnDelivery)
-            return Result.Failure<OrderResponse>(OrderErrors.UnsupportedPaymentMethod);
+        if (request.PaymentMethod is not (PaymentMethod.CashOnDelivery or PaymentMethod.Card))
+            return OrderErrors.UnsupportedPaymentMethod;
 
         if (!string.IsNullOrWhiteSpace(request.CouponCode))
-            return Result.Failure<OrderResponse>(OrderErrors.CouponNotSupported);
+            return OrderErrors.CouponNotSupported;
 
         var cartItems = await GetCartItemsAsync(cancellationToken);
 
         if (cartItems.Count == 0)
-            return Result.Failure<OrderResponse>(CartErrors.Empty);
+            return CartErrors.Empty;
 
         //var addressInfo = await unitOfWork.Repository<Address>().GetByPredicateProjectAsync<ShippingAddressInfo>(
         //    x => x.Id == request.ShippingAddressId && x.UserId == currentUser.Id, cancellationToken);
@@ -40,24 +40,24 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
             ), cancellationToken);
 
         if (addressInfo is null)
-            return Result.Failure<OrderResponse>(AddressErrors.AddressNotFound);
+            return AddressErrors.AddressNotFound;
 
         var productRepository = (IProductRepository)unitOfWork.Repository<Product>();
         var productIds = cartItems.Select(x => x.ProductId).Distinct().ToArray();
         var productsInfo = await productRepository.GetCheckoutInfoByIdsAsync(productIds, cancellationToken);
 
         if (productsInfo.Count != productIds.Length)
-            return Result.Failure<OrderResponse>(OrderErrors.ProductNotAvailable);
+            return OrderErrors.ProductNotAvailable;
 
         var productsById = productsInfo.ToDictionary(x => x.Id);
 
         foreach (var item in cartItems)
         {
             if (!productsById.TryGetValue(item.ProductId, out var product) || product.IsDeleted || !product.IsActive)
-                return Result.Failure<OrderResponse>(OrderErrors.ProductNotAvailable);
+                return OrderErrors.ProductNotAvailable;
 
             if (item.Quantity <= 0 || product.Stock < item.Quantity)
-                return Result.Failure<OrderResponse>(CartErrors.InsufficientStock);
+                return CartErrors.InsufficientStock;
         }
 
         var shippingAddress = ShippingAddressSnapshot.Create(
@@ -78,8 +78,14 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
             order.AddItem(product.Id, product.Name, product.Sku, product.Price, item.Quantity);
         }
 
-        var payment = Payment.CreateCash(order.Id, order.TotalAmount, order.Currency);
-        order.AddPayment(payment);
+        // Card payments are created later via POST /payments (Paymob intention).
+        Payment? payment = null;
+
+        if (order.PaymentMethod == PaymentMethod.CashOnDelivery)
+        {
+            payment = Payment.CreateCash(order.Id, order.TotalAmount, order.Currency);
+            order.AddPayment(payment);
+        }
 
         await unitOfWork.BeginTransactionAsync(cancellationToken);
 
@@ -92,7 +98,7 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
                 if (!decreased)
                 {
                     await unitOfWork.RollbackTransactionAsync(cancellationToken);
-                    return Result.Failure<OrderResponse>(CartErrors.InsufficientStock);
+                    return CartErrors.InsufficientStock;
                 }
             }
 
@@ -123,8 +129,10 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
             order.Status.ToString(),
             order.TotalAmount,
             order.Currency,
-            new PaymentResponse(payment.Id, payment.Method.ToString(), payment.Status.ToString(),
-            null, payment.Amount, payment.Currency)));
+            payment is null
+                ? null
+                : new PaymentResponse(payment.Id, payment.Method.ToString(), payment.Status.ToString(),
+                    null, payment.Amount, payment.Currency)));
     }
 
     private async Task<List<CartItemCheckoutInfo>> GetCartItemsAsync(CancellationToken cancellationToken)

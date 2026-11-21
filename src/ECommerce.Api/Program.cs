@@ -37,8 +37,7 @@ app.UseSerilogRequestLogging(options =>
 
     options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
     {
-        diagnosticContext.Set(
-            "ResponseTraceId", Activity.Current?.Id ?? httpContext.TraceIdentifier);
+        diagnosticContext.Set("ResponseTraceId", Activity.Current?.Id ?? httpContext.TraceIdentifier);
     };
 });
 
@@ -46,16 +45,16 @@ app.UseRequestLocalization();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.MapOpenApi();
+app.MapScalarApiReference();
+//}
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+//if (!app.Environment.IsDevelopment())
+//{
+app.UseHttpsRedirection();
+//}
 
 app.UseCors();
 app.UseStaticFiles();

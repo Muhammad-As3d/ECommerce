@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ECommerce.Infrastructure.Identity.Settings;
+﻿namespace ECommerce.Infrastructure.Settings;
 
 public class MailSetting
 {

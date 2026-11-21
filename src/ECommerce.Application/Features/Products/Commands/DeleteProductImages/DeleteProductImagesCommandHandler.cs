@@ -21,7 +21,7 @@ public class DeleteProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileServ
             .AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
-            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var repo = unitOfWork.Repository<ProductImage>();
 
@@ -31,7 +31,7 @@ public class DeleteProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileServ
             .GetAllSpecProjectAsync<ProductImageResponse>(spec, cancellationToken);
 
         if (images is null || !images.Any())
-            return Result.Failure(ProductErrors.NotfoundProductImages);
+            return ProductErrors.NotfoundProductImages;
 
         foreach (var image in images)
         {

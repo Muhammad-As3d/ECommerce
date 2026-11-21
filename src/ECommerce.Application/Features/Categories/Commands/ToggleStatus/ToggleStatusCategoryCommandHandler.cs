@@ -11,12 +11,12 @@ public class ToggleStatusCategoryCommandHandler(IUnitOfWork unitOfWork) : IReque
         var isCategoryHasProducts = await repo.AnyAsync(x => x.Id == request.Id && x.Products.Any(), cancellationToken);
 
         if (isCategoryHasProducts)
-            return Result.Failure(CategoryErrors.CategoryHasProducts);
+            return CategoryErrors.CategoryHasProducts;
 
         var affectedRows = await repo.ToggleStatusAsync(request.Id, cancellationToken);
 
         if (affectedRows == 0)
-            return Result.Failure(CategoryErrors.NotFound(request.Id));
+            return CategoryErrors.NotFound(request.Id);
 
         return Result.Success();
     }

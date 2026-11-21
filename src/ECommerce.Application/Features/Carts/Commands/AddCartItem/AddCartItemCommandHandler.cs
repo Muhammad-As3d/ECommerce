@@ -20,7 +20,7 @@ internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser cu
             return ProductErrors.NotFound(request.ProductId);
 
         if (product.Stock < request.Quantity)
-            return Result.Failure<Guid>(CartErrors.QuantityNotAvailable);
+            return CartErrors.QuantityNotAvailable;
 
         var cartId = await cartRepository
             .GetByPredicateProjectAsync(x => x.UserId == currentUser.Id, x => (Guid?)x.Id,
@@ -38,7 +38,7 @@ internal class AddCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser cu
             .AnyAsync(x => x.ProductId == request.ProductId && x.CartId == cartId.Value, cancellationToken);
 
         if (productAlreadyExists)
-            return Result.Failure<Guid>(CartErrors.ProductIsOnCart);
+            return CartErrors.ProductIsOnCart;
 
         var cartItem = CartItem.Create(cartId.Value, request.ProductId, request.Quantity, product.Price);
         await cartItemRepository.AddAsync(cartItem, cancellationToken);

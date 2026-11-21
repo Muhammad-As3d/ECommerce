@@ -12,6 +12,6 @@ public class DeleteAddressCommandHandler(IUnitOfWork unitOfWork, ICurrentUser cu
 
         return rowsAffected > 0
             ? Result.Success()
-            : Result.Failure(AddressErrors.AddressNotFound);
+            : AddressErrors.AddressNotFound;
     }
 }

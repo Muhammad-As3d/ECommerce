@@ -19,7 +19,7 @@ public class GetProductByIdQueryHandler(IUnitOfWork unitOfWork, ICacheService ca
         var categoryIsExists = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
-            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var spec = new GetProductByIdSpecification(request.CategoryId, request.Id);
 
@@ -28,7 +28,7 @@ public class GetProductByIdQueryHandler(IUnitOfWork unitOfWork, ICacheService ca
                 .GetBySpecProjectAsync<ProductResponse>(spec, cancellationToken);
 
         if (product is null)
-            return Result.Failure<ProductResponse>(ProductErrors.NotFound(request.Id));
+            return ProductErrors.NotFound(request.Id);
 
         await cacheService.SetAsync(cacheKey, product, cancellationToken: cancellationToken);
 

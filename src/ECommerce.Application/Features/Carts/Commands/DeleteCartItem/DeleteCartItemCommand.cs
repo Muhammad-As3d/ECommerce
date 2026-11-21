@@ -12,6 +12,6 @@ internal class DeleteCartItemCommandHandler(IUnitOfWork unitOfWork, ICurrentUser
 
         return rowsAffected > 0
             ? Result.Success()
-            : Result.Failure(CartErrors.ItemsNotFound);
+            : CartErrors.ItemsNotFound;
     }
 }

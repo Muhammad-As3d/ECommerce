@@ -11,7 +11,7 @@ public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
         var isNameExists = await repo.AnyAsync(x => x.Name == request.Name, cancellationToken);
 
         if (isNameExists)
-            return Result.Failure<Guid>(CategoryErrors.DuplicatedName);
+            return CategoryErrors.DuplicatedName;
 
         var category = Category.Create(request.Name, request.Description);
 

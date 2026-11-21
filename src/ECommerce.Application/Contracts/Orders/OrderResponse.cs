@@ -6,7 +6,7 @@ public record OrderResponse(
     string Status,
     decimal TotalAmount,
     string Currency,
-    PaymentResponse Payment);
+    PaymentResponse? Payment);
 
 public record PaymentResponse(
     Guid PaymentId,

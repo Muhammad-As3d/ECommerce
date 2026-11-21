@@ -11,7 +11,7 @@ public class GetOrderByIdQueryHandler(IUnitOfWork unitOfWork, ICurrentUser curre
             .GetByPredicateProjectAsync<OrderDetailsResponse>(x => x.UserId == currentUser.Id && x.Id == request.Id, cancellationToken);
 
         if (order is null)
-            return Result.Failure<OrderDetailsResponse>(OrderErrors.NotFound(request.Id));
+            return OrderErrors.NotFound(request.Id);
 
         return Result.Success(order);
     }

@@ -23,7 +23,7 @@ internal sealed class CancelOrderCommandHandler(IUnitOfWork unitOfWork, ICurrent
             cancellationToken);
 
         if (orderInfo is null)
-            return Result.Failure<CancelOrderResponse>(OrderErrors.NotFound(request.OrderId));
+            return OrderErrors.NotFound(request.OrderId);
 
         var canCancel = orderInfo.Status is OrderStatus.PendingPayment
             or OrderStatus.Confirmed
@@ -31,7 +31,7 @@ internal sealed class CancelOrderCommandHandler(IUnitOfWork unitOfWork, ICurrent
             or OrderStatus.PaymentFailed;
 
         if (!canCancel)
-            return Result.Failure<CancelOrderResponse>(OrderErrors.NotAllowedCancel);
+            return OrderErrors.NotAllowedCancel;
 
         var previousStatus = orderInfo.Status;
         var productRepository = (IProductRepository)unitOfWork.Repository<Product>();

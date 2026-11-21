@@ -14,10 +14,10 @@ internal sealed class MarkOrderAsShippedCommandHandler(IUnitOfWork unitOfWork, I
             cancellationToken);
 
         if (orderInfo is null)
-            return Result.Failure<MarkOrderAsShippedResponse>(OrderErrors.NotFound(request.OrderId));
+            return OrderErrors.NotFound(request.OrderId);
 
         if (orderInfo.Status is not OrderStatus.Processing)
-            return Result.Failure<MarkOrderAsShippedResponse>(OrderErrors.StatusNotProcessing);
+            return OrderErrors.StatusNotProcessing;
 
         var order = Order.CreateStub(orderInfo.Id, orderInfo.RowVersion, orderInfo.Status);
         var updatedProperties = order.MarkShipped(

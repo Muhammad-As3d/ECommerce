@@ -9,14 +9,14 @@ internal class UpdateItemQuantityCommandHandler(IUnitOfWork unitOfWork, ICurrent
             .AnyAsync(x => x.Id == request.CartItemId && x.Cart.UserId == currentUser.Id, cancellationToken);
 
         if (!itemExists)
-            return Result.Failure(CartErrors.CartItemsNotFound);
+            return CartErrors.CartItemsNotFound;
 
         var quantityExists = await unitOfWork
             .Repository<CartItem>()
             .AnyAsync(x => x.Id == request.CartItemId && x.Product.Stock >= request.Quantity, cancellationToken);
 
         if (!quantityExists)
-            return Result.Failure(CartErrors.InsufficientStock);
+            return CartErrors.InsufficientStock;
 
         var item = CartItem.CreateStub(request.CartItemId);
         var changedProperties = item.UpdateQuantity(request.Quantity);

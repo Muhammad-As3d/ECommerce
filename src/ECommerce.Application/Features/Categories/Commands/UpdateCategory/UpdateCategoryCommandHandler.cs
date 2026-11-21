@@ -12,7 +12,7 @@ public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
         var exists = await repo.AnyAsync(x => x.Id == request.Id, cancellationToken);
 
         if (!exists)
-            return Result.Failure(CategoryErrors.NotFound(request.Id));
+            return CategoryErrors.NotFound(request.Id);
 
         var category = Category.CreateStub(request.Id);
 

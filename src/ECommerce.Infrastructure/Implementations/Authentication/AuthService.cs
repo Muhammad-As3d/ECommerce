@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.Contracts.Users;
 using ECommerce.Infrastructure.Helpers;
+using ECommerce.Infrastructure.Settings;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 
@@ -21,7 +22,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var emailIsExists = await _userManager.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
 
         if (emailIsExists)
-            return Result.Failure(UserErrors.DuplicatedEmail);
+            return UserErrors.DuplicatedEmail;
 
         var user = new User
         {
@@ -44,10 +45,10 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
     public async Task<Result> ConfirmationEmailAsync(ConfirmationEmailRequest request)
     {
         if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
-            return Result.Failure(UserErrors.InvalidCode);
+            return UserErrors.InvalidCode;
 
         if (user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailAlreadyConfirmed);
+            return UserErrors.EmailAlreadyConfirmed;
 
         var code = request.Code;
 
@@ -57,7 +58,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         }
         catch (FormatException)
         {
-            return Result.Failure(UserErrors.InvalidCode);
+            return UserErrors.InvalidCode;
         }
 
         var result = await _userManager.ConfirmEmailAsync(user, code);
@@ -76,7 +77,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
             return Result.Success();
 
         if (user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailAlreadyConfirmed);
+            return UserErrors.EmailAlreadyConfirmed;
 
         await SendConfirmationEmailAsync(user);
 
@@ -101,7 +102,7 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
                 ? UserErrors.LockedUser
                 : UserErrors.InvalidCredentials;
 
-            return Result.Failure<AuthResponse>(error);
+            return error;
         }
 
         var (userRoles, userPermissions) = await GetUserRolesAndPermissionsAsync(user, cancellationToken);
@@ -129,23 +130,23 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var userId = _jwtProvider.ValidateToken(token);
 
         if (userId is null)
-            return Result.Failure<AuthResponse>(UserErrors.InvalidToken);
+            return UserErrors.InvalidToken;
 
         var user = await _userManager.Users.Where(x => x.Id == userId).Include(x => x.RefreshTokens).FirstOrDefaultAsync();
 
         if (user is null)
-            return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
+            return UserErrors.InvalidCredentials;
 
         if (user.IsDisabled)
-            return Result.Failure<AuthResponse>(UserErrors.IsDisabled);
+            return UserErrors.IsDisabled;
 
         var userRefreshToken = user.RefreshTokens.FirstOrDefault(x => x.Token == refreshToken && x.IsActive);
 
         if (userRefreshToken is null)
-            return Result.Failure<AuthResponse>(UserErrors.InvalidToken);
+            return UserErrors.InvalidToken;
 
         if (user.LockoutEnd > DateTime.UtcNow)
-            return Result.Failure<AuthResponse>(UserErrors.LockedUser);
+            return UserErrors.LockedUser;
 
         await context.RefreshTokens
             .Where(x => x.UserId == userId)
@@ -176,17 +177,17 @@ public class AuthService(UserManager<User> userManager, IEmailSender emailSender
         var userId = _jwtProvider.ValidateToken(token);
 
         if (userId is null)
-            return Result.Failure(UserErrors.InvalidToken);
+            return UserErrors.InvalidToken;
 
         var user = await _userManager.Users.Where(x => x.Id == userId).Include(x => x.RefreshTokens).FirstOrDefaultAsync();
 
         if (user is null)
-            return Result.Failure(UserErrors.InvalidToken);
+            return UserErrors.InvalidToken;
 
         var userRefreshToken = user.RefreshTokens.FirstOrDefault(c => c.Token == refreshToken && c.IsActive);
 
         if (userRefreshToken is null)
-            return Result.Failure(UserErrors.InvalidToken);
+            return UserErrors.InvalidToken;
 
         await context.RefreshTokens
             .Where(x => x.UserId == userId)

@@ -44,7 +44,7 @@ public class Order : AuditableEntity
 
     private Order() { }
 
-    public static Order CreateStub(Guid id, byte[] rowVersion, OrderStatus status = default)
+    public static Order CreateStub(Guid id, byte[] rowVersion, OrderStatus status = default, PaymentMethod paymentMethod = default)
     {
         if (rowVersion is null || rowVersion.Length == 0)
             throw new ArgumentException("RowVersion is required.", nameof(rowVersion));
@@ -53,7 +53,8 @@ public class Order : AuditableEntity
         {
             Id = id,
             RowVersion = rowVersion,
-            Status = status
+            Status = status,
+            PaymentMethod = paymentMethod
         };
     }
 
@@ -92,17 +93,18 @@ public class Order : AuditableEntity
         RecalculateTotals();
     }
 
-    public void ConfirmPayment()
+    public IReadOnlyCollection<string> ConfirmPayment()
     {
         if (PaymentMethod != PaymentMethod.Card)
             throw new InvalidOperationException("Order is not a card order.");
 
-        if (Status != OrderStatus.PendingPayment &&
-            Status != OrderStatus.PaymentFailed)
+        if (Status != OrderStatus.PendingPayment && Status != OrderStatus.PaymentFailed)
             throw new InvalidOperationException("Invalid order transition.");
 
         Status = OrderStatus.Confirmed;
         ConfirmedAt = DateTimeOffset.UtcNow;
+
+        return [nameof(Status), nameof(ConfirmedAt)];
     }
 
     public void AddPayment(Payment payment)
@@ -167,12 +169,13 @@ public class Order : AuditableEntity
         return [nameof(Status), nameof(DeliveredAt)];
     }
 
-    public void MarkPaymentFailed()
+    public IReadOnlyCollection<string> MarkPaymentFailed()
     {
         if (Status != OrderStatus.PendingPayment)
             throw new InvalidOperationException("Invalid order transition.");
 
         Status = OrderStatus.PaymentFailed;
+        return [nameof(Status)];
     }
 
     public IReadOnlyCollection<string> Cancel(string reason)

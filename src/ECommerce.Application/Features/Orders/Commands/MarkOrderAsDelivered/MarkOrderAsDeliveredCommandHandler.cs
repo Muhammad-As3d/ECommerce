@@ -25,13 +25,13 @@ internal sealed class MarkOrderAsDeliveredCommandHandler(IUnitOfWork unitOfWork,
             cancellationToken);
 
         if (orderInfo is null)
-            return Result.Failure<MarkOrderAsDeliveredResponse>(OrderErrors.NotFound(request.OrderId));
+            return OrderErrors.NotFound(request.OrderId);
 
         if (orderInfo.Status != OrderStatus.Shipped)
-            return Result.Failure<MarkOrderAsDeliveredResponse>(OrderErrors.StatusNotShipped);
+            return OrderErrors.StatusNotShipped;
 
         if (orderInfo.PaymentMethod == PaymentMethod.CashOnDelivery && orderInfo.CashPayment is null)
-            return Result.Failure<MarkOrderAsDeliveredResponse>(OrderErrors.CashPaymentNotFound);
+            return OrderErrors.CashPaymentNotFound;
 
         var order = Order.CreateStub(orderInfo.Id, orderInfo.RowVersion, orderInfo.Status);
         var updatedOrderProperties = order.MarkDelivered();

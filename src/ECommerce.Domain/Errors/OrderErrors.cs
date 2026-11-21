@@ -8,7 +8,7 @@ public static class OrderErrors
         Error.NotFound("Order.NotFound", $"Order with ID '{orderId}' was not found.");
 
     public static Error UnsupportedPaymentMethod =>
-        Error.BadRequest("Order.UnsupportedPaymentMethod", "Only cash on delivery is currently supported.");
+        Error.BadRequest("Order.UnsupportedPaymentMethod", "Only cash on delivery and card payments are currently supported.");
 
     public static Error CouponNotSupported =>
         Error.BadRequest("Order.CouponNotSupported", "Coupons are not supported yet.");

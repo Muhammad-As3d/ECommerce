@@ -61,22 +61,22 @@ public sealed class Payment : AuditableEntity
         };
     }
 
-    public static Payment CreateStripe(
-        Guid orderId,
-        decimal amount,
-        string currency,
-        string paymentIntentId)
+    public static Payment CreatePaymob(Guid orderId, decimal amount, string currency)
     {
         return new Payment
         {
             OrderId = orderId,
             Method = PaymentMethod.Card,
-            Provider = PaymentProvider.Stripe,
+            Provider = PaymentProvider.Paymob,
             Status = PaymentStatus.Pending,
             Amount = amount,
-            Currency = currency.ToUpperInvariant(),
-            ProviderPaymentIntentId = paymentIntentId
+            Currency = currency.ToUpperInvariant()
         };
+    }
+
+    public void AttachIntention(string intentionId)
+    {
+        ProviderPaymentIntentId = intentionId;
     }
 
     public void RequiresCustomerAction()
@@ -84,17 +84,13 @@ public sealed class Payment : AuditableEntity
         Status = PaymentStatus.RequiresAction;
     }
 
-    public void MarkProcessing()
-    {
+    public void MarkProcessing() =>
         Status = PaymentStatus.Processing;
-    }
 
-    public void MarkSucceeded(
-        string? providerChargeId,
-        DateTimeOffset paidAt)
+    public IReadOnlyCollection<string> MarkSucceeded(string? providerChargeId, DateTimeOffset paidAt)
     {
         if (Status == PaymentStatus.Succeeded)
-            return; // idempotent webhook handling
+            return [];
 
         if (Status is PaymentStatus.Cancelled or PaymentStatus.Refunded)
             throw new InvalidOperationException("Invalid payment transition.");
@@ -104,18 +100,21 @@ public sealed class Payment : AuditableEntity
         PaidAt = paidAt;
         FailureCode = null;
         FailureMessage = null;
+
+        return [nameof(Status), nameof(ProviderChargeId), nameof(PaidAt), nameof(FailureCode), nameof(FailureMessage)];
     }
 
-    public void MarkFailed(string? code, string? message)
+    public IReadOnlyCollection<string> MarkFailed(string? code, string? message)
     {
         if (Status == PaymentStatus.Succeeded)
-            throw new InvalidOperationException(
-                "Successful payment cannot be marked as failed.");
+            throw new InvalidOperationException("Successful payment cannot be marked as failed.");
 
         Status = PaymentStatus.Failed;
         FailureCode = code;
         FailureMessage = message;
         FailedAt = DateTimeOffset.UtcNow;
+
+        return [nameof(Status), nameof(FailureCode), nameof(FailureMessage), nameof(FailedAt)];
     }
 
     public IReadOnlyCollection<string> MarkCashCollected()

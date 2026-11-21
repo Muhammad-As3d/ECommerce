@@ -18,7 +18,7 @@ public class GetCategoryProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestH
             .GetBySpecProjectAsync<CategoryProductsResponse>(spec, cancellationToken);
 
         if (categoryProducts is null)
-            return Result.Failure<CategoryProductsResponse>(CategoryErrors.NotFound(request.Id));
+            return CategoryErrors.NotFound(request.Id);
 
         return Result.Success(categoryProducts);
     }

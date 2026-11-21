@@ -18,14 +18,14 @@ internal class ToggleStatusProductCommandHandler(IUnitOfWork unitOfWork, IDistri
             AnyAsync(x => x.Id == request.CategoryId && x.IsDeleted == false, cancellationToken);
 
         if (!categoryIsExists)
-            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var affectedRows = await unitOfWork
             .Repository<Product>()
             .ToggleStatusAsync(request.Id, cancellationToken);
 
         return affectedRows == 0
-            ? Result.Failure(ProductErrors.NotFound(request.Id))
+            ? ProductErrors.NotFound(request.Id)
             : Result.Success();
     }
 }

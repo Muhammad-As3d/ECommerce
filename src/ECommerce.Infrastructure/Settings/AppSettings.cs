@@ -1,4 +1,4 @@
-namespace ECommerce.Infrastructure.Identity.Settings;
+namespace ECommerce.Infrastructure.Settings;
 
 public class AppSettings
 {

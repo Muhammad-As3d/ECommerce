@@ -1,9 +1,13 @@
-﻿using ECommerce.Infrastructure.Implementations.Authentication;
+﻿using ECommerce.Infrastructure.Clients;
+using ECommerce.Infrastructure.Implementations.Authentication;
 using ECommerce.Infrastructure.Implementations.Services;
 using ECommerce.Infrastructure.Localization;
+using ECommerce.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
+using Refit;
+using System.Net.Http.Headers;
 
 namespace ECommerce.Infrastructure;
 
@@ -29,6 +33,8 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddPaymob();
+
         //caching
         //services.AddStackExchangeRedisCache(options =>
         //{
@@ -51,9 +57,29 @@ public static class DependencyInjection
         services.AddScoped<IOrderNumberGenerator, SqlOrderNumberGenerator>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IPaymobService, PaymobService>();
 
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>(name: "Database");
+
+        return services;
+    }
+
+    private static IServiceCollection AddPaymob(this IServiceCollection services)
+    {
+        services.AddOptions<PaymobSettings>()
+            .BindConfiguration(PaymobSettings.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddRefitGeneratedClient<IPaymobClient>(PaymobJsonContext.Default)
+            .ConfigureHttpClient((sp, client) =>
+            {
+                var settings = sp.GetRequiredService<IOptions<PaymobSettings>>().Value;
+                client.BaseAddress = new Uri(settings.BaseUrl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", settings.SecretKey);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
 
         return services;
     }

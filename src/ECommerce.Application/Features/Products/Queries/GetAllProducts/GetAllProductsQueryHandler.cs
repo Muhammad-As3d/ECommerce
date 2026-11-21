@@ -11,7 +11,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
         var categoryIsExists = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExists)
-            return Result.Failure<PaginatedList<ProductResponse>>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var spec = new ProductSpecification(categoryId: request.CategoryId, spec: request.Spec);
 

@@ -18,12 +18,12 @@ public class UpdateProductCommandHandler(IUnitOfWork unitOfWork, IDistributedCac
         var categoryIsExist = await unitOfWork.Repository<Category>().AnyAsync(x => x.Id == request.CategoryId, cancellationToken);
 
         if (!categoryIsExist)
-            return Result.Failure<Guid>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var productIsExist = await repo.AnyAsync(x => x.Id == request.Id && x.CategoryId == request.CategoryId, cancellationToken);
 
         if (!productIsExist)
-            return Result.Failure(ProductErrors.NotFound(request.Id));
+            return ProductErrors.NotFound(request.Id);
 
         var product = Product.CreateStub(request.Id);
         var changedProperties = product.Update(request.Name, request.Description, request.Stock, request.ModelYear, request.Price);

@@ -19,14 +19,14 @@ internal class CreateProductImagesCommandHandler(IUnitOfWork unitOfWork, IFileSe
             .AnyAsync(x => x.Id == request.CategoryId && !x.IsDeleted, cancellationToken);
 
         if (!categoryIsExists)
-            return Result.Failure<ProductResponse>(CategoryErrors.NotFound(request.CategoryId));
+            return CategoryErrors.NotFound(request.CategoryId);
 
         var repo = unitOfWork.Repository<Product>();
 
         var isExists = await repo.AnyAsync(x => x.Id == request.ProductId && x.CategoryId == request.CategoryId && !x.IsDeleted, cancellationToken);
 
         if (!isExists)
-            return Result.Failure(ProductErrors.NotFound(request.ProductId));
+            return ProductErrors.NotFound(request.ProductId);
 
         var imagesUrls = await fileService.UploadManyImageAsync(request.Images, cancellationToken);
 

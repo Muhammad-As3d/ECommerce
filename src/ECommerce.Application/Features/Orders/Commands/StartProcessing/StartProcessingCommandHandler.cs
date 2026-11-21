@@ -17,10 +17,10 @@ public class StartProcessingCommandHandler(IUnitOfWork unitOfWork, ICurrentUser 
                 ), cancellationToken);
 
         if (orderInfo is null)
-            return Result.Failure<StartProcessingResponse>(OrderErrors.NotFound(request.OrderId));
+            return OrderErrors.NotFound(request.OrderId);
 
         if (orderInfo.Status != OrderStatus.Confirmed)
-            return Result.Failure<StartProcessingResponse>(OrderErrors.StatusNotConfirmed);
+            return OrderErrors.StatusNotConfirmed;
 
         var order = Order.CreateStub(orderInfo.Id, orderInfo.RowVersion, orderInfo.Status);
         var updatedProperties = order.StartProcessing();

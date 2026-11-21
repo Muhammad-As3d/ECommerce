@@ -17,7 +17,7 @@ internal sealed class GetOrderStatusHistoryQueryHandler(IUnitOfWork unitOfWork, 
             cancellationToken);
 
         return response is null
-            ? Result.Failure<OrderStatusHistoryResponse>(OrderErrors.NotFound(request.OrderId))
+            ? OrderErrors.NotFound(request.OrderId)
             : Result.Success(response);
     }
 }

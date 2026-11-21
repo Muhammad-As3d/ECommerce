@@ -15,13 +15,15 @@ public enum PaymentStatus : byte
 public enum PaymentMethod : byte
 {
     CashOnDelivery = 1,
-    Card = 2
+    Card = 2,
+    ApplePay = 3,
 }
 
 public enum PaymentProvider : byte
 {
     None = 0,
-    Stripe = 1
+    Paymob = 1
+
 }
 
 public enum RefundStatus : byte
