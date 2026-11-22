@@ -21,6 +21,14 @@ public class AddressesController(ISender sender) : ApiBaseController
         return Created();
     }
 
+    [HttpPut("")]
+    public async Task<IActionResult> Update(AddressRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(request.Adapt<UpdateAddressCommand>(), cancellationToken);
+
+        return HandleResult(result);
+    }
+
     [HttpDelete("")]
     public async Task<IActionResult> Delete(CancellationToken cancellationToken = default)
     {

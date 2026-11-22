@@ -9,4 +9,13 @@ public class WishlistItem : BaseEntity
 
     public Wishlist Wishlist { get; set; } = null!;
     public Product Product { get; set; } = null!;
+
+    private WishlistItem() { }
+
+    public static WishlistItem Create(Guid wishlistId, Guid productId) =>
+        new()
+        {
+            WishlistId = wishlistId,
+            ProductId = productId
+        };
 }

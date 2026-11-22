@@ -7,6 +7,7 @@ global using ECommerce.Application.Abstractions.Constants;
 global using ECommerce.Application.Abstractions.Pagination;
 global using ECommerce.Application.Features.Addresses.Commands.AddAddress;
 global using ECommerce.Application.Features.Addresses.Commands.DeleteAddress;
+global using ECommerce.Application.Features.Addresses.Commands.UpdateAddress;
 global using ECommerce.Application.Features.Addresses.Queries;
 global using ECommerce.Application.Features.Products.Commands.CreateProduct;
 global using ECommerce.Application.Features.Products.Commands.CreateProductImage;

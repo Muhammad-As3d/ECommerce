@@ -43,6 +43,21 @@ public class MappingProfile : IRegister
 
         #endregion
 
+        #region Wishlist
+        config.NewConfig<WishlistItem, WishlistItemResponse>()
+            .MapWith(src =>
+            new WishlistItemResponse(src.Id,
+            src.ProductId,
+            src.Product.Name,
+            ToPublicImageUrl(src.Product.ProductImages.Select(x => x.ImageUrl).FirstOrDefault()),
+            src.Product.Price,
+            src.Product.Stock > 0));
+
+        config.NewConfig<Wishlist, WishlistResponse>()
+            .MapWith(src => new WishlistResponse(src.Id, src.Items.Count()));
+
+        #endregion
+
         #region Address
 
         config.NewConfig<Address, AddressResponse>();

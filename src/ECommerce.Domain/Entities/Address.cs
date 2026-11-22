@@ -17,6 +17,8 @@ public class Address : AuditableEntity
 
     private Address() { }
 
+    public static Address CreateStub(Guid id) => new() { Id = id };
+
     public static Address Create(string userId, string fullName, string street, string city, string governorate, string country, string postalCode, string phoneNumber, bool isDefault)
         => new()
         {
@@ -30,4 +32,17 @@ public class Address : AuditableEntity
             PhoneNumber = phoneNumber,
             IsDefault = isDefault
         };
+
+    public IReadOnlyCollection<string> Update(string street, string city, string governorate, string country, string postalCode, string phoneNumber, bool isDefault)
+    {
+        Street = street;
+        City = city;
+        Governorate = governorate;
+        Country = country;
+        PostalCode = postalCode;
+        PhoneNumber = phoneNumber;
+        IsDefault = isDefault;
+
+        return [nameof(Street), nameof(City), nameof(Governorate), nameof(Country), nameof(PostalCode), nameof(PhoneNumber), nameof(IsDefault)];
+    }
 }

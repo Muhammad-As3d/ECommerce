@@ -45,16 +45,16 @@ app.UseRequestLocalization();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
-//if (app.Environment.IsDevelopment())
-//{
-app.MapOpenApi();
-app.MapScalarApiReference();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
 
-//if (!app.Environment.IsDevelopment())
-//{
-app.UseHttpsRedirection();
-//}
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors();
 app.UseStaticFiles();
@@ -67,6 +67,5 @@ app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
-
 
 app.Run();

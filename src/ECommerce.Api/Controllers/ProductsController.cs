@@ -7,7 +7,7 @@ namespace ECommerce.Api.Controllers;
 public class ProductsController(ISender sender) : ApiBaseController
 {
 
-    [HttpGet("")]     
+    [HttpGet("")]
     public async Task<IActionResult> GetAll([FromRoute] Guid categoryId, [FromQuery] FiltersRequest spec, CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetAllProductsQuery(categoryId, spec), cancellationToken);

@@ -7,6 +7,7 @@ global using ECommerce.Application.Contracts.Orders;
 global using ECommerce.Application.Contracts.ProductImages;
 global using ECommerce.Application.Contracts.Products;
 global using ECommerce.Application.Contracts.Users;
+global using ECommerce.Application.Contracts.Wishlists;
 global using ECommerce.Application.Interfaces;
 global using ECommerce.Application.Interfaces.Repositories;
 global using ECommerce.Application.Interfaces.Services;
