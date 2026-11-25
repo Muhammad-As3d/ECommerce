@@ -12,6 +12,6 @@ public class GetAllOrdersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<
 
         return await unitOfWork
             .Repository<Order>()
-            .GetAllPaginatedProjectAsync<OrderAdminResponse>(Spec, request.Filters.PageNumber, request.Filters.PageSize, cancellationToken);
+            .GetAllPaginatedProjectSpecAsync<OrderAdminResponse>(Spec, request.Filters.PageNumber, request.Filters.PageSize, cancellationToken);
     }
 }

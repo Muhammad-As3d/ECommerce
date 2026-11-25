@@ -16,9 +16,9 @@ public class AddressesController(ISender sender) : ApiBaseController
     [HttpPost("")]
     public async Task<IActionResult> Create(AddressRequest request, CancellationToken cancellationToken = default)
     {
-        await sender.Send(request.Adapt<AddAddressCommand>(), cancellationToken);
+        var result = await sender.Send(request.Adapt<AddAddressCommand>(), cancellationToken);
 
-        return Created();
+        return HandleResult(result);
     }
 
     [HttpPut("")]

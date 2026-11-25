@@ -8,4 +8,4 @@ public record AddAddressCommand(
     string PostalCode,
     string PhoneNumber,
     bool IsDefault
-) : IRequest<Result>;
+) : IRequest<Result<Guid>>;

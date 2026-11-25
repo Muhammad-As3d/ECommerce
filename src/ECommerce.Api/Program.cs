@@ -1,8 +1,11 @@
 using ECommerce.Api;
+using ECommerce.Api.Hubs;
+using ECommerce.Application.Interfaces.Services;
 using ECommerce.Infrastructure.Persistence;
 using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
@@ -49,6 +52,20 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+
+    app.MapPost("api/v1/notifications/test", async (IHubContext<NotificationHub> hub, ICurrentUser currentUser) =>
+    {
+        await hub.Clients.User(currentUser.Id)
+            .SendAsync("ReceiveNotification", new
+            {
+                title = "Test 🔔",
+                message = "Hello from SignalR!",
+                createdOn = DateTime.UtcNow
+            });
+
+        return Results.Accepted();
+    })
+    .RequireAuthorization();
 }
 
 if (!app.Environment.IsDevelopment())
@@ -62,6 +79,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 app.MapHealthChecks("health", new HealthCheckOptions
 {

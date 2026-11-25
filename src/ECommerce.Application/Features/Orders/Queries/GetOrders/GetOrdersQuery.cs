@@ -14,6 +14,6 @@ public class GetOrdersQueryHandler(IUnitOfWork unitOfWork, ICurrentUser currentU
 
         return await unitOfWork
             .Repository<Order>()
-            .GetAllPaginatedProjectAsync<OrderUserResponse>(orderSpec, request.Spec.PageNumber, request.Spec.PageSize, cancellationToken);
+            .GetAllPaginatedProjectSpecAsync<OrderUserResponse>(orderSpec, request.Spec.PageNumber, request.Spec.PageSize, cancellationToken);
     }
 }

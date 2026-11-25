@@ -11,4 +11,13 @@ public class Notification : BaseEntity
     public NotificationType Type { get; set; }
     public bool IsRead { get; set; }
     public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
+
+    public static Notification CreateStub(Guid id) => new() { Id = id };
+
+    public IReadOnlyCollection<string> MarkAsRead()
+    {
+        IsRead = true;
+
+        return [nameof(IsRead)];
+    }
 }

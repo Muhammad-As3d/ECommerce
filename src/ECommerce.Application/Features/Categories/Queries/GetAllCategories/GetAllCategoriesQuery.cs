@@ -16,7 +16,7 @@ public class GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
 
         return await _unitOfWork
         .Repository<Category>()
-        .GetAllPaginatedProjectAsync<CategoryResponse>(spec, request.Spec.PageNumber, request.Spec.PageSize,
+        .GetAllPaginatedProjectSpecAsync<CategoryResponse>(spec, request.Spec.PageNumber, request.Spec.PageSize,
         cancellationToken);
     }
 }

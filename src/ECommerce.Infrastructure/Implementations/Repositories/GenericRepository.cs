@@ -68,6 +68,12 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
     public void DeleteRangeAsync(List<T> entities, CancellationToken cancellationToken = default) =>
          _dbSet.RemoveRange(entities);
 
+    public async Task<int> CountAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
+        await _dbSet
+        .AsNoTracking()
+        .Where(predicate)
+        .CountAsync(cancellationToken);
+
     #region Checks
 
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
@@ -88,7 +94,7 @@ public class GenericRepository<T>(ApplicationDbContext context, IMapper mapper)
             .ProjectToType<TProjection>(_mapper.Config)
             .ToPaginatedListAsync(pageNumber, pageSize, cancellationToken);
 
-    public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectAsync<TProjection>(Specification<T> spec,
+    public async Task<PaginatedList<TProjection>> GetAllPaginatedProjectSpecAsync<TProjection>(Specification<T> spec,
          int pageNumber, int pageSize, CancellationToken cancellationToken = default) where TProjection : class =>
         await SpecificationEvaluator
             .GetQuery(_dbSet, spec)

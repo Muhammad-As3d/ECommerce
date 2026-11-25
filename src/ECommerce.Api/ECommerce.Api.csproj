@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
-    <Content Update="Resources\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

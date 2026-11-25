@@ -4,7 +4,8 @@ using ECommerce.Infrastructure.Implementations.Services;
 using ECommerce.Infrastructure.Localization;
 using ECommerce.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Localization;
 using Refit;
 using System.Net.Http.Headers;
@@ -86,11 +87,19 @@ public static class DependencyInjection
 
     private static IServiceCollection AddLocalizationConfig(this IServiceCollection services)
     {
-        services.AddLocalization();
-        services.AddSingleton<JsonStringLocalizer>(provider =>
+        services.Configure<RequestLocalizationOptions>(options =>
         {
-            var environment = provider.GetRequiredService<IHostEnvironment>();
-            return new JsonStringLocalizer(Path.Combine(environment.ContentRootPath, "Resources"));
+            options.SetDefaultCulture("en")
+                .AddSupportedCultures("en", "ar", "ar-EG")
+                .AddSupportedUICultures("en", "ar", "ar-EG");
+
+            options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
+        });
+
+        services.AddLocalization();
+        services.AddSingleton(_ =>
+        {
+            return new JsonStringLocalizer(Path.Combine(AppContext.BaseDirectory, "Localization", "Resources"));
         });
         services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
         services.AddSingleton<IStringLocalizer>(provider => provider.GetRequiredService<JsonStringLocalizer>());
@@ -131,6 +140,19 @@ public static class DependencyInjection
                 ValidAudience = jwtSettings.Audience,
                 RoleClaimType = ClaimTypes.Role,
                 NameClaimType = ClaimTypes.NameIdentifier
+            };
+
+            o.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+
+                    if (!string.IsNullOrEmpty(accessToken) && context.HttpContext.Request.Path.StartsWithSegments("/hubs"))
+                        context.Token = accessToken;
+
+                    return Task.CompletedTask;
+                }
             };
         });
 

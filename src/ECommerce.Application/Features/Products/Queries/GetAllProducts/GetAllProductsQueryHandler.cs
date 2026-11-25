@@ -17,7 +17,7 @@ public class GetAllProductsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandle
 
         var response = await unitOfWork
             .Repository<Product>()
-            .GetAllPaginatedProjectAsync<ProductResponse>(spec, request.Spec.PageNumber, request.Spec.PageSize, cancellationToken);
+            .GetAllPaginatedProjectSpecAsync<ProductResponse>(spec, request.Spec.PageNumber, request.Spec.PageSize, cancellationToken);
 
         return Result.Success(response);
     }

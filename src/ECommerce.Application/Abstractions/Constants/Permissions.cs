@@ -48,6 +48,8 @@ public static class Permissions
     public const string UsersDisable = "user:disable";
     public const string UsersUnlock = "user:unlock";
 
+
+
     public static IList<string?> GetAllPermissions() =>
         [.. typeof(Permissions).GetFields().Select(f => f.GetValue(f) as string)];
 }

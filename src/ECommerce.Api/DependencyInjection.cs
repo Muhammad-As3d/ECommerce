@@ -1,5 +1,6 @@
 using ECommerce.Api.Authorization;
-using Microsoft.AspNetCore.Localization;
+using ECommerce.Api.Services;
+using ECommerce.Application.Interfaces.Services;
 using System.Net;
 
 namespace ECommerce.Api;
@@ -62,14 +63,6 @@ public static class DependencyInjection
                     "https://tools.ietf.org/html/rfc9110", "https://www.rfc-editor.org/rfc/rfc9110");
         });
 
-        services.Configure<RequestLocalizationOptions>(options =>
-        {
-            options.SetDefaultCulture("en")
-                .AddSupportedCultures("en", "ar", "ar-EG")
-                .AddSupportedUICultures("en", "ar", "ar-EG");
-            options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
-        });
-
         var assembly = typeof(DependencyInjection).Assembly;
 
         //Add Mapster
@@ -78,6 +71,9 @@ public static class DependencyInjection
 
         services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
         services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+
+        services.AddSignalR();
+        services.AddScoped<IRealTimeNotifier, SignalRNotifier>();
 
         return services;
     }

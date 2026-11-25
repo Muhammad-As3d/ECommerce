@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+    <h3>SignalR Test</h3>
+    <input id="token" placeholder="Paste JWT here" size="80" />
+    <button onclick="connect()">Connect</button>
+    <ul id="list"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+    <script>
+        async function connect() {
+            const token = document.getElementById("token").value;
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/hubs/notifications", { accessTokenFactory: () => token })
+                .withAutomaticReconnect()
+                .build();
+
+            // لازم الاسم يكون نفس اللي في SendAsync بالظبط
+            connection.on("ReceiveNotification", n => {
+                const li = document.createElement("li");
+                li.textContent = `${n.title}: ${n.message}`;
+                document.getElementById("list").appendChild(li);
+            });
+
+            await connection.start();
+            alert("Connected ✅");
+        }
+    </script>
+</body>
+</html>

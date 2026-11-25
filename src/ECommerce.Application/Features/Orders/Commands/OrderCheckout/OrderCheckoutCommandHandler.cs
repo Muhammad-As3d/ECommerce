@@ -1,4 +1,3 @@
-using ECommerce.Application.Interfaces.Repositories;
 using ECommerce.Application.Specifications.CartSpecification;
 
 namespace ECommerce.Application.Features.Orders.Commands.OrderCheckout;
@@ -131,8 +130,12 @@ internal sealed class OrderCheckoutCommandHandler(IUnitOfWork unitOfWork, ICurre
             order.Currency,
             payment is null
                 ? null
-                : new PaymentResponse(payment.Id, payment.Method.ToString(), payment.Status.ToString(),
-                    null, payment.Amount, payment.Currency)));
+                : new PaymentResponse
+                (payment.Id,
+                payment.Method.ToString(),
+                payment.Status.ToString(),
+                null, payment.Amount,
+                payment.Currency)));
     }
 
     private async Task<List<CartItemCheckoutInfo>> GetCartItemsAsync(CancellationToken cancellationToken)

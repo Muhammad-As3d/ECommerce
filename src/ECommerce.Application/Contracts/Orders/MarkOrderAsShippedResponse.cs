@@ -12,4 +12,5 @@ public sealed record MarkOrderAsShippedResponse(
 public sealed record MarkOrderAsShippedInfo(
     Guid Id,
     OrderStatus Status,
-    byte[] RowVersion);
+    byte[] RowVersion,
+    string UserId);
